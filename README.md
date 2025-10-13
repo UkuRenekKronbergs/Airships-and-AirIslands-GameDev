@@ -25,95 +25,29 @@ Key inspirations: **FTL**, **Fallout Shelter**, **Sunless Sea**, **Oxygen Not In
 
 ---
 
-## 🗺️ World & Progression
-- **One sector** per run, made up of:  
-  - **Handmade nodes** (cities, villages, unique locations)  
-  - **Randomized nodes** (battles, events, empty space)  
-- Node contents **refresh every X days** → world feels alive  
-- After **Z days**, the world escalates: tougher enemies, new quests, higher stakes  
+## 📑 Game Design Cheat Sheet
 
----
-
-## ⚙️ Resources
-- **Fuel** – required for movement  
-- **Food** – consumed daily, multiple quality tiers  
-- **Ammo** – required for combat  
-- **Currency** – earned via quests, trade, or combat  
-- **Ship Hull** – must be repaired at cities  
-
----
-
-## 🏗️ Ship & Rooms
-Ships are modular, made of **rooms**:  
-- **Mandatory rooms** (engine, pilot, weapons, etc.)  
-- **Optional rooms** (cargo hold, bedrooms, mess hall, medbay, etc.)  
-
-Players must balance **limited space**:  
-- More cargo = better trade profits  
-- More weapons = stronger in combat  
-- More crew facilities = happier, more efficient crew  
-
----
-
-## 💰 Economy & Quests
-Ways to earn money:  
-- **Quests** (deliver items, escort workers, destroy enemies)  
-- **Trade** (buy low, sell high between handmade nodes)  
-- **Combat** (loot resources from defeated enemies)  
-
-Money can be spent on:  
-- Fuel, ammo, food  
-- Ship repairs  
-- New weapons  
-- Room construction & upgrades  
-- Better food for crew efficiency  
+| **Kategooria**        | **Sisu** |
+|------------------------|----------|
+| **Žanr**              | Roguelike-strateegia, FTL + Fallout Shelter + Sunless Sea mõjutustega |
+| **Põhiloop**          | Liigu → Kohtu sündmusega (võitlus, kaubandus, quest) → Halda ressursse → Ehita/uuenda laeva → Korda kuni lõppbossini |
+| **Maailm**            | Üks suur “sektor” = sõlmed (nodes). <br>• Handmade nodes (linnad, külad, unikaalsed kohad) <br>• Randomized nodes (võitlused, sündmused, tühjus). <br>Node sisu värskendub iga X päeva järel. |
+| **Progressioon**      | Aja möödudes (Z päeva) → raskemad vaenlased, uued questid, uued sündmused. <br>Lõpus → Final Boss. |
+| **Ressursid**         | • **Fuel** – liikumiseks <br>• **Food** – crew vajadused, kvaliteeditasemed <br>• **Ammo** – lahinguks <br>• **Currency** – kaubandus, questid, võitlused <br>• **Ship Hull** – parandatav ainult linnades |
+| **Majandus**          | Raha teenimise viisid: <br>1. Questid <br>2. Kaubandus <br>3. Võitlus <br><br>Raha kulutamine: <br>• Fuel, ammo, food <br>• Parandused <br>• Relvad <br>• Uued ruumid / uuendused <br>• Parem toit crew’le |
+| **Laeva süsteem**     | Laev koosneb **ruumidest**: <br>• Kohustuslikud (engine, pilot, weapons, medbay) <br>• Valikulised (cargo hold, bedrooms, mess hall, jne). <br>Piiratud ruum sunnib tegema strateegilisi valikuid. |
+| **Crew**              | Vajavad sööki, und, motivatsiooni. <br>Parem toit = efektiivsem töö. |
+| **Visuaalne stiil**   | 2D külgvaade, minimalistlik pixel art. <br>Fookus funktsionaalsusel, mitte detailirohkusel. |
+| **MVP**               | • 5 handmade locations <br>• 3 enemy designs <br>• 10 random events <br>• 3 world stages <br>• 4 optional ship rooms <br>• 1 lõpp (Final Boss) <br>+ Kaubandus, random world generation |
+| **Meta-game**         | Läbimängude kordamine → mängija õpib sündmuste tulemusi, lahingusüsteemi, erinevaid laeva ehitusi ja strateegiaid. |
+| **Inspiratsioonid**   | Fallout Shelter, FTL, Sunless Sea, Oxygen Not Included, Rimworld |
 
 ---
 
 ## 🎨 Visual Style
 - **2D side-view pixel art**  
-- Minimalist, functional, atmospheric  
-- Focus on clarity over detail  
-
----
-
-## 📌 Minimal Viable Product (MVP)
-Truly minimal, but playable. Includes:  
-- **5 handmade locations**  
-- **3 enemy designs**  
-- **10 random events**  
-- **3 world stages**  
-- **4 non-mandatory ship rooms**  
-- **1 way to end the game**  
-
-Additional MVP features:  
-- Trade goods between handmade locations  
-- Random world generation  
-- Final Boss  
-
----
-
-## 🧭 Meta-game
-- Each run teaches the player more about:  
-  - Combat system  
-  - Event outcomes  
-  - Ship builds & strategies  
-- Replayability comes from experimenting with different approaches  
-
----
-
-## 📚 Market Research
-- **Fallout Shelter** – simple but effective building system  
-- **FTL** – roguelike node-based exploration & combat  
-- **Sunless Sea / Skies** – economic chains & exploration tension  
-- **Oxygen Not Included / Rimworld** – simplified crew needs & resource loops  
-
----
-
-## ⚓ Setting
-- A **European-inspired fantasy world**  
-- Floating islands with wooden and stone cities  
-- Airships as moving fortresses, trading hubs, and battlegrounds  
+- Minimalistlik, funktsionaalne, atmosfääriline  
+- Fookus: selgus, mitte detailirohkus  
 
 ---
 
