@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: bfa35f2234dec4444be9c7292f796256
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 311283
+  packageName: 2D Pixel Fantasy Tilemap (Free)
+  packageVersion: 1.0
+  assetPath: Assets/2DPixelFantasyTilemapFree/TilePalettes/Tiles/tower.asset
+  uploadId: 735278

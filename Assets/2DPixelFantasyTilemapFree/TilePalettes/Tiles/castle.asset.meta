@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0775c8949063dbc47a25aed46c46038f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 311283
+  packageName: 2D Pixel Fantasy Tilemap (Free)
+  packageVersion: 1.0
+  assetPath: Assets/2DPixelFantasyTilemapFree/TilePalettes/Tiles/castle.asset
+  uploadId: 735278
