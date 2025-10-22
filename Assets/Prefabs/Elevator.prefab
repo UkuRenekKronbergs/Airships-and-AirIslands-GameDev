@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 828244949989635754}
   - component: {fileID: 4281068062350485020}
   - component: {fileID: 9058750967090281176}
-  - component: {fileID: -5517508528392605040}
   m_Layer: 0
   m_Name: Elevator
   m_TagString: Untagged
@@ -101,21 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f42b08b3135eb72489f74106513fad6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Up: 0
-  Down: 0
-  Left: 0
---- !u!114 &-5517508528392605040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4164068272357657362}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f42b08b3135eb72489f74106513fad6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Up: 0
-  Down: 0
+  Up: {fileID: 0}
+  Down: {fileID: 0}
+  Left_Room: {fileID: 0}
+  Right_Room: {fileID: 0}
   Left: 0

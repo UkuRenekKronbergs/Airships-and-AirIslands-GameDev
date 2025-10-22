@@ -3,11 +3,13 @@ using UnityEngine;
 public class Compartment : MonoBehaviour
 
 {
-
+    //static Compartment instance;
     private int type = 0;//add type based on child.
 
-    //public GameObject Left_Room;
-    //public GameObject Right_Room;
+    //[HideInInspector]
+    public GameObject Left_Room;
+    //[HideInInspector]
+    public GameObject Right_Room;
 
     private void Awake()
     {
