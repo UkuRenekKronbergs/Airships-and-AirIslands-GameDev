@@ -4,8 +4,39 @@ public class Compartment : MonoBehaviour
 
 {
     //static Compartment instance;
-    private int type = 0;//add type based on child.
+    public int type = 0;//add type based on child.
+    public bool Is_Buildable = false;
+    private bool _is_empty = true;
 
+
+    public bool Is_Empty
+    {
+        get { return _is_empty; }
+
+        set
+        {
+            if (value == false)
+            {
+                Is_Buildable = false;
+
+                // Check if Ellevator
+                if (Left_Room.GetComponent<Compartment>() != null)
+                {
+                    if (Left_Room.GetComponent<Compartment>().Is_Empty == true)
+                    {
+                        Left_Room.GetComponent<Compartment>().Is_Buildable = true;
+                    }
+                }
+                if (Right_Room.GetComponent<Compartment>() != null)
+                {
+                    if (Right_Room.GetComponent<Compartment>().Is_Empty == true)
+                    {
+                        Right_Room.GetComponent<Compartment>().Is_Buildable = true;
+                    }
+                }
+            }
+        }
+    }
     //[HideInInspector]
     public GameObject Left_Room;
     //[HideInInspector]
@@ -26,4 +57,10 @@ public class Compartment : MonoBehaviour
     {
         
     }
+
+
+    
+
+
+ 
 }
