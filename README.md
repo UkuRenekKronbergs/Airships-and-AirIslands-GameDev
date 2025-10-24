@@ -33,7 +33,7 @@ Key inspirations: **FTL**, **Fallout Shelter**, **Sunless Sea**, **Oxygen Not In
 | **Core Loop**         | Travel → Encounter (combat, trade, quest) → Manage resources → Build/upgrade ship → Repeat until final boss |
 | **World**             | One large “sector” made of nodes: <br>• Handmade nodes (cities, villages, unique locations) <br>• Randomized nodes (battles, events, empty). <br>Node contents refresh every X days. |
 | **Progression**       | After Z days → tougher enemies, new quests, new events. <br>Endgame → Final Boss. |
-| **Resources**         | • **Fuel** – movement <br>• **Food** – crew needs, multiple quality tiers <br>• **Ammo** – combat <br>• **Currency** – trade, quests, combat <br>• **Ship Hull** – repairable only in cities |
+| **Resources**         | • **Fuel** – movement <br>• **Food** – crew needs, multiple quality tiers <br>• **Ammo** – combat <br>• **Gold** – trade, quests, combat <br>• **Ship Hull** – repairable only in cities |
 | **Economy**           | Ways to earn: <br>1. Quests <br>2. Trade <br>3. Combat <br><br>Spending: <br>• Fuel, ammo, food <br>• Repairs <br>• Weapons <br>• New rooms / upgrades <br>• Better food for crew |
 | **Ship System**       | Ship is built from **rooms**: <br>• Mandatory (engine, pilot, weapons, medbay) <br>• Optional (cargo hold, bedrooms, mess hall, etc.). <br>Limited space forces strategic choices. |
 | **Crew**              | Have needs: food, rest, morale. <br>Better food = more efficient work. |
