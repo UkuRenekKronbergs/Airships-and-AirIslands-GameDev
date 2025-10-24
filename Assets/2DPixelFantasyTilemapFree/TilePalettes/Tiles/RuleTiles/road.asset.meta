@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5eda2f0150dd1364caec3d50deaff2ea
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 311283
+  packageName: 2D Pixel Fantasy Tilemap (Free)
+  packageVersion: 1.0
+  assetPath: Assets/2DPixelFantasyTilemapFree/TilePalettes/Tiles/RuleTiles/road.asset
+  uploadId: 735278
