@@ -1,73 +1,56 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Compartment : MonoBehaviour
-
 {
-    //static Compartment instance;
-    //public int type = 0;//add type based on child.
-    //private Compartment_Type Compartment_Type = new(Compartment_Empty;
+    [SerializeField, Tooltip("Categorises the compartment layout for other systems.")]
+    private int compartmentType;
 
-
-
+    public GameObject Left_Room;
+    public GameObject Right_Room;
 
     public bool Is_Buildable = false;
-    private bool _is_empty = true;
 
+    private bool _isEmpty = true;
+
+    public int CompartmentType => compartmentType;
 
     public bool Is_Empty
     {
-        get { return _is_empty; }
-
+        get => _isEmpty;
         set
         {
-            if (value == false)
+            if (_isEmpty == value)
+            {
+                return;
+            }
+
+            _isEmpty = value;
+
+            if (!_isEmpty)
             {
                 Is_Buildable = false;
-
-                // Check if Elevator to the right or to the left. (Elevators use a different script in this version) 
-                if (Left_Room.GetComponent<Compartment>() != null)
-                {
-                    if (Left_Room.GetComponent<Compartment>().Is_Empty == true)
-                    {
-                        Left_Room.GetComponent<Compartment>().Is_Buildable = true;
-                    }
-                }
-                if (Right_Room.GetComponent<Compartment>() != null)
-                {
-                    if (Right_Room.GetComponent<Compartment>().Is_Empty == true)
-                    {
-                        Right_Room.GetComponent<Compartment>().Is_Buildable = true;
-                    }
-                }
+                UpdateNeighbourBuildableState();
             }
         }
     }
-    //[HideInInspector]
-    public GameObject Left_Room;
-    //[HideInInspector]
-    public GameObject Right_Room;
 
-    private void Awake()
+    private void UpdateNeighbourBuildableState()
     {
-
-
-        
+        TryEnableBuildable(Left_Room);
+        TryEnableBuildable(Right_Room);
     }
 
-    void Start()
+    private static void TryEnableBuildable(GameObject neighbour)
     {
-        
+        if (neighbour == null)
+        {
+            return;
+        }
+
+        var neighbourCompartment = neighbour.GetComponent<Compartment>();
+        if (neighbourCompartment != null && neighbourCompartment.Is_Empty)
+        {
+            neighbourCompartment.Is_Buildable = true;
+        }
     }
-
-
-    void Update()
-    {
-        
-    }
-
-
-    
-
-
- 
 }
