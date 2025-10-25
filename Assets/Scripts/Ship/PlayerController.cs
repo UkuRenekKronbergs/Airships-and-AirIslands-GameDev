@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Airships.Map
+namespace Airships.Ship
 {
     public class PlayerController : MonoBehaviour
     {
