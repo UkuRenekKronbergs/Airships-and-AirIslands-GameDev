@@ -1,18 +1,19 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+namespace Airships.Map
 {
-    public GameObject location; 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class PlayerController : MonoBehaviour
     {
-        
-    }
+        public GameObject location;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
+        {
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+        }
     }
 }
