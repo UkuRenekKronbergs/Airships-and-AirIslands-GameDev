@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 
 public class Row : MonoBehaviour
 {
+    [HideInInspector]
     public int CompartmentSlots = 8;
     //public GameObject EmptyRoomPrefab;
     //public GameObject Elevator_L;

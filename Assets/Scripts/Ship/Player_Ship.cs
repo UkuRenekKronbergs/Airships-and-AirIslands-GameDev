@@ -10,6 +10,7 @@ public class Player_Ship : MonoBehaviour
     public GameObject[] rows = new GameObject[3]; 
     private int Max_Storage;
     private int Storage_used;
+    [HideInInspector]
     public Dictionary<Compartment_Type, HashSet<GameObject>> AllCompartments = new Dictionary<Compartment_Type, HashSet<GameObject>>();
 
 

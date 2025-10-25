@@ -8,17 +8,18 @@ public class Compartment : MonoBehaviour
     //private Compartment_Type Compartment_Type = new(Compartment_Empty;
 
 
-    //[HideInInspector]
+    [HideInInspector]
     public GameObject Left_Room;
-    //[HideInInspector]
+    [HideInInspector]
     public GameObject Right_Room;
 
     public GameObject Compartment_Type_Prefab;
+    [HideInInspector]
     public GameObject Child_Compartment;
     private int Current_Tier = 0;
 
 
-
+    [HideInInspector]
     public bool Is_Buildable = false;
     private bool _is_empty = true;
 
