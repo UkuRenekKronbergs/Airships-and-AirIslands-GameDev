@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 537c20cc4789389469e6b2a524942987, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Name: Weapons
   Max_Ammount: 2
   Health: 2
   Cost: 2

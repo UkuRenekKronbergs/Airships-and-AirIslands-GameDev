@@ -5,6 +5,7 @@ public class Compartment_Type : MonoBehaviour
 {
     // PARENT CLASS FOR ALL COMPARTMENTS
     //public virtual int Health { get; set; } = 1;
+    public string Name;
     public int Max_Ammount = 1; //How many compartments of this type are allowed per one ship.
     public int Health = 1;
     public int Cost = 1;

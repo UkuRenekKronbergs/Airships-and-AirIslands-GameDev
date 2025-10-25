@@ -52,6 +52,9 @@ public class Row : MonoBehaviour
                 Compartments[i].GetComponent<Elevators>().Left_Room = Compartments[i - 1];
                 Compartments[i].GetComponent<Elevators>().Is_Empty = false;
                 Compartments[i].GetComponent<Elevators>().Is_Buildable = true;
+
+                // Set the compartment right to buildable.
+                Compartments[i-1].GetComponent<Compartment>().Is_Buildable = true;
             }
 
 
