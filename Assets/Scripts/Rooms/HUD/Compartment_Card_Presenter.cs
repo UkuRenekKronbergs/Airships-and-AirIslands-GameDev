@@ -117,8 +117,21 @@ public class Compartment_Card_Presenter : MonoBehaviour
             Player_Ship.Instance.Currency -=Compartment.Cost;
             Compartment comp = hit.collider.GetComponent<Compartment>();
             comp.Add_Compartment_Type_Child(Compartment_Prefab);
+            Player_Ship.Instance.AllCompartments_func();
+            Player_Ship.Instance.GPT_Debug();
+
         }
-    
+
+    }
+
+    //TODO
+    private void Merge_Compartment(GameObject Compartment_Prefab, RaycastHit2D hit) {
+        Compartment comp = hit.collider.GetComponent<Compartment>();
+        
+
+
+
+
     }
 
 

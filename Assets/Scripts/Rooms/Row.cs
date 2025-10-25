@@ -17,11 +17,14 @@ public class Row : MonoBehaviour
 
     private void Awake()
     {
+        // attached the children in the Unity editor. Just need to find them now.
         foreach (Transform child in transform.Find("Compartments"))
         {
             Compartments.Add(child.gameObject);
 
         }
+
+        // This is  just initializing the compartments by adding the left, right, isbuildable, isempty variables.
         int size = Compartments.Count;
         Compartment comp;
         for (int i = 0; i < size; i++) {

@@ -15,6 +15,7 @@ public class Compartment : MonoBehaviour
 
     public GameObject Compartment_Type_Prefab;
     public GameObject Child_Compartment;
+    private int Current_Tier = 0;
 
 
 
@@ -77,11 +78,41 @@ public class Compartment : MonoBehaviour
             Destroy(Child_Compartment);
         
         }
+        Current_Tier = 1;
         Child_Compartment = Instantiate(TypePrefab);
         Child_Compartment.transform.SetParent(this.transform,false);
         Child_Compartment.transform.localPosition = Vector3.zero;
         Child_Compartment.transform.localScale = Vector3.one;
        
+    }
+
+
+    // TODO, IMPLEMENT MERGING
+    public void Check_Merge() {
+
+        // Leftside
+        if (Not_an_Elevator(Left_Room)) {
+            return;
+        
+        
+        }
+
+
+    
+    }
+
+        public bool Not_an_Elevator(GameObject a) {
+
+        if (a.GetComponent<Compartment>() != null)
+            return true;
+        else 
+            return false;
+    
+    
+    
+    }
+    public Compartment_Type ReturnType() {
+        return Child_Compartment.GetComponent<Compartment_Type>();
     }
 
 
