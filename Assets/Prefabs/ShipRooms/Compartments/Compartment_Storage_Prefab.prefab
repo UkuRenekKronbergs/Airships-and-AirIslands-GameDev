@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -100,8 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 219f6a9948aae4747b12949d9e517d05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Max_Ammount: 1
-  Health: 1
-  Cost: 1
+  Name: Storage
+  Max_Ammount: 3
+  Health: 2
+  Cost: 5
   Max_Tier: 3
   Size: 3

@@ -8,6 +8,14 @@ public class Compartment : MonoBehaviour
     //private Compartment_Type Compartment_Type = new(Compartment_Empty;
 
 
+    //[HideInInspector]
+    public GameObject Left_Room;
+    //[HideInInspector]
+    public GameObject Right_Room;
+
+    public GameObject Compartment_Type_Prefab;
+    public GameObject Child_Compartment;
+
 
 
     public bool Is_Buildable = false;
@@ -42,14 +50,11 @@ public class Compartment : MonoBehaviour
             }
         }
     }
-    //[HideInInspector]
-    public GameObject Left_Room;
-    //[HideInInspector]
-    public GameObject Right_Room;
+
 
     private void Awake()
     {
-
+        Add_Compartment_Type_Child(Compartment_Type_Prefab);
 
         
     }
@@ -65,9 +70,23 @@ public class Compartment : MonoBehaviour
         
     }
 
+    public void Add_Compartment_Type_Child(GameObject TypePrefab) {
 
-    
+        if (Child_Compartment != null) {
+        // TODO: return resources that are hold up it the child comaprtment if any exists.
+            Destroy(Child_Compartment);
+        
+        }
+        Child_Compartment = Instantiate(TypePrefab);
+        Child_Compartment.transform.SetParent(this.transform,false);
+        Child_Compartment.transform.localPosition = Vector3.zero;
+        Child_Compartment.transform.localScale = Vector3.one;
+       
+    }
 
 
- 
+
+
+
+
 }

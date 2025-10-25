@@ -68,7 +68,7 @@ public class Row : MonoBehaviour
 
         void Start()
         {
-        Debug.Log(Compartments);
+        //Debug.Log(Compartments);
 
 
         }

@@ -38,6 +38,15 @@ public class Compartment_Card_Presenter : MonoBehaviour
 
     void Update()
     {
+        // Broke boy/girl/they
+        if (Player_Ship.Instance.Currency < Compartment.Cost) {
+            Cost_Text.color = Color.red;
+        }
+
+
+
+
+
         if (_pressed)
         {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -58,16 +67,12 @@ public class Compartment_Card_Presenter : MonoBehaviour
                     }
                 }
 
-
-
-
-
                 _pressed = false;
                 Cursor.SetCursor(null, mouse_hotspot, CursorMode.Auto);
 
 
 
-            }
+            }// if mouseubuttondown
         }
     }
 
@@ -106,6 +111,13 @@ public class Compartment_Card_Presenter : MonoBehaviour
 
     private void Build(GameObject Compartment_Prefab, RaycastHit2D hit) {
         Debug.Log("building");
+        // TODO Subdtract player resources 
+        if (Player_Ship.Instance.Currency >= Compartment.Cost)
+        {
+            Player_Ship.Instance.Currency -=Compartment.Cost;
+            Compartment comp = hit.collider.GetComponent<Compartment>();
+            comp.Add_Compartment_Type_Child(Compartment_Prefab);
+        }
     
     }
 

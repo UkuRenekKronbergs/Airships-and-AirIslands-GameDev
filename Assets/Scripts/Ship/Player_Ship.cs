@@ -3,17 +3,16 @@ using UnityEngine;
 
 public class Player_Ship : MonoBehaviour
 {
-    public static Player_Ship instance;
+    public static Player_Ship Instance;
     public int Hull = 10;
     public int Currency = 100;
-    //private Dictionary<string>
 
 
 
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     void Start()
