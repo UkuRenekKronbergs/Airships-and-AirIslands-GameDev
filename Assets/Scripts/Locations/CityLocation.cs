@@ -2,6 +2,7 @@ using AirshipsAndAirIslands.Events;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace AirshipsAndAirIslands.Locations
 {
@@ -11,25 +12,27 @@ namespace AirshipsAndAirIslands.Locations
     /// </summary>
     public class CityLocation : MonoBehaviour
     {
-    [Header("References")]
+        [Header("References")]
         [SerializeField] private GameState gameState;
         [SerializeField] private GameObject cityUiRoot;
         [SerializeField] private TMP_Text headerText;
         [SerializeField] private TMP_Text statsText;
         [SerializeField] private TMP_Text feedbackText;
 
-    [Header("UI Buttons")]
-    [SerializeField] private Button healButton;
-    [SerializeField] private Button tradeButton;
-    [SerializeField] private Button closeButton;
+        [Header("UI Buttons")]
+        [SerializeField] private Button healButton;
+        [SerializeField] private Button tradeButton;
+        [SerializeField] private Button closeButton;
 
         [Header("City Settings")]
         [SerializeField] private string cityName = "Nimbus Gate";
-    [SerializeField, Min(1)] private int healCost = 6;
+        [SerializeField, Min(1)] private int healCost = 6;
         [SerializeField, Min(1)] private int healAmount = 8;
-    [SerializeField] private ResourceType tradeInputType = ResourceType.Food;
-    [SerializeField, Min(1)] private int tradeInputAmount = 4;
-    [SerializeField, Min(1)] private int tradeGoldReward = 2;
+        [SerializeField] private ResourceType tradeInputType = ResourceType.Food;
+        [SerializeField, Min(1)] private int tradeInputAmount = 4;
+        [SerializeField, Min(1)] private int tradeGoldReward = 2;
+    [SerializeField] private bool loadSceneOnExit;
+    [SerializeField] private string exitSceneName = "Map";
 
         private void Awake()
         {
@@ -140,7 +143,21 @@ namespace AirshipsAndAirIslands.Locations
 
         public void OnCloseButtonPressed()
         {
-            CloseCity();
+            if (loadSceneOnExit && !string.IsNullOrWhiteSpace(exitSceneName))
+            {
+                if (Application.CanStreamedLevelBeLoaded(exitSceneName))
+                {
+                    SceneManager.LoadScene(exitSceneName);
+                }
+                else
+                {
+                    Debug.LogWarning($"CityLocation could not load scene '{exitSceneName}'. Check build settings.");
+                }
+            }
+            else
+            {
+                CloseCity();
+            }
         }
 
         private void WireButtonListeners()
