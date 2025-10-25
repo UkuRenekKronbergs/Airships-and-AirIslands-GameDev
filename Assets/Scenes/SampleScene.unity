@@ -1445,6 +1445,18 @@ PrefabInstance:
       value: Compartment_Card
       objectReference: {fileID: 0}
     - target: {fileID: 7579068390418473073, guid: 0d654c81d4683854ea2d286347ac47c1, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.b
+      value: 0.9245283
+      objectReference: {fileID: 0}
+    - target: {fileID: 7579068390418473073, guid: 0d654c81d4683854ea2d286347ac47c1, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.g
+      value: 0.2693154
+      objectReference: {fileID: 0}
+    - target: {fileID: 7579068390418473073, guid: 0d654c81d4683854ea2d286347ac47c1, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.r
+      value: 0.06686832
+      objectReference: {fileID: 0}
+    - target: {fileID: 7579068390418473073, guid: 0d654c81d4683854ea2d286347ac47c1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -1471,6 +1483,18 @@ PrefabInstance:
     - target: {fileID: 7579068390418473073, guid: 0d654c81d4683854ea2d286347ac47c1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8592823667467585475, guid: 0d654c81d4683854ea2d286347ac47c1, type: 3}
+      propertyPath: m_Color.b
+      value: 0.98427665
+      objectReference: {fileID: 0}
+    - target: {fileID: 8592823667467585475, guid: 0d654c81d4683854ea2d286347ac47c1, type: 3}
+      propertyPath: m_Color.g
+      value: 0.98427665
+      objectReference: {fileID: 0}
+    - target: {fileID: 8592823667467585475, guid: 0d654c81d4683854ea2d286347ac47c1, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
