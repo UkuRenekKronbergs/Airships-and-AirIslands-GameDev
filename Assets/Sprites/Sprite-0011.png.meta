@@ -1,13 +1,19 @@
 fileFormatVersion: 2
-guid: 65662103b448b7642a50da854d3fcb11
+guid: 08c47e9ce5328ea4c962fc151bf4afc1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1927202661202883626
-    second: enamy_0
+      213: 4026707059106911698
+    second: Sprite-0011_0
   - first:
-      213: 3805644991561306240
-    second: enamy_1
+      213: 3734350072797492280
+    second: Sprite-0011_1
+  - first:
+      213: 4594039769443294601
+    second: Sprite-0011_2
+  - first:
+      213: -6763590029179285957
+    second: Sprite-0011_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -103,13 +109,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: enamy_0
+      name: Sprite-0011_0
       rect:
         serializedVersion: 2
-        x: 20
-        y: 25
-        width: 338
-        height: 190
+        x: 16
+        y: 11
+        width: 50
+        height: 30
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -118,20 +124,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6db80d0f3633145e0800000000000000
-      internalID: -1927202661202883626
+      spriteID: 2d510a06cbcb1e730800000000000000
+      internalID: 4026707059106911698
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enamy_1
+      name: Sprite-0011_1
       rect:
         serializedVersion: 2
-        x: 351
-        y: 28
-        width: 238
-        height: 187
+        x: 75
+        y: 7
+        width: 44
+        height: 34
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,8 +146,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0809147e4fd50d430800000000000000
-      internalID: 3805644991561306240
+      spriteID: 8347c041b9313d330800000000000000
+      internalID: 3734350072797492280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite-0011_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 8
+        width: 50
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98d5fad74de41cf30800000000000000
+      internalID: 4594039769443294601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite-0011_3
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 12
+        width: 54
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3e056814b6e222a0800000000000000
+      internalID: -6763590029179285957
       vertices: []
       indices: 
       edges: []
@@ -160,8 +210,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      enamy_0: -1927202661202883626
-      enamy_1: 3805644991561306240
+      Sprite-0011_0: 4026707059106911698
+      Sprite-0011_1: 3734350072797492280
+      Sprite-0011_2: 4594039769443294601
+      Sprite-0011_3: -6763590029179285957
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
