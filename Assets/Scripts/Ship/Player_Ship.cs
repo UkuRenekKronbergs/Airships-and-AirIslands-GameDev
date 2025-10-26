@@ -12,7 +12,7 @@ public class Player_Ship : MonoBehaviour
     private int Storage_used;
     [HideInInspector]
     public Dictionary<Compartment_Type, HashSet<GameObject>> AllCompartments = new Dictionary<Compartment_Type, HashSet<GameObject>>();
-
+    public Dictionary<string, int> MinimumAmmounts = new Dictionary<string, int>();
 
 
 
@@ -24,6 +24,14 @@ public class Player_Ship : MonoBehaviour
     {
         Instance = this;
         AllCompartments_func();
+        // Stupid way to do this. There should probs be a masterlist somewhere of all possible compartments where you could pull this type of info.
+        // Controllers and shit would help. Oh well...
+        MinimumAmmounts["Weapons"] = 1;
+        MinimumAmmounts["Bridge"] = 1;
+        MinimumAmmounts["Storage"] = 1;
+
+
+
 
 
 
