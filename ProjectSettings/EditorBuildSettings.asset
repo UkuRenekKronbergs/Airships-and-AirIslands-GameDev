@@ -9,14 +9,14 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 218114f05f8a6904e98de4a492eec86a
   - enabled: 1
+    path: Assets/Scenes/ShipRooms.unity
+    guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
     path: Assets/Scenes/Map.unity
     guid: 3656e3c584a81de4abe9c326428ec2b5
   - enabled: 1
     path: Assets/Scenes/City.unity
     guid: a8f228ca3858d1848ab6e05a2d1f8e92
-  - enabled: 1
-    path: Assets/Scenes/ShipRooms.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
     path: Assets/Scenes/Battle.unity
     guid: e6757d3bca2762b4f96dee9432f1df7a
