@@ -75,6 +75,12 @@ public class Compartment : MonoBehaviour
 
     public void Add_Compartment_Type_Child(GameObject TypePrefab) {
 
+        if (TypePrefab == null)
+        {
+            Debug.LogError($"Compartment '{name}' has no Compartment_Type_Prefab assigned.");
+            return;
+        }
+
         if (Child_Compartment != null) {
         // TODO: return resources that are hold up it the child comaprtment if any exists.
             Destroy(Child_Compartment);
@@ -114,6 +120,15 @@ public class Compartment : MonoBehaviour
     
     }
     public Compartment_Type ReturnType() {
+        if (Child_Compartment == null)
+        {
+            Add_Compartment_Type_Child(Compartment_Type_Prefab);
+            if (Child_Compartment == null)
+            {
+                Debug.LogError($"Compartment '{name}' failed to create a child compartment.");
+                return null;
+            }
+        }
         return Child_Compartment.GetComponent<Compartment_Type>();
     }
 

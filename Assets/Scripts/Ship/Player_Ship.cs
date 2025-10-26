@@ -62,6 +62,10 @@ public class Player_Ship : MonoBehaviour
             if ((Compartment.GetComponent<Compartment>() != null))
             {
                 Compartment_Type a = Compartment.GetComponent<Compartment>().ReturnType();
+                if (a == null)
+                {
+                    continue;
+                }
                 if (AllCompartments.ContainsKey(a.Name))
                 {
                     AllCompartments[a.Name].Add(Compartment);
