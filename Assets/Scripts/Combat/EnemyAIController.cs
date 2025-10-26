@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using AirshipsAndAirIslands.Events;
 using UnityEngine;
 
@@ -25,7 +26,8 @@ namespace AirshipsAndAirIslands.Combat
         [SerializeField] private GameState gameState;
         [SerializeField] private GameObject muzzleFlashPrefab;
         [SerializeField, Min(0)] private int shieldOverloadBonusArmor = 3;
-    [SerializeField] private BattleManager battleManager;
+        [SerializeField] private BattleManager battleManager;
+        [SerializeField] private EnemySubsystem[] subsystemOverrides;
 
     [Header("Runtime Debug")]
     [SerializeField] private int currentHull;
@@ -36,6 +38,7 @@ namespace AirshipsAndAirIslands.Combat
         private Rigidbody2D _rigidbody;
         private Coroutine _attackRoutine;
         private float _shieldOverloadTimer;
+        private readonly List<EnemySubsystem> _subsystems = new();
 
         private void Awake()
         {
@@ -44,6 +47,8 @@ namespace AirshipsAndAirIslands.Combat
             {
                 currentHull = stats.MaxHull;
             }
+
+            CollectSubsystems();
         }
 
         private void Start()
@@ -120,6 +125,7 @@ namespace AirshipsAndAirIslands.Combat
 
         public EnemyStats Stats => stats;
         public int CurrentHull => currentHull;
+    public IReadOnlyList<EnemySubsystem> GetSubsystems() => _subsystems;
 
         private void FireWeapons()
         {
@@ -232,6 +238,22 @@ namespace AirshipsAndAirIslands.Combat
             }
         }
 
+        public void ApplyDamageToSubsystem(EnemySubsystem subsystem, int amount)
+        {
+            if (subsystem == null || !_subsystems.Contains(subsystem))
+            {
+                return;
+            }
+
+            subsystem.ApplyDamage(amount);
+            ApplyDamage(amount);
+
+            if (subsystem.IsCritical && subsystem.IsDestroyed)
+            {
+                HandleDestroyed();
+            }
+        }
+
         private int GetEffectiveArmor()
         {
             if (_shieldOverloadTimer > 0f)
@@ -254,6 +276,34 @@ namespace AirshipsAndAirIslands.Combat
             Destroy(gameObject);
         }
 
+
+        private void CollectSubsystems()
+        {
+            _subsystems.Clear();
+
+            if (subsystemOverrides != null && subsystemOverrides.Length > 0)
+            {
+                foreach (var subsystem in subsystemOverrides)
+                {
+                    if (subsystem != null && !_subsystems.Contains(subsystem))
+                    {
+                        _subsystems.Add(subsystem);
+                    }
+                }
+            }
+
+            if (_subsystems.Count == 0)
+            {
+                var discovered = GetComponentsInChildren<EnemySubsystem>(includeInactive: true);
+                foreach (var subsystem in discovered)
+                {
+                    if (subsystem != null && !_subsystems.Contains(subsystem))
+                    {
+                        _subsystems.Add(subsystem);
+                    }
+                }
+            }
+        }
         public void ApplyStatusEffectShieldOverload(float durationSeconds)
         {
             if (stats == null || !stats.HasShieldOverload)
