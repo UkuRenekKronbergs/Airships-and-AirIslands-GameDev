@@ -150,7 +150,7 @@ namespace AirshipsAndAirIslands.Combat
         {
             if (hullValueText != null)
             {
-                hullValueText.text = hull.ToString();
+                hullValueText.text = $"Hull: {hull}";
             }
         }
 
@@ -158,7 +158,7 @@ namespace AirshipsAndAirIslands.Combat
         {
             if (ammoValueText != null)
             {
-                ammoValueText.text = ammo.ToString();
+                ammoValueText.text = $"Ammo: {ammo}";
             }
         }
 
