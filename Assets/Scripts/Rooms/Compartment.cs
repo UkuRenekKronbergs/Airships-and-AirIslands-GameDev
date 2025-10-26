@@ -23,7 +23,7 @@ public class Compartment : MonoBehaviour
     public bool Is_Buildable = false;
     private bool _is_empty = true;
 
-
+    // This could be probably be acomplished with only one variable. So getting rid of either buildable or empty is an option.
     public bool Is_Empty
     {
         get { return _is_empty; }
@@ -32,6 +32,7 @@ public class Compartment : MonoBehaviour
         {
             if (value == false)
             {
+                _is_empty = false;
                 Is_Buildable = false;
 
                 // Check if Elevator to the right or to the left. (Elevators use a different script in this version) 

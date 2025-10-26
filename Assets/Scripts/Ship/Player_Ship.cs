@@ -11,8 +11,8 @@ public class Player_Ship : MonoBehaviour
     private int Max_Storage;
     private int Storage_used;
     [HideInInspector]
-    public Dictionary<Compartment_Type, HashSet<GameObject>> AllCompartments = new Dictionary<Compartment_Type, HashSet<GameObject>>();
-    public Dictionary<string, int> MinimumAmmounts = new Dictionary<string, int>();
+    public Dictionary<string, HashSet<GameObject>> AllCompartments = new Dictionary<string, HashSet<GameObject>>();
+    //public Dictionary<string, int> MinimumAmmounts = new Dictionary<string, int>();
 
 
 
@@ -26,10 +26,10 @@ public class Player_Ship : MonoBehaviour
         AllCompartments_func();
         // Stupid way to do this. There should probs be a masterlist somewhere of all possible compartments where you could pull this type of info.
         // Controllers and shit would help. Oh well...
-        MinimumAmmounts["Weapons"] = 1;
-        MinimumAmmounts["Bridge"] = 1;
-        MinimumAmmounts["Storage"] = 1;
-
+        //MinimumAmmounts["Weapons"] = 1;
+        //MinimumAmmounts["Bridge"] = 1;
+        //MinimumAmmounts["Storage"] = 1;
+        //MinimumAmmounts["Engine"] = 1;
 
 
 
@@ -39,7 +39,7 @@ public class Player_Ship : MonoBehaviour
 
     }
     public void AllCompartments_func() {
-        AllCompartments = new Dictionary<Compartment_Type, HashSet<GameObject>>();// Kind of defeats the purpose of using hasshet. But I am too lazy rn to add the ability to remove items from the hashset.
+        AllCompartments = new Dictionary<string, HashSet<GameObject>>();// Kind of defeats the purpose of using hasshet. But I am too lazy rn to add the ability to remove items from the hashset.
         List<GameObject> Compartments = new List<GameObject>();
 
         // Note: A bit different than the code in rows.cs. In rows, compartments is the parent that holds all compartments and non of the ship edges. And we have to search for that child specifically. Here I passed the compartment holder directly in unity editor.
@@ -53,6 +53,7 @@ public class Player_Ship : MonoBehaviour
 
 
 
+
         }
 
         foreach (GameObject Compartment in Compartments)
@@ -61,14 +62,14 @@ public class Player_Ship : MonoBehaviour
             if ((Compartment.GetComponent<Compartment>() != null))
             {
                 Compartment_Type a = Compartment.GetComponent<Compartment>().ReturnType();
-                if (AllCompartments.ContainsKey(a))
+                if (AllCompartments.ContainsKey(a.Name))
                 {
-                    AllCompartments[a].Add(Compartment);
+                    AllCompartments[a.Name].Add(Compartment);
                 }
                 else
                 {
-                    AllCompartments.Add(a, new HashSet<GameObject>());
-                    AllCompartments[a].Add(Compartment);
+                    AllCompartments.Add(a.Name, new HashSet<GameObject>());
+                    AllCompartments[a.Name].Add(Compartment);
                 }
             }
         }
@@ -77,7 +78,7 @@ public class Player_Ship : MonoBehaviour
 
     void Start()
     {
-        //GPT_Debug();
+        GPT_Debug();
     }
 
     void Update()
@@ -85,33 +86,25 @@ public class Player_Ship : MonoBehaviour
         
     }
 
+
     public void GPT_Debug() {
         foreach (var kvp in AllCompartments)
         {
-            Compartment_Type key = kvp.Key;
+            string key = kvp.Key;
             HashSet<GameObject> valueSet = kvp.Value;
 
-            string keyLabel;
+            
 
             // Safely handle MonoBehaviour keys (attached to GameObjects)
-            if (key != null)
-            {
-                if (key is MonoBehaviour mb && mb.gameObject != null)
-                    keyLabel = $"{mb.gameObject.name} ({key.GetType().Name})";
-                else
-                    keyLabel = key.GetType().Name;
-            }
-            else
-            {
-                keyLabel = "NULL KEY";
-            }
+            
 
-            Debug.Log($"Key: {keyLabel}");
+            Debug.Log($"Key: {key}");
 
             foreach (GameObject obj in valueSet)
             {
                 Debug.Log($"   -> {obj.name}");
             }
+            Debug.Log("Next Key");
         }
 
 
