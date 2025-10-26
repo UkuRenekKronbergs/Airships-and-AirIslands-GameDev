@@ -101,9 +101,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bf04676af0a2f94e924d7c7ffe4d038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Is_Buildable: 0
   Left_Room: {fileID: 0}
   Right_Room: {fileID: 0}
+  Compartment_Type_Prefab: {fileID: 4746088805539881469, guid: c01b12eb7a8727f49a7272bb7c8d2473, type: 3}
+  Is_Buildable: 0
 --- !u!61 &2764046865087368058
 BoxCollider2D:
   m_ObjectHideFlags: 0

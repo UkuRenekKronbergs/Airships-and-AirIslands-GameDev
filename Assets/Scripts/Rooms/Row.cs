@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 
 public class Row : MonoBehaviour
 {
+    [HideInInspector]
     public int CompartmentSlots = 8;
     //public GameObject EmptyRoomPrefab;
     //public GameObject Elevator_L;
@@ -17,11 +18,14 @@ public class Row : MonoBehaviour
 
     private void Awake()
     {
+        // attached the children in the Unity editor. Just need to find them now.
         foreach (Transform child in transform.Find("Compartments"))
         {
             Compartments.Add(child.gameObject);
 
         }
+
+        // This is  just initializing the compartments by adding the left, right, isbuildable, isempty variables.
         int size = Compartments.Count;
         Compartment comp;
         for (int i = 0; i < size; i++) {
@@ -68,7 +72,7 @@ public class Row : MonoBehaviour
 
         void Start()
         {
-        Debug.Log(Compartments);
+        //Debug.Log(Compartments);
 
 
         }
@@ -78,5 +82,6 @@ public class Row : MonoBehaviour
         {
 
         }
+
     
 }

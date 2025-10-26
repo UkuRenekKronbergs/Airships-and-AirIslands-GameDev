@@ -8,12 +8,22 @@ public class Compartment : MonoBehaviour
     //private Compartment_Type Compartment_Type = new(Compartment_Empty;
 
 
+    [HideInInspector]
+    public GameObject Left_Room;
+    [HideInInspector]
+    public GameObject Right_Room;
+
+    public GameObject Compartment_Type_Prefab;
+    [HideInInspector]
+    public GameObject Child_Compartment;
+    private int Current_Tier = 0;
 
 
+    [HideInInspector]
     public bool Is_Buildable = false;
     private bool _is_empty = true;
 
-
+    // This could be probably be acomplished with only one variable. So getting rid of either buildable or empty is an option.
     public bool Is_Empty
     {
         get { return _is_empty; }
@@ -22,6 +32,7 @@ public class Compartment : MonoBehaviour
         {
             if (value == false)
             {
+                _is_empty = false;
                 Is_Buildable = false;
 
                 // Check if Elevator to the right or to the left. (Elevators use a different script in this version) 
@@ -42,14 +53,11 @@ public class Compartment : MonoBehaviour
             }
         }
     }
-    //[HideInInspector]
-    public GameObject Left_Room;
-    //[HideInInspector]
-    public GameObject Right_Room;
+
 
     private void Awake()
     {
-
+        Add_Compartment_Type_Child(Compartment_Type_Prefab);
 
         
     }
@@ -65,9 +73,53 @@ public class Compartment : MonoBehaviour
         
     }
 
+    public void Add_Compartment_Type_Child(GameObject TypePrefab) {
+
+        if (Child_Compartment != null) {
+        // TODO: return resources that are hold up it the child comaprtment if any exists.
+            Destroy(Child_Compartment);
+        
+        }
+        Current_Tier = 1;
+        Child_Compartment = Instantiate(TypePrefab);
+        Child_Compartment.transform.SetParent(this.transform,false);
+        Child_Compartment.transform.localPosition = Vector3.zero;
+        Child_Compartment.transform.localScale = Vector3.one;
+       
+    }
+
+
+    // TODO, IMPLEMENT MERGING
+    public void Check_Merge() {
+
+        // Leftside
+        if (Not_an_Elevator(Left_Room)) {
+            return;
+        
+        
+        }
+
 
     
+    }
+
+        public bool Not_an_Elevator(GameObject a) {
+
+        if (a.GetComponent<Compartment>() != null)
+            return true;
+        else 
+            return false;
+    
+    
+    
+    }
+    public Compartment_Type ReturnType() {
+        return Child_Compartment.GetComponent<Compartment_Type>();
+    }
 
 
- 
+
+
+
+
 }
