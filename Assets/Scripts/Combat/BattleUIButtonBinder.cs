@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace AirshipsAndAirIslands.Combat
@@ -14,10 +15,14 @@ namespace AirshipsAndAirIslands.Combat
         [SerializeField] private BattleManager battleManager;
         [SerializeField] private PlayerCombatController playerCombat;
 
+    [Header("Flow")]
+    [SerializeField] private string mainMenuSceneName = "MainMenu";
+
         [Header("Buttons")]
         [SerializeField] private Button fireButton;
         [SerializeField] private Button nextSubsystemButton;
         [SerializeField] private Button previousSubsystemButton;
+    [SerializeField] private Button exitButton;
 
         [Header("Labels")]
         [SerializeField] private TMP_Text subsystemCountText;
@@ -33,6 +38,7 @@ namespace AirshipsAndAirIslands.Combat
             WireButton(fireButton, HandleFireClicked);
             WireButton(nextSubsystemButton, HandleNextSubsystemClicked);
             WireButton(previousSubsystemButton, HandlePreviousSubsystemClicked);
+            WireButton(exitButton, HandleExitClicked);
 
             if (battleManager != null)
             {
@@ -50,6 +56,7 @@ namespace AirshipsAndAirIslands.Combat
             UnwireButton(fireButton, HandleFireClicked);
             UnwireButton(nextSubsystemButton, HandleNextSubsystemClicked);
             UnwireButton(previousSubsystemButton, HandlePreviousSubsystemClicked);
+            UnwireButton(exitButton, HandleExitClicked);
 
             if (battleManager != null)
             {
@@ -78,6 +85,17 @@ namespace AirshipsAndAirIslands.Combat
         private void HandlePreviousSubsystemClicked()
         {
             battleManager?.CycleSubsystem(-1);
+        }
+
+        private void HandleExitClicked()
+        {
+            if (string.IsNullOrWhiteSpace(mainMenuSceneName))
+            {
+                Debug.LogWarning("BattleUIButtonBinder: Main menu scene name not configured.");
+                return;
+            }
+
+            SceneManager.LoadScene(mainMenuSceneName);
         }
 
         private void HandleStateChanged(BattleManager.BattleState _)
@@ -109,6 +127,11 @@ namespace AirshipsAndAirIslands.Combat
             if (previousSubsystemButton != null)
             {
                 previousSubsystemButton.interactable = isRunning && subsystemCount > 1;
+            }
+
+            if (exitButton != null)
+            {
+                exitButton.interactable = true;
             }
 
             if (subsystemCountText != null)
