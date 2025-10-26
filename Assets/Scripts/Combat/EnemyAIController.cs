@@ -25,10 +25,13 @@ namespace AirshipsAndAirIslands.Combat
         [SerializeField] private GameState gameState;
         [SerializeField] private GameObject muzzleFlashPrefab;
         [SerializeField, Min(0)] private int shieldOverloadBonusArmor = 3;
+    [SerializeField] private BattleManager battleManager;
 
-        [Header("Runtime Debug")]
-        [SerializeField] private int currentHull;
-        [SerializeField] private EnemyState currentState;
+    [Header("Runtime Debug")]
+    [SerializeField] private int currentHull;
+    [SerializeField] private EnemyState currentState;
+
+    public event Action<EnemyAIController> Destroyed;
 
         private Rigidbody2D _rigidbody;
         private Coroutine _attackRoutine;
@@ -48,6 +51,11 @@ namespace AirshipsAndAirIslands.Combat
             if (gameState == null)
             {
                 gameState = FindFirstObjectByType<GameState>();
+            }
+
+            if (battleManager == null)
+            {
+                battleManager = FindFirstObjectByType<BattleManager>();
             }
 
             if (target == null)
@@ -110,6 +118,9 @@ namespace AirshipsAndAirIslands.Combat
             }
         }
 
+        public EnemyStats Stats => stats;
+        public int CurrentHull => currentHull;
+
         private void FireWeapons()
         {
             var baseDamage = stats.AttackDamage;
@@ -123,6 +134,15 @@ namespace AirshipsAndAirIslands.Combat
 
             // TODO: Integrate with player's combat system.
             Debug.Log($"{stats.EnemyName} fires for {damage} damage (bonus {bonus}).");
+
+            if (battleManager != null)
+            {
+                battleManager.ApplyDamageToPlayer(damage, this);
+            }
+            else if (gameState != null)
+            {
+                gameState.ModifyResource(ResourceType.Hull, -damage);
+            }
 
             if (muzzleFlashPrefab != null)
             {
@@ -230,6 +250,7 @@ namespace AirshipsAndAirIslands.Combat
             }
 
             // TODO: Grant loot / update game state.
+            Destroyed?.Invoke(this);
             Destroy(gameObject);
         }
 

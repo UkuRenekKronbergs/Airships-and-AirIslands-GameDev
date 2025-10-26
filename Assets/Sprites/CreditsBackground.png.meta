@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 65662103b448b7642a50da854d3fcb11
+guid: 99cb2faa2f59dc440a173ed840ad3190
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1927202661202883626
-    second: enamy_0
-  - first:
-      213: 3805644991561306240
-    second: enamy_1
+      213: 5961385446741494771
+    second: CreditsBackground_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -103,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: enamy_0
+      name: CreditsBackground_0
       rect:
         serializedVersion: 2
-        x: 20
-        y: 25
-        width: 338
-        height: 190
+        x: 0
+        y: 0
+        width: 1536
+        height: 1024
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -118,30 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6db80d0f3633145e0800000000000000
-      internalID: -1927202661202883626
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: enamy_1
-      rect:
-        serializedVersion: 2
-        x: 351
-        y: 28
-        width: 238
-        height: 187
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0809147e4fd50d430800000000000000
-      internalID: 3805644991561306240
+      spriteID: 3fbc532aa781bb250800000000000000
+      internalID: 5961385446741494771
       vertices: []
       indices: 
       edges: []
@@ -160,8 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      enamy_0: -1927202661202883626
-      enamy_1: 3805644991561306240
+      CreditsBackground_0: 5961385446741494771
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System;
-using Airships.Map;
+using Airships.Ship;
 
 public class TravelNodeController : MonoBehaviour
 {
