@@ -38,7 +38,7 @@ Key inspirations: **FTL**, **Fallout Shelter**, **Sunless Sea**, **Oxygen Not In
 | **Ship System**       | Ship is built from **rooms**: <br>• Mandatory (engine, pilot, weapons, medbay) <br>• Optional (cargo hold, bedrooms, mess hall, etc.). <br>Limited space forces strategic choices. |
 | **Crew**              | Have needs: food, rest, morale. <br>Better food = more efficient work. |
 | **Visual Style**      | 2D side-view pixel art. <br>Minimalist, functional, atmospheric. |
-| **MVP**               | • 5 handmade locations <br>• 3 enemy designs <br>• 10 random events <br>• 3 world stages <br>• 4 optional ship rooms <br>• 1 ending (Final Boss) <br>+ Trade, random world generation |
+| **MVP**               | • 1 handmade locations <br>• 1 enemy designs <br>• 10 random events <br>• 1 world stage <br>• 4 optional ship rooms <br> <br>+ Trade |
 | **Meta-game**         | Multiple runs teach players event outcomes, combat mastery, ship builds, and strategies. |
 | **Inspirations**      | Fallout Shelter, FTL, Sunless Sea, Oxygen Not Included, Rimworld |
 
