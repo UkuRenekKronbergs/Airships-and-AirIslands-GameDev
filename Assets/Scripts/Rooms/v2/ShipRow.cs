@@ -51,12 +51,12 @@ public class ShipRow : MonoBehaviour
         List<Transform> columns = new List<Transform>();
         // Both the CombinedCompartment script and CopartmentType script are attached to the same gameobject.
         // CompartmentType is also a field of CombinedCompartment because thats still the main script.
-        GameObject Emptyroom = Instantiate(CompartmentHolder.Instance.EmptyCompartment);
+        //GameObject Emptyroom = Instantiate(CompartmentHolder.Instance.EmptyCompartment);
 
 
         GameObject newCombinedCompartment = new GameObject("EmptyCompartment", typeof(CombinedCompartment), typeof(EmptyCompartment));
-        //newCombinedCompartment.GetComponent<CombinedCompartment>().CompartmentType = newCombinedCompartment.GetComponent<EmptyCompartment>();
-        newCombinedCompartment.GetComponent<CombinedCompartment>().test = Emptyroom;
+        newCombinedCompartment.GetComponent<CombinedCompartment>().CompartmentType = newCombinedCompartment.GetComponent<EmptyCompartment>();
+        //newCombinedCompartment.GetComponent<CombinedCompartment>().test = CompartmentHolder.Instance.EmptyCompartment;
 
 
         foreach (Transform child in transform) { 

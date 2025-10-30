@@ -6,7 +6,7 @@ public class CombinedCompartment : MonoBehaviour
 {
     // Turn private later, all of them?
     public CompartmentType CompartmentType;
-    public GameObject test;
+    //public GameObject test;
     public int CurrentTier = 0;
     public List<GameObject> SingleCompartment = new List<GameObject>();
     public List<GameObject> Columns = new List<GameObject>(); // len is size of compartment
