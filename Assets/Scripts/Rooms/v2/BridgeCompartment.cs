@@ -1,24 +1,18 @@
 using UnityEngine;
 
-public class EmptyCompartment : CompartmentType
-
+public class BridgeCompartment : CompartmentType
 {
+
     private void Reset()
     {
-        Name = "EmptyCompartment";
-        Max_Ammount = 99;
-        Min_Ammount = 0;
+        Name = "BridgeCompartment";
+        Max_Ammount = 1;
+        Min_Ammount = 1;
         Health = 1;
         Cost = 0;
         Max_Tier = 1;
-        Size = 0;//will this cause problems?;
+        Size = 6;
     }
-
-    private void Awake()
-    {
-  
-    }
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
