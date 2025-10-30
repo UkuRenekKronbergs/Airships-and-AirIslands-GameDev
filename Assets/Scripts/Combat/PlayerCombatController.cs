@@ -93,12 +93,12 @@ namespace AirshipsAndAirIslands.Combat
                 return false;
             }
 
-            return TryFireAt(battleManager.CurrentTarget);
+            return TryFireAt(battleManager.CurrentSubsystem);
         }
 
-        public bool TryFireAt(EnemyAIController target)
+        public bool TryFireAt(EnemySubsystem subsystem)
         {
-            if (target == null)
+            if (subsystem == null)
             {
                 return false;
             }
@@ -113,9 +113,34 @@ namespace AirshipsAndAirIslands.Combat
                 return false;
             }
 
+            EnemyAIController owner = null;
+            if (battleManager != null)
+            {
+                owner = battleManager.GetSubsystemOwner(subsystem);
+                if (owner == null)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                owner = subsystem.GetComponentInParent<EnemyAIController>();
+                if (owner == null)
+                {
+                    return false;
+                }
+            }
+
             gameState.ModifyResource(ResourceType.Ammo, -ammoPerShot);
             var damage = CalculateDamageRoll();
-            target.ApplyDamage(damage);
+            if (battleManager != null)
+            {
+                battleManager.ApplyDamageToSubsystem(subsystem, damage);
+            }
+            else
+            {
+                owner.ApplyDamageToSubsystem(subsystem, damage);
+            }
             SpawnMuzzleEffect();
             BeginReload();
             WeaponFired?.Invoke(damage);

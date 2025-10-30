@@ -23,6 +23,9 @@ public class MainMenuController : MonoBehaviour
     [SerializeField]
     private Button settingsBackButton;
 
+    [SerializeField]
+    private Button githubButton;
+
     [Header("Panels")]
     [SerializeField]
     private GameObject settingsPanel;
@@ -33,14 +36,18 @@ public class MainMenuController : MonoBehaviour
     [SerializeField]
     private string playSceneName = "Map";
 
+    [SerializeField]
+    private string githubUrl = "https://github.com/UkuRenekKronbergs/Airships-and-AirIslands-GameDev/tree/main";
+
     private void Awake()
     {
         WireButton(playButton, OnPlayClicked);
         WireButton(settingsButton, OnSettingsClicked);
         WireButton(creditsButton, OnCreditsClicked);
         WireButton(exitButton, OnExitClicked);
-    WireButton(creditsBackButton, OnCreditsBackClicked);
-    WireButton(settingsBackButton, OnSettingsBackClicked);
+        WireButton(creditsBackButton, OnCreditsBackClicked);
+        WireButton(settingsBackButton, OnSettingsBackClicked);
+        WireButton(githubButton, OnGithubClicked);
 
         if (settingsPanel != null)
         {
@@ -117,6 +124,17 @@ public class MainMenuController : MonoBehaviour
     private void OnExitClicked()
     {
         QuitGame();
+    }
+
+    private void OnGithubClicked()
+    {
+        if (string.IsNullOrWhiteSpace(githubUrl))
+        {
+            Debug.LogWarning("MainMenuController: GitHub URL is empty.");
+            return;
+        }
+
+        Application.OpenURL(githubUrl);
     }
 
     private void OnCreditsBackClicked()

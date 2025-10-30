@@ -9,6 +9,9 @@ public class TravelNodeController : MonoBehaviour
     public PathController pathController;
     public PlayerController playerController;
 
+    bool mouseOver = false;
+    int distance = 0;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -20,11 +23,16 @@ public class TravelNodeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (mouseOver && Input.GetKeyDown(KeyCode.Mouse0) && distance != 0)
+        {
+            playerController.moveLocation(gameObject);
+        }
     }
 
     void OnMouseEnter()
     {
+        mouseOver = true;
+
         NodePair path = new NodePair();
         foreach (NodePair pair in pathController.pairs)
         {
@@ -36,14 +44,19 @@ public class TravelNodeController : MonoBehaviour
 
         if (path.distance != 0)
         {
-            travel_text.text = path.distance.ToString();    
+            travel_text.text = path.distance.ToString();
+            distance = path.distance;
         } else
         {
             travel_text.text = "No path to destination";
+            distance = 0;
         }
     }
-    
-    void OnMouseExit() {
-        travel_text.text = "";    
+
+    void OnMouseExit()
+    {
+        mouseOver = false;
+        distance = 0;
+        travel_text.text = "";
     }
 }

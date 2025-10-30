@@ -6,14 +6,19 @@ namespace Airships.Ship
     {
         public GameObject location;
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-        }
-
         // Update is called once per frame
         void Update()
         {
+        }
+
+        public void moveLocation(GameObject destination)
+        {
+            if (destination == null) return;
+
+            location = destination;
+
+            var destinationPos = destination.transform.position;
+            transform.position = destinationPos + new Vector3(0f, 1f, 0f);
         }
     }
 }

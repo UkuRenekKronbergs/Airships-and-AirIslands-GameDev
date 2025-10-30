@@ -1,8 +1,9 @@
+using System.Text;
 using AirshipsAndAirIslands.Events;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace AirshipsAndAirIslands.Locations
 {
@@ -23,6 +24,7 @@ namespace AirshipsAndAirIslands.Locations
         [SerializeField] private Button healButton;
         [SerializeField] private Button tradeButton;
         [SerializeField] private Button closeButton;
+    [SerializeField] private Button roomsButton;
 
         [Header("City Settings")]
         [SerializeField] private string cityName = "Nimbus Gate";
@@ -33,6 +35,7 @@ namespace AirshipsAndAirIslands.Locations
         [SerializeField, Min(1)] private int tradeGoldReward = 2;
     [SerializeField] private bool loadSceneOnExit;
     [SerializeField] private string exitSceneName = "Map";
+        [SerializeField] private string roomsSceneName = "Rooms";
 
         private void Awake()
         {
@@ -42,6 +45,13 @@ namespace AirshipsAndAirIslands.Locations
             }
 
             WireButtonListeners();
+        }
+
+        private void Start()
+        {
+            EnsureGameState();
+            UpdateHeader();
+            UpdateStats();
         }
 
         private void Reset()
@@ -70,11 +80,7 @@ namespace AirshipsAndAirIslands.Locations
                 cityUiRoot.SetActive(true);
             }
 
-            if (headerText != null)
-            {
-                headerText.text = cityName;
-            }
-
+            UpdateHeader();
             UpdateStats();
             SetFeedback(string.Empty);
         }
@@ -179,6 +185,12 @@ namespace AirshipsAndAirIslands.Locations
                 closeButton.onClick.RemoveListener(OnCloseButtonPressed);
                 closeButton.onClick.AddListener(OnCloseButtonPressed);
             }
+
+            if (roomsButton != null)
+            {
+                roomsButton.onClick.RemoveListener(OnRoomsButtonPressed);
+                roomsButton.onClick.AddListener(OnRoomsButtonPressed);
+            }
         }
 
         private bool EnsureGameState()
@@ -199,9 +211,24 @@ namespace AirshipsAndAirIslands.Locations
                 return;
             }
 
-            statsText.text =
-                $"Hull: {gameState.GetResource(ResourceType.Hull)}/{gameState.MaxHull}\n" +
-                $"Gold: {gameState.GetResource(ResourceType.Gold)}";
+            var builder = new StringBuilder();
+
+            AppendStat("Hull", $"{gameState.GetResource(ResourceType.Hull)}/{gameState.MaxHull}");
+            AppendStat("Gold", gameState.GetResource(ResourceType.Gold).ToString());
+            AppendStat("Fuel", gameState.GetResource(ResourceType.Fuel).ToString());
+            AppendStat("Food", gameState.GetResource(ResourceType.Food).ToString());
+            AppendStat("Ammo", gameState.GetResource(ResourceType.Ammo).ToString());
+            AppendStat("Crew Morale", gameState.GetResource(ResourceType.CrewMorale).ToString());
+            AppendStat("Crew Fatigue", gameState.GetResource(ResourceType.CrewFatigue).ToString());
+
+            statsText.text = builder.ToString().TrimEnd('\r', '\n');
+
+            void AppendStat(string label, string value)
+            {
+                builder.Append(label);
+                builder.Append(": ");
+                builder.AppendLine(value);
+            }
         }
 
         private void SetFeedback(string message)
@@ -212,6 +239,35 @@ namespace AirshipsAndAirIslands.Locations
             }
 
             feedbackText.text = message;
+        }
+
+        public void OnRoomsButtonPressed()
+        {
+            if (string.IsNullOrWhiteSpace(roomsSceneName))
+            {
+                Debug.LogWarning("CityLocation rooms scene name is empty.");
+                return;
+            }
+
+            if (Application.CanStreamedLevelBeLoaded(roomsSceneName))
+            {
+                SceneManager.LoadScene(roomsSceneName);
+            }
+            else
+            {
+                Debug.LogWarning($"CityLocation could not load rooms scene '{roomsSceneName}'. Check build settings.");
+            }
+        }
+
+        private void UpdateHeader()
+        {
+            if (headerText == null)
+            {
+                return;
+            }
+
+            var displayName = string.IsNullOrWhiteSpace(cityName) ? transform.root.name : cityName;
+            headerText.text = displayName;
         }
     }
 }

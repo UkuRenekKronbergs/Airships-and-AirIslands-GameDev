@@ -17,11 +17,11 @@ Key inspirations: **FTL**, **Fallout Shelter**, **Sunless Sea**, **Oxygen Not In
 ---
 
 ## 🌀 Core Gameplay Loop
-1. Travel between floating islands (nodes)  
-2. Encounter **battles, events, or trade opportunities**  
-3. Manage crew needs (food, rest, morale)  
-4. Upgrade ship rooms and systems  
-5. Survive until the **final boss**  
+1. Build and upgrade ship rooms and systems
+2. Travel between floating islands (nodes)
+3. Encounter **battles, events, or trade opportunities**
+4. Manage crew needs (food, rest, morale)
+5. Survive until the **final boss**
 
 ---
 
@@ -30,15 +30,15 @@ Key inspirations: **FTL**, **Fallout Shelter**, **Sunless Sea**, **Oxygen Not In
 | **Category**          | **Details** |
 |------------------------|-------------|
 | **Genre**             | Roguelike strategy, inspired by FTL + Fallout Shelter + Sunless Sea |
-| **Core Loop**         | Travel → Encounter (combat, trade, quest) → Manage resources → Build/upgrade ship → Repeat until final boss |
+| **Core Loop**         | Build/upgrade ship → Travel → Encounter (combat, trade, quest) → Manage resources →  → Repeat until final boss |
 | **World**             | One large “sector” made of nodes: <br>• Handmade nodes (cities, villages, unique locations) <br>• Randomized nodes (battles, events, empty). <br>Node contents refresh every X days. |
 | **Progression**       | After Z days → tougher enemies, new quests, new events. <br>Endgame → Final Boss. |
 | **Resources**         | • **Fuel** – movement <br>• **Food** – crew needs, multiple quality tiers <br>• **Ammo** – combat <br>• **Gold** – trade, quests, combat <br>• **Ship Hull** – repairable only in cities |
 | **Economy**           | Ways to earn: <br>1. Quests <br>2. Trade <br>3. Combat <br><br>Spending: <br>• Fuel, ammo, food <br>• Repairs <br>• Weapons <br>• New rooms / upgrades <br>• Better food for crew |
-| **Ship System**       | Ship is built from **rooms**: <br>• Mandatory (engine, pilot, weapons, medbay) <br>• Optional (cargo hold, bedrooms, mess hall, etc.). <br>Limited space forces strategic choices. |
+| **Ship System**       | Ship is built from **rooms**: <br>• Mandatory (engine, bridge, weapons, storage) <br>• Optional (bedrooms, mess hall, medbay etc). <br>Limited space forces strategic choices. |
 | **Crew**              | Have needs: food, rest, morale. <br>Better food = more efficient work. |
 | **Visual Style**      | 2D side-view pixel art. <br>Minimalist, functional, atmospheric. |
-| **MVP**               | • 5 handmade locations <br>• 3 enemy designs <br>• 10 random events <br>• 3 world stages <br>• 4 optional ship rooms <br>• 1 ending (Final Boss) <br>+ Trade, random world generation |
+| **MVP**               | • 1 handmade locations <br>• 1 enemy designs <br>• 10 random events <br>• 1 world stage <br>• 4 optional ship rooms <br> • Trade system |
 | **Meta-game**         | Multiple runs teach players event outcomes, combat mastery, ship builds, and strategies. |
 | **Inspirations**      | Fallout Shelter, FTL, Sunless Sea, Oxygen Not Included, Rimworld |
 
