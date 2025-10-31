@@ -2,18 +2,18 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
-public class Compartment_Card_Presenter : MonoBehaviour
+public class CompartmentCardPresenter : MonoBehaviour
 {
 
-    public GameObject Compartment_Prefab;
+    public GameObject CompartmentPrefab;
     public Image Icon;
-    public Texture2D Mouse_Icon_Neutral;
-    public Texture2D Mouse_Icon_Positive;
-    public Texture2D Mouse_Icon_Negative;
-    private Vector2 mouse_hotspot;
-    private Compartment_Type Compartment;
-    public TextMeshProUGUI Name_Text;
-    public TextMeshProUGUI Cost_Text;
+    public Texture2D MouseIconNeutral;
+    public Texture2D MouseIconPositive;
+    public Texture2D MouseIconNegative;
+    private Vector2 _mouseHotspot;
+    private CompartmentType Compartment;
+    public TextMeshProUGUI NameText;
+    public TextMeshProUGUI CostText;
     public TextMeshProUGUI MinText;
     public TextMeshProUGUI MaxText;
     public TextMeshProUGUI CurrentText;
@@ -22,9 +22,9 @@ public class Compartment_Card_Presenter : MonoBehaviour
 
     private void Awake()
     {
-        Compartment = Compartment_Prefab.GetComponent<Compartment_Type>();
-        Name_Text.SetText(Compartment.Name );
-        Cost_Text.SetText("Cost: "+Compartment.Cost.ToString());
+        Compartment = CompartmentPrefab.GetComponent<CompartmentType>();
+        NameText.SetText(Compartment.Name );
+        CostText.SetText("Cost: "+Compartment.Cost.ToString());
         Icon.sprite = Compartment.Icon;
         //SetMinMaxCurrent(Compartment);
 
@@ -37,15 +37,15 @@ public class Compartment_Card_Presenter : MonoBehaviour
         {
             _button.onClick.AddListener(Pressed);
         }
-        mouse_hotspot = new Vector2(Mouse_Icon_Neutral.width / 2f, Mouse_Icon_Neutral.height / 2f);
+        _mouseHotspot = new Vector2(MouseIconNeutral.width / 2f, MouseIconNeutral.height / 2f);
     }
 
 
     void Start()
     {
-        SetMinMaxCurrent(Compartment);
+        //SetMinMaxCurrent(Compartment);
 
-        MandatoryFree();
+        //MandatoryFree();
            
 
 
@@ -60,11 +60,12 @@ public class Compartment_Card_Presenter : MonoBehaviour
 
         // Broke boy/girl/they
         if (Player_Ship.Instance.Currency < Compartment.Cost) 
-            Cost_Text.color = Color.red;
+            CostText.color = Color.red;
         
+        /*
         else if (MandatoryFree() || Player_Ship.Instance.Currency >= Compartment.Cost)
-            Cost_Text.color = new Color(0f, 0.39f, 0f);
-
+            CostText.color = new Color(0f, 0.39f, 0f);
+        */
 
 
 
@@ -85,14 +86,14 @@ public class Compartment_Card_Presenter : MonoBehaviour
                     Compartment comp = hit.collider.GetComponent<Compartment>();
                     if (comp != null) {
                         if (comp.Is_Empty && comp.Is_Buildable) {
-                            Build(Compartment_Prefab, hit);
+                            Build(CompartmentPrefab, hit);
                            
                         }
                     }
                 }
 
                 _pressed = false;
-                Cursor.SetCursor(null, mouse_hotspot, CursorMode.Auto);
+                Cursor.SetCursor(null, _mouseHotspot, CursorMode.Auto);
 
 
 
@@ -102,7 +103,7 @@ public class Compartment_Card_Presenter : MonoBehaviour
 
     public void Pressed() {
         _pressed = true;
-        Cursor.SetCursor(Mouse_Icon_Neutral,mouse_hotspot,CursorMode.Auto);
+        Cursor.SetCursor(MouseIconNeutral,_mouseHotspot,CursorMode.Auto);
     }
 
     public void CursorHover(RaycastHit2D hit) {
@@ -114,23 +115,23 @@ public class Compartment_Card_Presenter : MonoBehaviour
             {
                 if (comp.Is_Empty && comp.Is_Buildable)
                 {
-                    Cursor.SetCursor(Mouse_Icon_Positive, mouse_hotspot, CursorMode.Auto);
+                    Cursor.SetCursor(MouseIconPositive, _mouseHotspot, CursorMode.Auto);
                 }
                 else
                 {
-                    Cursor.SetCursor(Mouse_Icon_Negative, mouse_hotspot, CursorMode.Auto);
+                    Cursor.SetCursor(MouseIconNegative, _mouseHotspot, CursorMode.Auto);
 
                 }
             }
             else
             {
                 if (hit.collider.GetComponent<Elevators>() != null)
-                    Cursor.SetCursor(Mouse_Icon_Negative, mouse_hotspot, CursorMode.Auto);
+                    Cursor.SetCursor(MouseIconNegative, _mouseHotspot, CursorMode.Auto);
 
             }
         }
         else
-            Cursor.SetCursor(Mouse_Icon_Neutral, mouse_hotspot, CursorMode.Auto);
+            Cursor.SetCursor(MouseIconNeutral, _mouseHotspot, CursorMode.Auto);
     }
 
     private void Build(GameObject Compartment_Prefab, RaycastHit2D hit) {
@@ -138,7 +139,8 @@ public class Compartment_Card_Presenter : MonoBehaviour
 
 
         // TODO Subdtract player resources 
-        if (Player_Ship.Instance.Currency >= Compartment.Cost && !MandatoryFree())
+        if (Player_Ship.Instance.Currency >= Compartment.Cost) //        if (Player_Ship.Instance.Currency >= Compartment.Cost && !MandatoryFree())
+
         {
             Player_Ship.Instance.Currency -=Compartment.Cost;
             Compartment comp = hit.collider.GetComponent<Compartment>();
@@ -149,7 +151,7 @@ public class Compartment_Card_Presenter : MonoBehaviour
 
 
             Player_Ship.Instance.AllCompartments_func();
-            SetMinMaxCurrent(Compartment);
+            //SetMinMaxCurrent(Compartment);
 
             // Disable button. currently no way to reenable
             if (Player_Ship.Instance.AllCompartments[Compartment.Name].Count >= Compartment.Max_Ammount) {
@@ -166,6 +168,7 @@ public class Compartment_Card_Presenter : MonoBehaviour
 
 
         }
+        /*
         else if (MandatoryFree())
         {
             Compartment comp = hit.collider.GetComponent<Compartment>();
@@ -183,12 +186,12 @@ public class Compartment_Card_Presenter : MonoBehaviour
             {
                 _button.interactable = false;
             }
-        }
+        }*/
 
     }
 
-
-    public void SetMinMaxCurrent(Compartment_Type Compartment) {
+    /*
+    public void SetMinMaxCurrent(CompartmentType Compartment) {
         MinText.SetText("Min: " + Compartment.Min_Ammount.ToString());
         MaxText.SetText("Max: " + Compartment.Max_Ammount.ToString());
         //Debug.Log(Player_Ship.Instance.AllCompartments.ContainsKey(Compartment.name));
@@ -211,18 +214,18 @@ public class Compartment_Card_Presenter : MonoBehaviour
         if (Player_Ship.Instance.AllCompartments.TryGetValue(Compartment.Name, out HashSet<GameObject> value))
         {
             if (value.Count < Compartment.Min_Ammount){
-                Cost_Text.SetText("Cost: " + "FREE");
+                CostText.SetText("Cost: " + "FREE");
                 return true;
                 
             }
         }
         else if (Compartment.Min_Ammount > 0)
         {
-            Cost_Text.SetText("Cost: " + "FREE");
+            CostText.SetText("Cost: " + "FREE");
             return true;
             
         }
-        Cost_Text.SetText("Cost: " + Compartment.Cost.ToString());
+        CostText.SetText("Cost: " + Compartment.Cost.ToString());
         return false;
         
     }
@@ -233,5 +236,5 @@ public class Compartment_Card_Presenter : MonoBehaviour
         
     }
 
-
+    */
 }

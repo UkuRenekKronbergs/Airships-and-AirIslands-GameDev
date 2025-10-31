@@ -5,7 +5,7 @@ public class BridgeCompartment : CompartmentType
 
     private void Reset()
     {
-        Name = "BridgeCompartment";
+        Name = "Bridge";
         Max_Ammount = 1;
         Min_Ammount = 1;
         Health = 1;

@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 8728080654263009913}
   - component: {fileID: 2445006625243894554}
   m_Layer: 5
-  m_Name: Name_Text
+  m_Name: NameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -170,7 +170,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000002501356, y: 14.571711}
+  m_AnchoredPosition: {x: -2.2509, y: 12.5}
   m_SizeDelta: {x: 80, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8728080654263009913
@@ -420,7 +420,7 @@ GameObject:
   - component: {fileID: 7528449017870514963}
   - component: {fileID: 8708686854579890904}
   m_Layer: 5
-  m_Name: Cost_Text
+  m_Name: CostText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -769,7 +769,7 @@ GameObject:
   - component: {fileID: 7579068390418473073}
   - component: {fileID: 3081140123602331034}
   m_Layer: 5
-  m_Name: Compartment_Card
+  m_Name: CompartmentCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -894,13 +894,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fb51cb147d73c94698b32beba813277, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Compartment_Prefab: {fileID: 9092484782707555412, guid: 9e8902bf4b4a82e41b2e5dd46fe8075a, type: 3}
+  CompartmentPrefab: {fileID: 203636011591564442, guid: 71e494b5fe5463147a0d8a6ccde3b8ae, type: 3}
   Icon: {fileID: 4571774049737350176}
-  Mouse_Icon_Neutral: {fileID: 2800000, guid: 9f724b55c334b4941921d0099f4fd9f3, type: 3}
-  Mouse_Icon_Positive: {fileID: 2800000, guid: 3a123a03a1c7d284cbe4ba41ba455036, type: 3}
-  Mouse_Icon_Negative: {fileID: 2800000, guid: 228b7b6bb915c0d4e823933fb2661032, type: 3}
-  Name_Text: {fileID: 2445006625243894554}
-  Cost_Text: {fileID: 8708686854579890904}
+  MouseIconNeutral: {fileID: 2800000, guid: 9f724b55c334b4941921d0099f4fd9f3, type: 3}
+  MouseIconPositive: {fileID: 2800000, guid: 3a123a03a1c7d284cbe4ba41ba455036, type: 3}
+  MouseIconNegative: {fileID: 2800000, guid: 228b7b6bb915c0d4e823933fb2661032, type: 3}
+  NameText: {fileID: 2445006625243894554}
+  CostText: {fileID: 8708686854579890904}
   MinText: {fileID: 860788943587238221}
   MaxText: {fileID: 370950864731964409}
   CurrentText: {fileID: 7551152441180805597}
