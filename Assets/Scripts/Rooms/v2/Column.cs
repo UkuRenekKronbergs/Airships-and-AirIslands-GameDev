@@ -6,8 +6,10 @@ public class Column : MonoBehaviour
     public GameObject Top;
     public GameObject Middle;
     public GameObject Bottom;
-    public GameObject LeftColumn = null;
-    public GameObject RightColumn = null;
+    //public GameObject LeftColumn = null;
+    //public GameObject RightColumn = null;
+    public Column LeftColumn = null;
+    public Column RightColumn = null;
 
     private bool _outline = false;
     // Not TESTED!!

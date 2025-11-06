@@ -24,13 +24,11 @@ public class HUD : MonoBehaviour
     }
     void Start()
     {
-        Currency_Counter.text = "Currency: "+ Player_Ship.Instance.Currency.ToString();
-        //Debug.Log(Player_Ship.Instance.Currency.ToString());
+
     }
 
     void Update()
     {
-        Currency_Counter.text = "Currency: " + Player_Ship.Instance.Currency.ToString();
 
     }
 

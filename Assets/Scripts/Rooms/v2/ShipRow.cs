@@ -80,19 +80,19 @@ public class ShipRow : MonoBehaviour
             {
                 columns[i].GetComponent<Column>().LeftColumn = null;
                 if (size > 1)
-                    columns[i].GetComponent<Column>().RightColumn = columns[i + 1].gameObject;
+                    columns[i].GetComponent<Column>().RightColumn = columns[i + 1].GetComponent<Column>();
             }
             //Rightmost
             else if (i == size - 1) {
                 columns[i].GetComponent<Column>().RightColumn = null;
                 // Most likely this check will never fail, because its connect with else if to if i==0
                 if (size > 1)
-                    columns[i].GetComponent<Column>().LeftColumn = columns[i - 1].gameObject;
+                    columns[i].GetComponent<Column>().LeftColumn = columns[i - 1].GetComponent<Column>();
             }
             else
             {
-                columns[i].GetComponent<Column>().LeftColumn = columns[i - 1].gameObject;
-                columns[i].GetComponent<Column>().RightColumn = columns[i + 1].gameObject;
+                columns[i].GetComponent<Column>().LeftColumn = columns[i - 1].GetComponent<Column>();
+                columns[i].GetComponent<Column>().RightColumn = columns[i + 1].GetComponent<Column>();
             }
             columns[i].transform.SetParent(newCombinedCompartment.transform);
 

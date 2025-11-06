@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
-public class CompartmentCardPresenter : MonoBehaviour
+public class CompartmentCardPresenterOld : MonoBehaviour
 {
 
     public GameObject CompartmentPrefab;
