@@ -1,6 +1,7 @@
+using System.Collections.Generic;
+using System.Drawing;
 using NUnit.Framework;
 using UnityEngine;
-using System.Collections.Generic;
 
 public class ShipRow : MonoBehaviour
 {
@@ -47,7 +48,8 @@ public class ShipRow : MonoBehaviour
     /// Also because there EmptyCompartments will now be generated and destroyed during runtime anyway and I want to avoid possible conflict between
     /// those generated and made in the editor.
     /// </summary>
-    private void Initialize() { 
+    private void Initialize()
+    {
         List<Transform> columns = new List<Transform>();
         // Both the CombinedCompartment script and CopartmentType script are attached to the same gameobject.
         // CompartmentType is also a field of CombinedCompartment because thats still the main script.
@@ -59,16 +61,48 @@ public class ShipRow : MonoBehaviour
         //newCombinedCompartment.GetComponent<CombinedCompartment>().test = CompartmentHolder.Instance.EmptyCompartment;
 
 
-        foreach (Transform child in transform) { 
+        foreach (Transform child in transform)
+        {
             columns.Add(child);
         }
-
+        /*
         foreach (Transform child in columns)
         {
             child.transform.SetParent(newCombinedCompartment.transform);
         }
-        newCombinedCompartment.transform.SetParent(this.transform);
-    }
+        */
+        int size = columns.Count;
+        for (int i = 0; i <size; i++)
+        {
+
+            //Leftmost
+            if (i == 0)
+            {
+                columns[i].GetComponent<Column>().LeftColumn = null;
+                if (size > 1)
+                    columns[i].GetComponent<Column>().RightColumn = columns[i + 1].gameObject;
+            }
+            //Rightmost
+            else if (i == size - 1) {
+                columns[i].GetComponent<Column>().RightColumn = null;
+                // Most likely this check will never fail, because its connect with else if to if i==0
+                if (size > 1)
+                    columns[i].GetComponent<Column>().LeftColumn = columns[i - 1].gameObject;
+            }
+            else
+            {
+                columns[i].GetComponent<Column>().LeftColumn = columns[i - 1].gameObject;
+                columns[i].GetComponent<Column>().RightColumn = columns[i + 1].gameObject;
+            }
+            columns[i].transform.SetParent(newCombinedCompartment.transform);
+
+
+
+        }
+
+            newCombinedCompartment.transform.SetParent(this.transform);
+        }
+    
 
 
 
@@ -80,7 +114,8 @@ public class ShipRow : MonoBehaviour
             RowsCombinedCompartments.Add(child.gameObject);
         }
         // TODO ElevatorCompartments list refresh, and has bridge refresh. Honestly probably shouldnt stuff all these values in one function?
-
-
     }
+
+
+
 }
