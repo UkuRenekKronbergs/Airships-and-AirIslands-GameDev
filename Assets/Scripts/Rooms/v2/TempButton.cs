@@ -7,7 +7,7 @@ public class TempButton : MonoBehaviour
 {
     public GameObject ShadowPrefab;
     private Button _button;
-    public bool _isbuilding;
+    public bool _isbuilding=false;
     private GameObject buildingShadow;
     public GameObject compartment;
 
@@ -77,7 +77,10 @@ public class TempButton : MonoBehaviour
         _isbuilding = !_isbuilding;
         Debug.Log($"ToggleBuildMode called. IsBuilding={_isbuilding}");
         if (_isbuilding) {
+            
             buildingShadow = Instantiate(ShadowPrefab);
+            buildingShadow.GetComponent<PlacementShadow>().ShadowSize = 6;
+            Debug.Log(buildingShadow.GetComponent<PlacementShadow>().ShadowSize);
         }
         if (!_isbuilding) {
             Destroy(buildingShadow);

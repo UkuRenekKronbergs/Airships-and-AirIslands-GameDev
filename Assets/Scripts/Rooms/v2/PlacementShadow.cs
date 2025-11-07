@@ -5,19 +5,34 @@ using UnityEditor.Networking.PlayerConnection;
 using UnityEngine.UIElements;
 public class PlacementShadow : MonoBehaviour
 {
+    private int _shadowSize = 3;
+    public int ShadowSize
+    {
+        get { return _shadowSize; }
+        set {
+            SetShadowSize(value);
+            _shadowSize = value;
+        }
+    }
 
+
+    public int size = 3; //3 == 3x3, 2=2x3, 1=1x3
     List<GameObject> columns = new List<GameObject>();
     public LayerMask CollisionLayerMask;
     //public HashSet<Columns> SelectedColumns = new HashSet<Columns>;
     //private bool _
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    private void Awake()
     {
         foreach (Transform child in transform)
         {
             columns.Add(child.gameObject);
-            //Debug.Log(columns.Count);
+            Debug.Log(columns.Count);
         }
+    }
+    void Start()
+    {
+  
 
     }
 
@@ -218,6 +233,19 @@ public class PlacementShadow : MonoBehaviour
         }
         return true;
     }
+
+    private void SetShadowSize(int s) {
+       
+
+        foreach (GameObject elem in columns) {
+        elem.SetActive(true);
+        }
+        for (int i = s; i < columns.Count; i++) {
+            columns[i].SetActive(false);
+            
+        }
+    }
+
     }
 
 

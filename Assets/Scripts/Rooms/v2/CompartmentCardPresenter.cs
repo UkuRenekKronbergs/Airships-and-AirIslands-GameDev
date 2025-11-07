@@ -14,16 +14,22 @@ public class CompartmentCardPresenter : MonoBehaviour
     public TextMeshProUGUI MinText;
     public TextMeshProUGUI MaxText;
     public TextMeshProUGUI CurrentText;
+    public GameObject ShadowPrefab;
+    private GameObject buildingShadow;
+
+
+
     private Button _button;
     private bool _pressed = false;
 
     private void Awake()
     {
         Compartment = CompartmentPrefab.GetComponent<CompartmentType>();
-        NameText.SetText(Compartment.Name );
+        NameText.SetText(Compartment.Name);
+        Debug.Log(Compartment.MaxAmmount);
         CostText.SetText("Cost: "+Compartment.Cost.ToString());
         Icon.sprite = Compartment.Icon;
-        //SetMinMaxCurrent(Compartment);
+        SetMinMaxCurrent(Compartment);
 
 
 
@@ -32,7 +38,7 @@ public class CompartmentCardPresenter : MonoBehaviour
         _button = GetComponent<Button>();
         if (_button != null)
         {
-            _button.onClick.AddListener(Pressed);
+            _button.onClick.AddListener(TogglePressed);
         }
         //_mouseHotspot = new Vector2(MouseIconNeutral.width / 2f, MouseIconNeutral.height / 2f);
     }
@@ -54,7 +60,7 @@ public class CompartmentCardPresenter : MonoBehaviour
     {
         
 
-
+        /*
         // Broke boy/girl/they
         if (Player_Ship.Instance.Currency < Compartment.Cost) 
             CostText.color = Color.red;
@@ -98,8 +104,20 @@ public class CompartmentCardPresenter : MonoBehaviour
         }
     }
 
-    public void Pressed() {
-        _pressed = true;
+    public void TogglePressed() {
+        _pressed = !_pressed;
+
+        if (_pressed) {
+            buildingShadow = Instantiate(ShadowPrefab);
+            buildingShadow.GetComponent<PlacementShadow>().ShadowSize = CompartmentPrefab.GetComponent < CompartmentType>().Size;
+        }
+        if (!_pressed)
+        {
+            Destroy(buildingShadow);
+
+        }
+
+
     }
 
     private void Build(GameObject Compartment_Prefab, RaycastHit2D hit) {
@@ -122,7 +140,7 @@ public class CompartmentCardPresenter : MonoBehaviour
             //SetMinMaxCurrent(Compartment);
 
             // Disable button. currently no way to reenable
-            if (Player_Ship.Instance.AllCompartments[Compartment.Name].Count >= Compartment.Max_Ammount) {
+            if (Player_Ship.Instance.AllCompartments[Compartment.Name].Count >= Compartment.MaxAmmount) {
                 _button.interactable = false;
             }
 
@@ -158,10 +176,11 @@ public class CompartmentCardPresenter : MonoBehaviour
 
     }
 
-    /*
+    
     public void SetMinMaxCurrent(CompartmentType Compartment) {
-        MinText.SetText("Min: " + Compartment.Min_Ammount.ToString());
-        MaxText.SetText("Max: " + Compartment.Max_Ammount.ToString());
+        MinText.SetText("Min: " + Compartment.MinAmmount.ToString());
+        MaxText.SetText("Max: " + Compartment.MaxAmmount.ToString());
+        /*
         //Debug.Log(Player_Ship.Instance.AllCompartments.ContainsKey(Compartment.name));
         if (Player_Ship.Instance.AllCompartments.ContainsKey(Compartment.Name))
         {
@@ -174,8 +193,9 @@ public class CompartmentCardPresenter : MonoBehaviour
             CurrentText.SetText("Current: " + "0" + "/" + Compartment.Max_Ammount.ToString());
 
         }
+        */
     }
-
+    /*
     private bool MandatoryFree()
     {
 

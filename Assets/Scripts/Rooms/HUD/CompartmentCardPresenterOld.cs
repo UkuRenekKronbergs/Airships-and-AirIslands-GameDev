@@ -154,7 +154,7 @@ public class CompartmentCardPresenterOld : MonoBehaviour
             //SetMinMaxCurrent(Compartment);
 
             // Disable button. currently no way to reenable
-            if (Player_Ship.Instance.AllCompartments[Compartment.Name].Count >= Compartment.Max_Ammount) {
+            if (Player_Ship.Instance.AllCompartments[Compartment.Name].Count >= Compartment.MaxAmmount) {
                 _button.interactable = false;
             }
 

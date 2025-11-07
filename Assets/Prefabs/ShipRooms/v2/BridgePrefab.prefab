@@ -45,11 +45,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Bridge
-  Max_Ammount: 1
-  Min_Ammount: 1
+  MaxAmmount: 1
+  MinAmmount: 1
   Health: 1
   Cost: 0
-  Max_Tier: 1
+  MaxTier: 1
   Icon: {fileID: -6763590029179285957, guid: 08c47e9ce5328ea4c962fc151bf4afc1, type: 3}
   Size: 6
   prefabs: []

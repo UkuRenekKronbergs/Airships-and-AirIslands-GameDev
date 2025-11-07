@@ -6,11 +6,11 @@ public class BridgeCompartment : CompartmentType
     private void Reset()
     {
         Name = "Bridge";
-        Max_Ammount = 1;
-        Min_Ammount = 1;
+        MaxAmmount = 1;
+        MinAmmount = 1;
         Health = 1;
         Cost = 0;
-        Max_Tier = 1;
+        MaxTier = 1;
         Size = 6;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created

@@ -4,14 +4,22 @@ using System.Collections.Generic;
 public class BuildingController : MonoBehaviour
 {
     public bool BuildingModeAllowed = true;//disable button during combat
+    public GameObject BuildModeButton;
     public GameObject BuildPanel;
     public bool IsBuilding = false;
     // Add in editor
-    public List<GameObject> CompartmentCards = new List<GameObject>();
-    //publix 
-    //public testingCompartment = 
+    public List<GameObject> CompartmentCardPrefabs = new List<GameObject>();
 
-   
+
+
+    private void Awake()
+    {
+        foreach (GameObject card in CompartmentCardPrefabs) { 
+            Instantiate(card,BuildPanel.transform);
+        
+        
+        }
+    }
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -28,6 +36,7 @@ public class BuildingController : MonoBehaviour
 
     public void ToggleBuildMode() {
         IsBuilding = !IsBuilding;
+        BuildPanel.SetActive(IsBuilding);
 
         //Todo, finalisebuild. subdract resources, finalize.
     }

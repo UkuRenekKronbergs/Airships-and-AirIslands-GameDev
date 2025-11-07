@@ -31,7 +31,7 @@ public class CombinedCompartment : MonoBehaviour
 
         if (CompartmentType is EmptyCompartment)
         {
-            Debug.Log("test");
+            //Debug.Log("test");
 
         }
         else { 

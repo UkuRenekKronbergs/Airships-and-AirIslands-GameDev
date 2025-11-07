@@ -8,21 +8,21 @@ public class EngineCompartment : CompartmentType
     private void Reset()
     {
         Name = "Engine";
-        Max_Ammount = 3;
-        Min_Ammount = 1;
+        MaxAmmount = 3;
+        MinAmmount = 1;
         Health = 1;
         Cost = 0;
-        Max_Tier = 3;
+        MaxTier = 3;
         Size = 3;
     }
     private void Awake()
     {
         Name = "EngineCompartment";
-        Max_Ammount = 3;
-        Min_Ammount = 1;
+        MaxAmmount = 3;
+        MinAmmount = 1;
         Health = 1;
         Cost = 0;
-        Max_Tier = 3;
+        MaxTier = 3;
         Size = 3;
     }
     void Start()

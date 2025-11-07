@@ -6,11 +6,11 @@ public class EmptyCompartment : CompartmentType
     private void Reset()
     {
         Name = "EmptyCompartment";
-        Max_Ammount = 99;
-        Min_Ammount = 0;
+        MaxAmmount = 99;
+        MinAmmount = 0;
         Health = 1;
         Cost = 0;
-        Max_Tier = 1;
+        MaxTier = 1;
         Size = 0;//will this cause problems?;
     }
 

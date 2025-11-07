@@ -767,7 +767,7 @@ GameObject:
   - component: {fileID: 1028358834595488732}
   - component: {fileID: 8592823667467585475}
   - component: {fileID: 7579068390418473073}
-  - component: {fileID: 3081140123602331034}
+  - component: {fileID: 6782293377268491371}
   m_Layer: 5
   m_Name: CompartmentCard
   m_TagString: Untagged
@@ -882,7 +882,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3081140123602331034
+--- !u!114 &6782293377268491371
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -891,16 +891,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6817360165078194381}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9fb51cb147d73c94698b32beba813277, type: 3}
+  m_Script: {fileID: 11500000, guid: 9067d46bc49a6c24e99bc86ad2a24b6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CompartmentPrefab: {fileID: 203636011591564442, guid: 71e494b5fe5463147a0d8a6ccde3b8ae, type: 3}
+  CompartmentPrefab: {fileID: 0}
   Icon: {fileID: 4571774049737350176}
-  MouseIconNeutral: {fileID: 2800000, guid: 9f724b55c334b4941921d0099f4fd9f3, type: 3}
-  MouseIconPositive: {fileID: 2800000, guid: 3a123a03a1c7d284cbe4ba41ba455036, type: 3}
-  MouseIconNegative: {fileID: 2800000, guid: 228b7b6bb915c0d4e823933fb2661032, type: 3}
   NameText: {fileID: 2445006625243894554}
   CostText: {fileID: 8708686854579890904}
   MinText: {fileID: 860788943587238221}
   MaxText: {fileID: 370950864731964409}
   CurrentText: {fileID: 7551152441180805597}
+  ShadowPrefab: {fileID: 5185987246915442958, guid: ae696f9d49fb3934bbf7808db59af32b, type: 3}
