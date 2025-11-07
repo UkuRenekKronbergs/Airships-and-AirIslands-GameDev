@@ -59,15 +59,6 @@ public class TempButton : MonoBehaviour
                     newCompartment.transform.SetParent(row.transform);
 
                 }
-
-
-
-
-
-
-
-
-
             }
 
         }
@@ -79,8 +70,8 @@ public class TempButton : MonoBehaviour
         if (_isbuilding) {
             
             buildingShadow = Instantiate(ShadowPrefab);
-            buildingShadow.GetComponent<PlacementShadow>().ShadowSize = 6;
-            Debug.Log(buildingShadow.GetComponent<PlacementShadow>().ShadowSize);
+            buildingShadow.GetComponent<PlacementShadow>().ShadowSize = 6;// Set to the size specified for that compartment type
+            //Debug.Log(buildingShadow.GetComponent<PlacementShadow>().ShadowSize);
         }
         if (!_isbuilding) {
             Destroy(buildingShadow);

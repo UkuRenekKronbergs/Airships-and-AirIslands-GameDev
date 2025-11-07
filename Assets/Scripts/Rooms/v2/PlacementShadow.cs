@@ -16,7 +16,7 @@ public class PlacementShadow : MonoBehaviour
     }
 
 
-    public int size = 3; //3 == 3x3, 2=2x3, 1=1x3
+    public int size = 3; //3 == 3x3, 2=2x3, 1=1x3 etc
     List<GameObject> columns = new List<GameObject>();
     public LayerMask CollisionLayerMask;
     //public HashSet<Columns> SelectedColumns = new HashSet<Columns>;
@@ -27,7 +27,7 @@ public class PlacementShadow : MonoBehaviour
         foreach (Transform child in transform)
         {
             columns.Add(child.gameObject);
-            Debug.Log(columns.Count);
+            //Debug.Log(columns.Count);
         }
     }
     void Start()
@@ -169,7 +169,12 @@ public class PlacementShadow : MonoBehaviour
         HashSet<Column> result = new HashSet<Column>();
         int columnindex = 0;
         //Column[,] CompGrid = new Column[transform.childCount, 3];
-        Column[][] CompGrid = new Column[transform.childCount][];
+
+
+
+
+
+        Column[][] CompGrid = new Column[ShadowSize][];
         for (int i = 0;i< CompGrid.Length; i++)
         {
             CompGrid[i] = new Column[3];
@@ -178,9 +183,10 @@ public class PlacementShadow : MonoBehaviour
 
 
 
-
-        foreach (GameObject column in columns)
+        //GameObject column in colum
+        for(int i = 0; i<ShadowSize;i++)
             {
+            GameObject column = columns[i];
                 // Column ammount might vary, but column size is always 3
 
                 int rowindex = 0;
