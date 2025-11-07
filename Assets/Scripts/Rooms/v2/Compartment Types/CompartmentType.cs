@@ -19,6 +19,8 @@ public class CompartmentType : MonoBehaviour
     public int Size = 3;
     public List<GameObject> prefabs = new List<GameObject>();
 
+    public List<Sprite> sprites = new List<Sprite>();
+
 
 
 

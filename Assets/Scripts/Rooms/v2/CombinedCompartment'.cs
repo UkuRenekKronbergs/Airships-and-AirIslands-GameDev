@@ -1,11 +1,13 @@
+using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
-using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 public class CombinedCompartment : MonoBehaviour
 {
     // Turn private later, all of them?
     public CompartmentType CompartmentType;
+    public GameObject CompartmentPrefab;
     //public GameObject test;
     public int CurrentTier = 0;
     public List<GameObject> SingleCompartment = new List<GameObject>();
@@ -23,6 +25,12 @@ public class CombinedCompartment : MonoBehaviour
 
     void Start()
     {
+        //Debug.Log("How many times is this triggered");
+        // Needs to be updated later somehow
+        foreach (Transform child in transform)
+        {
+            Columns.Add(child.gameObject);
+        }
 
 
 
@@ -31,14 +39,12 @@ public class CombinedCompartment : MonoBehaviour
 
         if (CompartmentType is EmptyCompartment)
         {
-            //Debug.Log("test");
+           // Debug.Log(CompartmentType is EmptyCompartment);
 
         }
-        else { 
-        
-        
-        
-        
+        else {
+            Debug.Log(CompartmentPrefab);
+            ApplyRoomSprite();
         }
 
     }
@@ -57,6 +63,28 @@ public class CombinedCompartment : MonoBehaviour
             child.transform.SetParent(newComp.transform);
         }
         newComp.transform.SetParent(this.transform);
+    }
+
+    public void ApplyRoomSprite() {
+        //Elevators later
+        if (Columns.Count == 1) {
+            return;
+        }
+      List<Sprite> sprites = CompartmentPrefab.GetComponent<CompartmentType>().sprites;
+        SpriteRenderer a = Columns[1].GetComponent<Column>().Middle.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
+        a.sprite = sprites[0];
+        a.enabled = true;
+
+
+
+
+
+    
+    
+    
+    
+    
+    
     }
 
 

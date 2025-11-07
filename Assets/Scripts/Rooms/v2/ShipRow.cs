@@ -58,6 +58,8 @@ public class ShipRow : MonoBehaviour
 
         GameObject newCombinedCompartment = new GameObject("EmptyCompartment", typeof(CombinedCompartment), typeof(EmptyCompartment));
         newCombinedCompartment.GetComponent<CombinedCompartment>().CompartmentType = newCombinedCompartment.GetComponent<EmptyCompartment>();
+        newCombinedCompartment.GetComponent<CombinedCompartment>().CompartmentPrefab = CompartmentHolder.Instance.EmptyCompartment;
+
         //newCombinedCompartment.GetComponent<CombinedCompartment>().test = CompartmentHolder.Instance.EmptyCompartment;
 
 
@@ -100,7 +102,7 @@ public class ShipRow : MonoBehaviour
 
         }
 
-            newCombinedCompartment.transform.SetParent(this.transform);
+        newCombinedCompartment.transform.SetParent(this.transform);
         }
     
 

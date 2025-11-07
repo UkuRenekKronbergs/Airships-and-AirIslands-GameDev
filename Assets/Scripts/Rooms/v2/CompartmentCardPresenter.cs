@@ -81,28 +81,32 @@ public class CompartmentCardPresenter : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 (bool result, HashSet<Column> columns) = buildingShadow.GetComponent<PlacementShadow>().GetHitColumnV2();
+                /*
                 Debug.Log(columns.Count == Compartment.Size);
                 Debug.Log(columns.Count);
                 Debug.Log(Compartment.Size);
-
+                */
 
                 //ColumnsContinuous = all columns are next to eachother, columns.Count = correct number of columns for this compartment, result = Each square of each column returned the same column.
                 if (buildingShadow.GetComponent<PlacementShadow>().ColumnsContinuous(columns) && columns.Count == Compartment.Size && result)
                     {
-                    Debug.Log("IStheproblemhere");
+                    //Debug.Log("IStheproblemhere");
 
 
                         GameObject newCompartment = Instantiate(CompartmentPrefab);
                         newCompartment.name = Compartment.name;//display name in unity hierarchy
                                                                // New combinedCompartment because im not implementing tier yet. TODO tiers
-
                         newCompartment.AddComponent<CombinedCompartment>();
+                    newCompartment.GetComponent<CombinedCompartment>().CompartmentPrefab = CompartmentPrefab;
+
+
+                        //n//ewCompartment.AddComponent<CombinedCompartment>().compar;
                         GameObject row = new GameObject(); // This is a inefficient way to get this value.
                         foreach (Column column in columns)
                         {
                             row = column.transform.parent.parent.gameObject;//<----stupid
                             column.transform.SetParent(newCompartment.transform);
-                            tempcolor(column);
+                            //tempcolor(column);
                         }
                         newCompartment.transform.SetParent(row.transform);
 
