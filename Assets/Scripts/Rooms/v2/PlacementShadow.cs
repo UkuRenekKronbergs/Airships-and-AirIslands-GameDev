@@ -57,7 +57,7 @@ public class PlacementShadow : MonoBehaviour
                     {
                         Column hitcolumn = hit.collider.gameObject.GetComponent<Column>();
                         // If empty == green
-                        if (hitcolumn.transform.parent.GetComponent<CombinedCompartment>().CompartmentType is EmptyCompartment)
+                        if (hitcolumn.GetComponentInParent<CombinedCompartment>().CompartmentType is EmptyCompartment)
                             square.Find("Centre").GetComponent<SpriteRenderer>().color = Color.green;
                         else
                             square.Find("Centre").GetComponent<SpriteRenderer>().color = Color.red;
@@ -93,13 +93,14 @@ public class PlacementShadow : MonoBehaviour
                     //Debug.Log(hit.collider);
                     if (hitcolumn.LeftColumn != null)
                     {
-                        if (hitcolumn.LeftColumn.transform.parent.GetComponent<CombinedCompartment>().CompartmentType is not EmptyCompartment)
+                        //Debug.Log(hitcolumn.LeftColumn.GetComponentInParent<CombinedCompartment>());
+                        if (hitcolumn.LeftColumn.GetComponentInParent<CombinedCompartment>().CompartmentType is not EmptyCompartment)
                             return true;
 
                     }
                     else if (hitcolumn.RightColumn != null)
                     {
-                        if (hitcolumn.RightColumn.transform.parent.GetComponent<CombinedCompartment>().CompartmentType is not EmptyCompartment)
+                        if (hitcolumn.RightColumn.GetComponentInParent<CombinedCompartment>().CompartmentType is not EmptyCompartment)
                             return true;
                     }
                 }
@@ -120,7 +121,7 @@ public class PlacementShadow : MonoBehaviour
                 if (hit.collider != null)
                 {
                     Column hitcolumn = hit.collider.gameObject.GetComponent<Column>();
-                    if (hitcolumn.transform.parent.GetComponent<CombinedCompartment>().CompartmentType is EmptyCompartment)
+                    if (hitcolumn.GetComponentInParent<CombinedCompartment>().CompartmentType is EmptyCompartment)
                         result.Add(hitcolumn);
                 }
             }
@@ -130,7 +131,7 @@ public class PlacementShadow : MonoBehaviour
 
     // Verify that selected columns are continuous
     // Need to add verification for situation where the hashset has less columns than required for the build.
-    public bool ColumnsContinuous(HashSet<Column> columns) {
+    public bool ColumnsContinuous(List<Column> columns) {
         //Same row
         List<Column> chain = new List<Column>();
 
@@ -164,9 +165,9 @@ public class PlacementShadow : MonoBehaviour
         // All columns are next to eachother.
         return true;
     }
-    public (bool allowed, HashSet<Column>) GetHitColumnV2()
+    public (bool allowed, List<Column> columns) GetHitColumnV2()
     {
-        HashSet<Column> result = new HashSet<Column>();
+        List<Column> result = new List<Column>();
         int columnindex = 0;
         //Column[,] CompGrid = new Column[transform.childCount, 3];
 
@@ -183,7 +184,7 @@ public class PlacementShadow : MonoBehaviour
 
 
 
-        //GameObject column in colum
+    
         for(int i = 0; i<ShadowSize;i++)
             {
             GameObject column = columns[i];
@@ -196,9 +197,10 @@ public class PlacementShadow : MonoBehaviour
                 if (hit.collider != null)
                 {
                     Column hitcolumn = hit.collider.gameObject.GetComponent<Column>();
-                    if (hitcolumn.transform.parent.GetComponent<CombinedCompartment>().CompartmentType is EmptyCompartment)
+                    if (hitcolumn.GetComponentInParent<CombinedCompartment>().CompartmentType is EmptyCompartment)
                     {
-                        result.Add(hitcolumn);
+                        AddUnique(result, hitcolumn);
+                        //result.Add(hitcolumn);
                         CompGrid[columnindex][rowindex] = hitcolumn;
                     }
                 }
@@ -249,6 +251,13 @@ public class PlacementShadow : MonoBehaviour
         for (int i = s; i < columns.Count; i++) {
             columns[i].SetActive(false);
             
+        }
+    }
+
+    void AddUnique(List<Column> Columns, Column Column)
+    {
+        if (!Columns.Contains(Column)) { 
+            Columns.Add(Column);
         }
     }
 

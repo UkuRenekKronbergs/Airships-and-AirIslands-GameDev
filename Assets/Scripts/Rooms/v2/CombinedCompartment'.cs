@@ -20,7 +20,7 @@ public class CombinedCompartment : MonoBehaviour
 
     private void Awake()
     {
-        
+
     }
 
     void Start()
@@ -39,11 +39,12 @@ public class CombinedCompartment : MonoBehaviour
 
         if (CompartmentType is EmptyCompartment)
         {
-           // Debug.Log(CompartmentType is EmptyCompartment);
+            // Debug.Log(CompartmentType is EmptyCompartment);
 
         }
-        else {
-            Debug.Log(CompartmentPrefab);
+        else
+        {
+            //Debug.Log(CompartmentPrefab);
             ApplyRoomSprite();
         }
 
@@ -52,11 +53,12 @@ public class CombinedCompartment : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
     // Allows us to do thing like delete 1 tier off a tier 2 or 3 room.
-    public void ExpandCommpartment(List<GameObject> columns) {
+    public void ExpandCommpartment(List<GameObject> columns)
+    {
         GameObject newComp = new GameObject();
         foreach (GameObject child in columns)
         {
@@ -65,29 +67,66 @@ public class CombinedCompartment : MonoBehaviour
         newComp.transform.SetParent(this.transform);
     }
 
-    public void ApplyRoomSprite() {
+    public void ApplyRoomSprite()
+    {
         //Elevators later
-        if (Columns.Count == 1) {
+        if (Columns.Count == 1)
+        {
             return;
         }
-      List<Sprite> sprites = CompartmentPrefab.GetComponent<CompartmentType>().sprites;
-        SpriteRenderer a = Columns[1].GetComponent<Column>().Middle.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
-        a.sprite = sprites[0];
-        a.enabled = true;
+        List<Sprite> sprites = CompartmentPrefab.GetComponent<CompartmentType>().sprites;
+        SpriteRenderer a;
+        for (int i = 0; i < Columns.Count; i++)
+        {
+
+            if (i == 0)
+            {
+                a = Columns[i].GetComponent<Column>().Top.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
+                a.sprite = sprites[1];
+                a.enabled = true;
+                a = Columns[i].GetComponent<Column>().Middle.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
+                a.sprite = sprites[0];
+                a.enabled = true;
+            }
+            //middle
+            if (i == 1)
+            {
+                a = Columns[i].GetComponent<Column>().Top.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
+                a.sprite = sprites[2];
+                a.enabled = true;
+
+                a = Columns[i].GetComponent<Column>().Middle.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
+                a.sprite = sprites[5];
+                a.enabled = true;
+
+                a = Columns[i].GetComponent<Column>().Bottom.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
+                a.sprite = sprites[4];
+                a.enabled = true;
+
+            }
+            if (i == 2)
+            {
+                a = Columns[i].GetComponent<Column>().Top.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
+                a.sprite = sprites[3];
+                a.enabled = true;
+                a = Columns[i].GetComponent<Column>().Middle.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
+                a.sprite = sprites[0];
+                a.flipX = true;
+                a.enabled = true;
+
+            }
 
 
 
 
 
-    
-    
-    
-    
-    
-    
+
+
+
+        }
+
+
+
+
     }
-
-
-
-
 }

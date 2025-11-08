@@ -32,8 +32,8 @@ Transform:
   m_LocalScale: {x: 1, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7250416281715768903}
   - {fileID: 1969254510038174859}
+  - {fileID: 7250416281715768903}
   - {fileID: 7109037480627842579}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -104,9 +104,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c157159f591974242ad99ede2c81c33a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Top: {fileID: 303488888913665592}
-  Middle: {fileID: 8934191905704717556}
+  Top: {fileID: 8934191905704717556}
+  Middle: {fileID: 303488888913665592}
   Bottom: {fileID: 144340951527640684}
+  LeftColumn: {fileID: 0}
+  RightColumn: {fileID: 0}
 --- !u!61 &-4391258813941512804
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ public class CompartmentCardPresenter : MonoBehaviour
     public GameObject CompartmentPrefab;
     public Image Icon;
     private Vector2 _mouseHotspot;
-    private CompartmentType Compartment;
+    private CompartmentType CompartmentType;
     public TextMeshProUGUI NameText;
     public TextMeshProUGUI CostText;
     public TextMeshProUGUI MinText;
@@ -24,12 +24,12 @@ public class CompartmentCardPresenter : MonoBehaviour
 
     private void Awake()
     {
-        Compartment = CompartmentPrefab.GetComponent<CompartmentType>();//I cant be bothered to write out the whole line 9 times.
-        NameText.SetText(Compartment.Name);
+        CompartmentType = CompartmentPrefab.GetComponent<CompartmentType>();//I cant be bothered to write out the whole line 9 times.
+        NameText.SetText(CompartmentType.Name);
         //Debug.Log(Compartment.MaxAmmount);
-        CostText.SetText("Cost: "+Compartment.Cost.ToString());
-        Icon.sprite = Compartment.Icon;
-        SetMinMaxCurrent(Compartment);
+        CostText.SetText("Cost: " + CompartmentType.Cost.ToString());
+        Icon.sprite = CompartmentType.Icon;
+        SetMinMaxCurrent(CompartmentType);
 
 
 
@@ -49,16 +49,16 @@ public class CompartmentCardPresenter : MonoBehaviour
         //SetMinMaxCurrent(Compartment);
 
         //MandatoryFree();
-           
 
 
 
-        
+
+
     }
 
     void Update()
     {
-        
+
 
         /*
         // Broke boy/girl/they
@@ -75,12 +75,12 @@ public class CompartmentCardPresenter : MonoBehaviour
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
-         
 
-            
+
+
             if (Input.GetMouseButtonDown(0))
             {
-                (bool result, HashSet<Column> columns) = buildingShadow.GetComponent<PlacementShadow>().GetHitColumnV2();
+                (bool result, List<Column> columns) = buildingShadow.GetComponent<PlacementShadow>().GetHitColumnV2();
                 /*
                 Debug.Log(columns.Count == Compartment.Size);
                 Debug.Log(columns.Count);
@@ -88,30 +88,34 @@ public class CompartmentCardPresenter : MonoBehaviour
                 */
 
                 //ColumnsContinuous = all columns are next to eachother, columns.Count = correct number of columns for this compartment, result = Each square of each column returned the same column.
-                if (buildingShadow.GetComponent<PlacementShadow>().ColumnsContinuous(columns) && columns.Count == Compartment.Size && result)
+                if (buildingShadow.GetComponent<PlacementShadow>().ColumnsContinuous(columns) && columns.Count == CompartmentType.Size && result)
+                {
+                    GameObject CombinedCompartment = CheckMerge(columns, CompartmentType);
+                    Debug.Log(CombinedCompartment);
+                    if (CombinedCompartment == null)
                     {
-                    //Debug.Log("IStheproblemhere");
-
-
-                        GameObject newCompartment = Instantiate(CompartmentPrefab);
-                        newCompartment.name = Compartment.name;//display name in unity hierarchy
-                                                               // New combinedCompartment because im not implementing tier yet. TODO tiers
-                        newCompartment.AddComponent<CombinedCompartment>();
-                    newCompartment.GetComponent<CombinedCompartment>().CompartmentPrefab = CompartmentPrefab;
-
-
-                        //n//ewCompartment.AddComponent<CombinedCompartment>().compar;
-                        GameObject row = new GameObject(); // This is a inefficient way to get this value.
-                        foreach (Column column in columns)
-                        {
-                            row = column.transform.parent.parent.gameObject;//<----stupid
-                            column.transform.SetParent(newCompartment.transform);
-                            //tempcolor(column);
-                        }
-                        newCompartment.transform.SetParent(row.transform);
-
+                        CombinedCompartment = Instantiate(CompartmentPrefab);
+                        CombinedCompartment.name = CompartmentType.name;// unity editor name
+                        CombinedCompartment.AddComponent<CombinedCompartment>();
+                        CombinedCompartment.GetComponent<CombinedCompartment>().CompartmentPrefab = CompartmentPrefab;
+                        CombinedCompartment.GetComponent<CombinedCompartment>().CompartmentType = CompartmentType;
+                        CombinedCompartment.GetComponent<CombinedCompartment>().CurrentTier = 1;
                     }
-                
+                    else
+                        CombinedCompartment.GetComponent<CombinedCompartment>().CurrentTier++;
+
+                        GameObject subCompartment = new GameObject("sub");
+                    GameObject row = columns[0].GetComponentInParent<ShipRow>().gameObject;
+                    foreach (Column column in columns)
+                    {
+                        column.transform.SetParent(subCompartment.transform);
+                        //tempcolor(column);
+                    }
+                    subCompartment.transform.SetParent(CombinedCompartment.transform);
+                    CombinedCompartment.transform.SetParent(row.transform);
+
+                }
+
                 ToggleSelected();
                 Cursor.SetCursor(null, _mouseHotspot, CursorMode.Auto);
 
@@ -121,12 +125,14 @@ public class CompartmentCardPresenter : MonoBehaviour
         }
     }
 
-    public void ToggleSelected() {
+    public void ToggleSelected()
+    {
         _selected = !_selected;
 
-        if (_selected) {
+        if (_selected)
+        {
             buildingShadow = Instantiate(ShadowPrefab);
-            buildingShadow.GetComponent<PlacementShadow>().ShadowSize = CompartmentPrefab.GetComponent < CompartmentType>().Size;
+            buildingShadow.GetComponent<PlacementShadow>().ShadowSize = CompartmentPrefab.GetComponent<CompartmentType>().Size;
         }
         if (!_selected)
         {
@@ -137,15 +143,16 @@ public class CompartmentCardPresenter : MonoBehaviour
 
     }
 
-    private void Build(GameObject Compartment_Prefab, RaycastHit2D hit) {
+    private void Build(GameObject Compartment_Prefab, RaycastHit2D hit)
+    {
         Debug.Log("building");
 
 
         // TODO Subdtract player resources 
-        if (Player_Ship.Instance.Currency >= Compartment.Cost) //        if (Player_Ship.Instance.Currency >= Compartment.Cost && !MandatoryFree())
+        if (Player_Ship.Instance.Currency >= CompartmentType.Cost) //        if (Player_Ship.Instance.Currency >= Compartment.Cost && !MandatoryFree())
 
         {
-            Player_Ship.Instance.Currency -=Compartment.Cost;
+            Player_Ship.Instance.Currency -= CompartmentType.Cost;
             Compartment comp = hit.collider.GetComponent<Compartment>();
             comp.Add_Compartment_Type_Child(Compartment_Prefab);
 
@@ -157,7 +164,8 @@ public class CompartmentCardPresenter : MonoBehaviour
             //SetMinMaxCurrent(Compartment);
 
             // Disable button. currently no way to reenable
-            if (Player_Ship.Instance.AllCompartments[Compartment.Name].Count >= Compartment.MaxAmmount) {
+            if (Player_Ship.Instance.AllCompartments[CompartmentType.Name].Count >= CompartmentType.MaxAmmount)
+            {
                 _button.interactable = false;
             }
 
@@ -193,8 +201,9 @@ public class CompartmentCardPresenter : MonoBehaviour
 
     }
 
-    
-    public void SetMinMaxCurrent(CompartmentType Compartment) {
+
+    public void SetMinMaxCurrent(CompartmentType Compartment)
+    {
         MinText.SetText("Min: " + Compartment.MinAmmount.ToString());
         MaxText.SetText("Max: " + Compartment.MaxAmmount.ToString());
         /*
@@ -252,7 +261,50 @@ public class CompartmentCardPresenter : MonoBehaviour
 
 
         }
-
-
     }
+    // If merge with adjecent compartment or create a new seperate one instead
+    // Checks left of leftmost column and right of rightmos column (also works if only one column exists in list)
+    // if null, no merge
+    // if tie, choose  left side.
+    //
+    public GameObject CheckMerge(List<Column> columns, CompartmentType type)
+    {
+        Debug.Log(type);
+
+        // Return
+        int HighestFoundTier = 0;
+        GameObject returncompartment = null;
+
+
+
+
+        // Do NOT RETURN
+        CombinedCompartment compartment = null;
+        Debug.Log(columns[0].LeftColumn != null && columns[0].LeftColumn.GetComponentInParent<CombinedCompartment>().CompartmentType == type);
+        if (columns[0].LeftColumn != null && columns[0].LeftColumn.GetComponentInParent<CombinedCompartment>().CompartmentType == type)
+        {
+            compartment = columns[0].LeftColumn.GetComponentInParent<CombinedCompartment>();
+            Debug.Log(compartment.CurrentTier < compartment.CompartmentType.MaxTier && compartment.CurrentTier > HighestFoundTier);
+            if (compartment.CurrentTier < compartment.CompartmentType.MaxTier && compartment.CurrentTier > HighestFoundTier)
+            {
+                HighestFoundTier = compartment.CurrentTier;
+                returncompartment = compartment.gameObject;
+
+            }
+
+        }
+        if (columns[columns.Count - 1].RightColumn != null && columns[columns.Count - 1].RightColumn.GetComponentInParent<CombinedCompartment>().CompartmentType == type)
+        {
+            compartment = columns[columns.Count - 1].RightColumn.GetComponentInParent<CombinedCompartment>();
+            if (compartment.CurrentTier < compartment.CompartmentType.MaxTier && compartment.CurrentTier > HighestFoundTier)
+            {
+                HighestFoundTier = compartment.CurrentTier;
+                returncompartment = compartment.gameObject;
+            }
+        }
+        return returncompartment;
+    }
+
+
 }
+

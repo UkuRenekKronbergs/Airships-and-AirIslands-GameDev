@@ -40,7 +40,7 @@ public class TempButton : MonoBehaviour
             // TODO: Stop rooms being generated with each click, even 
             if (UnityEngine.Input.GetMouseButtonDown(0))
             {
-                (bool result,HashSet<Column> columns)  = buildingShadow.GetComponent<PlacementShadow>().GetHitColumnV2();
+                (bool result,List<Column> columns)  = buildingShadow.GetComponent<PlacementShadow>().GetHitColumnV2();
                 if (buildingShadow.GetComponent<PlacementShadow>().ColumnsContinuous(columns) && columns.Count==compartment.GetComponent<CompartmentType>().Size&& result)
                 {
 

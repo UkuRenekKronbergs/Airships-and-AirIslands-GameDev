@@ -56,9 +56,13 @@ public class ShipRow : MonoBehaviour
         //GameObject Emptyroom = Instantiate(CompartmentHolder.Instance.EmptyCompartment);
 
 
-        GameObject newCombinedCompartment = new GameObject("EmptyCompartment", typeof(CombinedCompartment), typeof(EmptyCompartment));
+        //GameObject newCombinedCompartment = new GameObject("EmptyCompartment", typeof(CombinedCompartment), typeof(EmptyCompartment));
+        //GameObject newCombinedCompartment = new GameObject("EmptyCompartment", typeof(CombinedCompartment));// if add Empytycompartment as typeof it will not get the correct "reset" values.
+        GameObject newCombinedCompartment = Instantiate(CompartmentHolder.Instance.EmptyCompartment);
+        newCombinedCompartment.AddComponent<CombinedCompartment>();
         newCombinedCompartment.GetComponent<CombinedCompartment>().CompartmentType = newCombinedCompartment.GetComponent<EmptyCompartment>();
-        newCombinedCompartment.GetComponent<CombinedCompartment>().CompartmentPrefab = CompartmentHolder.Instance.EmptyCompartment;
+        newCombinedCompartment.GetComponent<CombinedCompartment>().CompartmentPrefab = CompartmentHolder.Instance.EmptyCompartment;// DO i even need to hav ea type field if I also have an instance field anyway?
+        newCombinedCompartment.name = "EmptyCompartment";
 
         //newCombinedCompartment.GetComponent<CombinedCompartment>().test = CompartmentHolder.Instance.EmptyCompartment;
 
