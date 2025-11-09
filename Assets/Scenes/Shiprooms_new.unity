@@ -2501,6 +2501,7 @@ MonoBehaviour:
   CompartmentCardPrefabs:
   - {fileID: 4740849916376545134, guid: 9cf3e4fe04165fe45ab3d952199d56f0, type: 3}
   - {fileID: 8626850734079568973, guid: 4d9b3e797c831f5499aee5aea7dbed87, type: 3}
+  ShadowPrefab: {fileID: 5185987246915442958, guid: ae696f9d49fb3934bbf7808db59af32b, type: 3}
 --- !u!1 &900487409
 GameObject:
   m_ObjectHideFlags: 0

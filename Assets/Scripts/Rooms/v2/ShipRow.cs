@@ -10,7 +10,7 @@ public class ShipRow : MonoBehaviour
 
     //[HideInInspector]
 
-    public bool CanBeReached = false;
+    public bool Isolated = false;
     //[HideInInspector]
     public List<GameObject> RowsCombinedCompartments = new List<GameObject>();
 
