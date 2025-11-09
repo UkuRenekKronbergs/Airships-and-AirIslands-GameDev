@@ -110,24 +110,7 @@ public class PlacementShadow : MonoBehaviour
         return true;
     }
 
-    public HashSet<Column> GetHitColumn()
-    {
-        HashSet<Column> result = new HashSet<Column>();
-        foreach (GameObject column in columns)
-        {
-            foreach (Transform square in column.transform)
-            {
-                RaycastHit2D hit = Physics2D.Raycast(square.position, Vector2.zero, Mathf.Infinity, CollisionLayerMask);
-                if (hit.collider != null)
-                {
-                    Column hitcolumn = hit.collider.gameObject.GetComponent<Column>();
-                    if (hitcolumn.GetComponentInParent<CombinedCompartment>().CompartmentType is EmptyCompartment)
-                        result.Add(hitcolumn);
-                }
-            }
-        }
-        return result;
-    }
+
 
     // Verify that selected columns are continuous
     // Need to add verification for situation where the hashset has less columns than required for the build.
@@ -254,7 +237,7 @@ public class PlacementShadow : MonoBehaviour
         }
     }
 
-    void AddUnique(List<Column> Columns, Column Column)
+    private void AddUnique(List<Column> Columns, Column Column)
     {
         if (!Columns.Contains(Column)) { 
             Columns.Add(Column);

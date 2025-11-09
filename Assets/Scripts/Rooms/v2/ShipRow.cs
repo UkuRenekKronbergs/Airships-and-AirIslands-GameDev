@@ -107,7 +107,7 @@ public class ShipRow : MonoBehaviour
 
 
 
-    private void RefreshValues()
+    public void RefreshValues()
     {
         RowsCombinedCompartments = new List<GameObject>();
         foreach (Transform child in transform)
@@ -124,10 +124,7 @@ public class ShipRow : MonoBehaviour
         // TODO ElevatorCompartments list refresh, and has bridge refresh. Honestly probably shouldnt stuff all these values in one function?
     }
 
-    public void AddCombinedCompartment(GameObject newCombined) {
-        newCombined.transform.SetParent(transform);
-        RefreshValues();
-    }
+
 
 
 
