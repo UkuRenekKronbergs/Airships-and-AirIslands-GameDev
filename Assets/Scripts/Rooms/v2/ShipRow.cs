@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using NUnit.Framework;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class ShipRow : MonoBehaviour
 {
@@ -64,19 +65,13 @@ public class ShipRow : MonoBehaviour
         newCombinedCompartment.GetComponent<CombinedCompartment>().CompartmentPrefab = CompartmentHolder.Instance.EmptyCompartment;// DO i even need to hav ea type field if I also have an instance field anyway?
         newCombinedCompartment.name = "EmptyCompartment";
 
-        //newCombinedCompartment.GetComponent<CombinedCompartment>().test = CompartmentHolder.Instance.EmptyCompartment;
 
 
         foreach (Transform child in transform)
         {
             columns.Add(child);
         }
-        /*
-        foreach (Transform child in columns)
-        {
-            child.transform.SetParent(newCombinedCompartment.transform);
-        }
-        */
+
         int size = columns.Count;
         for (int i = 0; i <size; i++)
         {
@@ -118,8 +113,20 @@ public class ShipRow : MonoBehaviour
         foreach (Transform child in transform)
         {
             RowsCombinedCompartments.Add(child.gameObject);
+            if (child.GetComponent<BridgeCompartment>()!=null)
+                HasBridge= true;
+
+
         }
+
+
+
         // TODO ElevatorCompartments list refresh, and has bridge refresh. Honestly probably shouldnt stuff all these values in one function?
+    }
+
+    public void AddCombinedCompartment(GameObject newCombined) {
+        newCombined.transform.SetParent(transform);
+        RefreshValues();
     }
 
 
