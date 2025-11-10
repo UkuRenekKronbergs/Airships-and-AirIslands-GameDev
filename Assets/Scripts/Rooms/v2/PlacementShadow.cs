@@ -21,7 +21,7 @@ public class PlacementShadow : MonoBehaviour
     public int size = 3; //3 == 3x3, 2=2x3, 1=1x3 etc
     List<GameObject> columns = new List<GameObject>();
     public LayerMask CollisionLayerMask;
-
+    public bool AllowedToPlace = false;
 
 
 
@@ -49,43 +49,17 @@ public class PlacementShadow : MonoBehaviour
         mousePos.x += 1;//mouse at centre square for at least 3x3
         transform.position = mousePos;
 
-        ColorDecider();
-        // The whole Needs to be either an elevator or NextTo an existing compartment
-        /*
-        if (NexToValid())
-        {
-            foreach (GameObject column in columns)
-            {
-                foreach (Transform square in column.transform)
-                {
-                    RaycastHit2D hit = Physics2D.Raycast(square.position, Vector2.zero, Mathf.Infinity, CollisionLayerMask);
-                    if (hit.collider != null)
-                    {
-                        Column hitcolumn = hit.collider.gameObject.GetComponent<Column>();
-                        // If empty == green
-                        if (hitcolumn.GetComponentInParent<CombinedCompartment>().CompartmentType is EmptyCompartment)
-                            square.Find("Centre").GetComponent<SpriteRenderer>().color = Color.green;
-                        else
-                            square.Find("Centre").GetComponent<SpriteRenderer>().color = Color.red;
-                    }
-                    else
-                        square.Find("Centre").GetComponent<SpriteRenderer>().color = Color.red;
+        AllowedToPlace=ColorDecider();
+        //Debug.Log(AllowedToPlace);
 
-
-
-                }
-            }
-
-        }
-        */
 
 
 
     }
-    //                    square.Find("Centre").GetComponent<SpriteRenderer>().color = Color.red;
 
 
     // Make each square fire a ray and check if at least ONE of them hit a tile next to another compartment
+    // Is this usefull anymore, mby delete?
     public bool NexToValid()
     {
 
@@ -369,7 +343,7 @@ public class PlacementShadow : MonoBehaviour
 
     private RaycastHit2D[][] FireAllSquares()
     {
-        RaycastHit2D[][] AllTheHits = new RaycastHit2D[columns.Count][];
+        RaycastHit2D[][] AllTheHits = new RaycastHit2D[ShadowSize][];
         for (int i = 0; i < AllTheHits.Length; i++)
         {
             AllTheHits[i] = new RaycastHit2D[3];
@@ -382,7 +356,8 @@ public class PlacementShadow : MonoBehaviour
             GameObject column = columns[i];
 
             int rowindex = 0;
-            foreach (Transform square in column.transform)
+
+            foreach (Transform square in columns[i].transform)
             {
                 RaycastHit2D hit = Physics2D.Raycast(square.position, Vector2.zero, Mathf.Infinity, CollisionLayerMask);
                 AllTheHits[columnindex][rowindex] = hit;
@@ -402,8 +377,8 @@ public class PlacementShadow : MonoBehaviour
     private bool[][] ResetColorMatrix()
     {
         bool[][] ColorMatrix;
-        ColorMatrix = new bool[columns.Count][];
-        for (int i = 0; i < columns.Count; i++)
+        ColorMatrix = new bool[ShadowSize][];
+        for (int i = 0; i < ShadowSize; i++)
         {
             ColorMatrix[i] = new bool[] { true, true, true };
         }
@@ -412,7 +387,7 @@ public class PlacementShadow : MonoBehaviour
     }
     private void applyColorMatrix(bool[][] ColorMatrix)
     {
-        for (int i = 0; i < columns.Count; ++i)
+        for (int i = 0; i < ShadowSize; ++i)
         {
             int rowindex = 0;
             foreach (Transform square in columns[i].transform)
@@ -464,9 +439,9 @@ public class PlacementShadow : MonoBehaviour
                 if (ColorMatrix[i][j] == true)
                 {
                     // If has BridgeCompartment on that row, do not check if there is a compartment above or bellow
-                    if (SquareMatrix[i][j].collider.gameObject.GetComponentInParent<ShipRow>().HasBridge == false) { 
+                    //if (SquareMatrix[i][j].collider.gameObject.GetComponentInParent<ShipRow>().HasBridge == false) 
 
-                        Collider2D collider = SquareMatrix[i][j].collider.gameObject.GetComponent<Collider2D>();
+                    Collider2D collider = SquareMatrix[i][j].collider.gameObject.GetComponent<Collider2D>();
                     //Top
                     shootposition = new Vector2(
                         collider.bounds.center.x,
@@ -506,7 +481,7 @@ public class PlacementShadow : MonoBehaviour
 
                             }
                         }
-                }//hasbridge=false
+                //hasbridge=false
             }
                 strikes = 0;
             }

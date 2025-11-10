@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 public class CompartmentCardPresenter : MonoBehaviour
 {
 
@@ -16,9 +17,9 @@ public class CompartmentCardPresenter : MonoBehaviour
     public TextMeshProUGUI CurrentText;
     //public GameObject ShadowPrefab;
     //private GameObject buildingShadow;
+    private Color green = new Color(0.5f, 0.6f, 0.3f);
 
-
-
+    
     private Button _button;
     private bool _selected = false;
 
@@ -29,7 +30,6 @@ public class CompartmentCardPresenter : MonoBehaviour
         //Debug.Log(Compartment.MaxAmmount);
         CostText.SetText("Cost: " + CompartmentType.Cost.ToString());
         Icon.sprite = CompartmentType.Icon;
-        SetMinMaxCurrent(CompartmentType);
 
 
 
@@ -46,9 +46,13 @@ public class CompartmentCardPresenter : MonoBehaviour
 
     void Start()
     {
-        //SetMinMaxCurrent(Compartment);
 
-        //MandatoryFree();
+        
+        if (SetMinMaxCurrent()) {
+            _button.enabled = false;
+        }
+        
+
 
 
 
@@ -59,150 +63,99 @@ public class CompartmentCardPresenter : MonoBehaviour
     void Update()
     {
 
-
-        /*
-        // Broke boy/girl/they
-        if (Player_Ship.Instance.Currency < Compartment.Cost) 
-            CostText.color = Color.red;
+      
         
-        /*
-        else if (MandatoryFree() || Player_Ship.Instance.Currency >= Compartment.Cost)
-            CostText.color = new Color(0f, 0.39f, 0f);
-        */
 
-    
-    }
+  
+        }
+
+
+
     /*
-    public void ToggleSelected()
-    {
-        _selected = !_selected;
-
-        if (_selected)
-        {
-            buildingShadow = Instantiate(ShadowPrefab);
-            buildingShadow.GetComponent<PlacementShadow>().ShadowSize = CompartmentPrefab.GetComponent<CompartmentType>().Size;
-        }
-        if (!_selected)
-        {
-            Destroy(buildingShadow);
-
-        }
-
-
-    }
+    else if (MandatoryFree() || Player_Ship.Instance.Currency >= Compartment.Cost)
+        CostText.color = new Color(0f, 0.39f, 0f);
     */
 
-    private void Build(GameObject Compartment_Prefab, RaycastHit2D hit)
-    {
-        Debug.Log("building");
 
+    public void UpdateButtons() {
 
-        // TODO Subdtract player resources 
-        if (Player_Ship.Instance.Currency >= CompartmentType.Cost) //        if (Player_Ship.Instance.Currency >= Compartment.Cost && !MandatoryFree())
-
+        if (SetMinMaxCurrent())
         {
-            Player_Ship.Instance.Currency -= CompartmentType.Cost;
-            Compartment comp = hit.collider.GetComponent<Compartment>();
-            comp.Add_Compartment_Type_Child(Compartment_Prefab);
-
-            //Flags
-            comp.Is_Empty = false;
-
-
-            Player_Ship.Instance.AllCompartments_func();
-            //SetMinMaxCurrent(Compartment);
-
-            // Disable button. currently no way to reenable
-            if (Player_Ship.Instance.AllCompartments[CompartmentType.Name].Count >= CompartmentType.MaxAmmount)
-            {
-                _button.interactable = false;
-            }
-
-
-
-
-
-            //Player_Ship.Instance.GPT_Debug();
-            //foreach (var elem in Player_Ship.Instance.AllCompartments.Keys)
-            //Debug.Log(elem);
-
+            _button.enabled = false;
 
         }
-        /*
         else if (MandatoryFree())
         {
-            Compartment comp = hit.collider.GetComponent<Compartment>();
-            comp.Add_Compartment_Type_Child(Compartment_Prefab);
+            _button.enabled = true;
+            CostText.color = green;
 
-            //Flags
-            comp.Is_Empty = false;
-
-
-            Player_Ship.Instance.AllCompartments_func();
-            SetMinMaxCurrent(Compartment);
-
-            // Disable button. currently no way to reenable
-            if (Player_Ship.Instance.AllCompartments[Compartment.Name].Count >= Compartment.Max_Ammount)
-            {
-                _button.interactable = false;
-            }
-        }*/
-
-    }
-
-
-    public void SetMinMaxCurrent(CompartmentType Compartment)
-    {
-        MinText.SetText("Min: " + Compartment.MinAmmount.ToString());
-        MaxText.SetText("Max: " + Compartment.MaxAmmount.ToString());
-        /*
-        //Debug.Log(Player_Ship.Instance.AllCompartments.ContainsKey(Compartment.name));
-        if (Player_Ship.Instance.AllCompartments.ContainsKey(Compartment.Name))
+        }
+        else if (PlayerShip.Instance.Currency < CompartmentType.Cost)
         {
-            int a = Player_Ship.Instance.AllCompartments[Compartment.Name].Count;
-            CurrentText.SetText("Current: "+a.ToString() + "/" + Compartment.Max_Ammount.ToString());
+            CostText.SetText("Cost: " + CompartmentType.Cost.ToString());
+            CostText.color = Color.red;
+            _button.interactable = false;
         }
         else
         {
-            //Debug.Log("always");
-            CurrentText.SetText("Current: " + "0" + "/" + Compartment.Max_Ammount.ToString());
+            CostText.SetText("Cost: " + CompartmentType.Cost.ToString());
+            CostText.color = green;
+            _button.interactable = true;
 
         }
-        */
+
+
+
+
     }
-    /*
+ 
+    
+
+
+
+
+    public bool SetMinMaxCurrent()
+    {
+        MinText.SetText("Min: " + CompartmentType.MinAmmount.ToString());
+        MaxText.SetText("Max: " + CompartmentType.MaxAmmount.ToString());
+        //Debug.Log(PlayerShip.Instance);
+        if (PlayerShip.Instance.AllCompartments.ContainsKey(CompartmentType.Name))
+        {
+            //Debug.Log("always");
+            int a = PlayerShip.Instance.CountTiersOrSubs(CompartmentType);
+            CurrentText.SetText("Current: "+a.ToString() + "/" + CompartmentType.MaxAmmount.ToString());
+            if (a == CompartmentType.MaxAmmount) {
+                CostText.SetText("MAX");
+                CostText.color = new Color (0.2f, 0.2f, 0.2f);//should be dark gray
+                return true;
+
+
+            }
+            else
+                return false;
+        }
+        else
+        {
+            CurrentText.SetText("Current: " + "0" + "/" + CompartmentType.MaxAmmount.ToString());
+            return false;
+
+        }
+    }
+    
     private bool MandatoryFree()
     {
-
-        if (Player_Ship.Instance.AllCompartments.TryGetValue(Compartment.Name, out HashSet<GameObject> value))
-        {
-            if (value.Count < Compartment.Min_Ammount){
-                CostText.SetText("Cost: " + "FREE");
-                return true;
-                
-            }
-        }
-        else if (Compartment.Min_Ammount > 0)
-        {
+        int CurrentAmmount = PlayerShip.Instance.CountTiersOrSubs(CompartmentType);
+        if (CurrentAmmount < CompartmentType.MinAmmount){
             CostText.SetText("Cost: " + "FREE");
             return true;
-            
+
         }
-        CostText.SetText("Cost: " + Compartment.Cost.ToString());
+        //CostText.SetText("Cost: " + CompartmentType.Cost.ToString());
         return false;
         
     }
 
-    //TODO
-    private void Merge_Compartment(GameObject Compartment_Prefab, RaycastHit2D hit) {
-        Compartment comp = hit.collider.GetComponent<Compartment>();
-        
-    }
 
-    */
-
-
-    // If merge with adjecent compartment or create a new seperate one instead
 
 
 

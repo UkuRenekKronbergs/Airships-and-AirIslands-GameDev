@@ -1,14 +1,18 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
-using UnityEngine.UI;
+using TMPro;
 using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class BuildingController : MonoBehaviour
 {
     public bool BuildingModeAllowed = true;//disable button during combat
+    public GameObject CurrencyCounter; // THIS SHOULDNT BE HANDLED HERE
     public GameObject BuildModeButton;
     public GameObject BuildPanel;
     public bool IsBuilding = false;
+    public bool InBuildMode = false;
     // Add in editor
     public List<GameObject> CompartmentCardPrefabs = new List<GameObject>();
     private List<GameObject> CompartmentCards = new List<GameObject>();
@@ -17,6 +21,7 @@ public class BuildingController : MonoBehaviour
 
     //cardselected
     private int _currentlySelected;
+    //private int _selectedLastUpdate;
     private CompartmentType _compartmentType = null;
 
 
@@ -35,7 +40,9 @@ public class BuildingController : MonoBehaviour
         {
             int index = i;
             CompartmentCards[index].GetComponent<Button>().onClick.AddListener(() => CardSelected(index));
+            //CompartmentCards[index].GetComponent<CompartmentCardPresenter>().UpdateButtons();
         }
+
 
 
 
@@ -45,14 +52,20 @@ public class BuildingController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        CurrencyCounter.GetComponent< TextMeshProUGUI >().text = PlayerShip.Instance.Currency.ToString();
+        for (int i = 0; i < CompartmentCards.Count; i++)
+        {
+            CompartmentCards[i].GetComponent<CompartmentCardPresenter>().UpdateButtons();
+        }
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (IsBuilding)
+        if (IsBuilding&& InBuildMode)
         {
+            //int selectedThisCycle = _currentlySelected;
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
             GameObject row;
@@ -63,7 +76,8 @@ public class BuildingController : MonoBehaviour
 
 
                 //ColumnsContinuous = all columns are next to eachother, columns.Count = correct number of columns for this compartment, result = Each square of each column returned the same column.
-                if (buildingShadow.GetComponent<PlacementShadow>().ColumnsContinuous(columns) && columns.Count == compartmentType.Size && result)
+                //if (buildingShadow.GetComponent<PlacementShadow>().ColumnsContinuous(columns) && columns.Count == compartmentType.Size && result)
+                if(buildingShadow.GetComponent<PlacementShadow>().AllowedToPlace)
                 {
 
                     (GameObject left, GameObject right) Check = CheckMerge(columns, compartmentType);
@@ -110,7 +124,6 @@ public class BuildingController : MonoBehaviour
                         {
                             CCGO = Check.left;
                             MergeCombinedAndSub(CCGO, subCompartment, "left");
-                            CCGO.GetComponent<CombinedCompartment>().CurrentTier++;
                         }
                         // merge with right
                         else
@@ -133,15 +146,25 @@ public class BuildingController : MonoBehaviour
                         ConnectElevators(CCGO);
                     }
                     PlayerShip.Instance.GetAllCompartments();
+                    /// THIS SHOULDNT BE HERE OR AT LEAST LIKE THIS
+                    if(PlayerShip.Instance.CountTiersOrSubs(compartmentType)>compartmentType.MinAmmount)
+                        PlayerShip.Instance.Currency -= compartmentType.Cost;
+                    CurrencyCounter.GetComponent<TextMeshProUGUI>().text = PlayerShip.Instance.Currency.ToString();
+
+
 
                 }
 
-                // Didnt click to place.
                 IsBuilding = false;
                 if (buildingShadow != null)
-                {
+                   {
                     Destroy(buildingShadow);
+                    for (int i = 0; i < CompartmentCards.Count; i++)
+                    {
+                        CompartmentCards[i].GetComponent<CompartmentCardPresenter>().UpdateButtons();
+                    }
                 }
+        
 
             }// if mouseubuttondown
         }
@@ -150,8 +173,8 @@ public class BuildingController : MonoBehaviour
 
     public void ToggleBuildMode()
     {
-        IsBuilding = !IsBuilding;
-        BuildPanel.SetActive(IsBuilding);
+        InBuildMode = !InBuildMode;
+        BuildPanel.SetActive(InBuildMode);
 
         //Todo, finalisebuild. subdract resources, finalize.
     }
@@ -162,18 +185,18 @@ public class BuildingController : MonoBehaviour
         _currentlySelected = cardIndex;
 
         IsBuilding = true;
+
+
         if (buildingShadow != null)
         {
             Destroy(buildingShadow);
         }
-        else
-        {
-            buildingShadow = Instantiate(ShadowPrefab);
-            buildingShadow.GetComponent<PlacementShadow>().CompartmentType = CompartmentCards[cardIndex].GetComponent<CompartmentCardPresenter>().CompartmentType;
-            buildingShadow.GetComponent<PlacementShadow>().ShadowSize = CompartmentCards[cardIndex].GetComponent<CompartmentCardPresenter>().CompartmentType.Size;
+        buildingShadow = Instantiate(ShadowPrefab);
+        buildingShadow.GetComponent<PlacementShadow>().CompartmentType = CompartmentCards[cardIndex].GetComponent<CompartmentCardPresenter>().CompartmentType;
+        buildingShadow.GetComponent<PlacementShadow>().ShadowSize = CompartmentCards[cardIndex].GetComponent<CompartmentCardPresenter>().CompartmentType.Size;
 
 
-        }
+        
 
 
 

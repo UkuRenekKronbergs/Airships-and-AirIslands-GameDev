@@ -2101,6 +2101,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d654c81d4683854ea2d286347ac47c1, type: 3}
+--- !u!1 &666816176 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2330473302305317191, guid: bcb94cca4bffa074fb868beda786133c, type: 3}
+  m_PrefabInstance: {fileID: 1018544452}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &737937145
 GameObject:
   m_ObjectHideFlags: 0
@@ -2495,6 +2500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BuildingModeAllowed: 1
+  CurrencyCounter: {fileID: 1987759755}
   BuildModeButton: {fileID: 524580997}
   BuildPanel: {fileID: 737937145}
   IsBuilding: 0
@@ -2522,7 +2528,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &900487410
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2649,6 +2655,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 935033142}
+  - component: {fileID: 935033143}
   m_Layer: 0
   m_Name: PlayerShip
   m_TagString: Untagged
@@ -2672,6 +2679,24 @@ Transform:
   - {fileID: 1178009469}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &935033143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 935033141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7573b2be7bc6ac44aee7e89535b58a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Rows:
+  - {fileID: 1870302660}
+  - {fileID: 2073826321}
+  - {fileID: 666816176}
+  Hull: 10
+  Currency: 100
 --- !u!1001 &1018544452
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3629,6 +3654,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c26cbd07fc38f9c479524d3cd8c9ca8f, type: 3}
+--- !u!1 &1870302660 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2330473302305317191, guid: bcb94cca4bffa074fb868beda786133c, type: 3}
+  m_PrefabInstance: {fileID: 1939077679}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1918868840
 GameObject:
   m_ObjectHideFlags: 0
@@ -3956,7 +3986,7 @@ GameObject:
   - component: {fileID: 1987759757}
   - component: {fileID: 1987759756}
   m_Layer: 5
-  m_Name: Curreny_Counter
+  m_Name: CurrenyCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4183,6 +4213,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2044987532}
   m_CullTransparentMesh: 1
+--- !u!1 &2073826321 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2330473302305317191, guid: bcb94cca4bffa074fb868beda786133c, type: 3}
+  m_PrefabInstance: {fileID: 3150273822955403719}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3150273822955403719
 PrefabInstance:
   m_ObjectHideFlags: 0

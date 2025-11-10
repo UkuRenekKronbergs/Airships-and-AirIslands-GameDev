@@ -11,12 +11,13 @@ public class EngineCompartment : CompartmentType
         MaxAmmount = 3;
         MinAmmount = 1;
         Health = 1;
-        Cost = 0;
+        Cost = 20;
         MaxTier = 3;
         Size = 3;
     }
     private void Awake()
     {
+        /*
         Name = "EngineCompartment";
         MaxAmmount = 3;
         MinAmmount = 1;
@@ -24,6 +25,7 @@ public class EngineCompartment : CompartmentType
         Cost = 0;
         MaxTier = 3;
         Size = 3;
+        */
     }
     void Start()
     {

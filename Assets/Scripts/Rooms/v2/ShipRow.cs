@@ -20,6 +20,7 @@ public class ShipRow : MonoBehaviour
     // If Bridge, can always be reached. Other rows check if they have elevator to this row to be reachable.
     //[HideInInspector]
     public bool HasBridge = false;
+    public GameObject EmptyCompartmentPrefab; 
 
 
     private void Awake()
@@ -59,10 +60,10 @@ public class ShipRow : MonoBehaviour
 
         //GameObject newCombinedCompartment = new GameObject("EmptyCompartment", typeof(CombinedCompartment), typeof(EmptyCompartment));
         //GameObject newCombinedCompartment = new GameObject("EmptyCompartment", typeof(CombinedCompartment));// if add Empytycompartment as typeof it will not get the correct "reset" values.
-        GameObject newCombinedCompartment = Instantiate(CompartmentHolder.Instance.EmptyCompartment);
+        GameObject newCombinedCompartment = Instantiate(EmptyCompartmentPrefab);
         newCombinedCompartment.AddComponent<CombinedCompartment>();
         newCombinedCompartment.GetComponent<CombinedCompartment>().CompartmentType = newCombinedCompartment.GetComponent<EmptyCompartment>();
-        newCombinedCompartment.GetComponent<CombinedCompartment>().CompartmentPrefab = CompartmentHolder.Instance.EmptyCompartment;// DO i even need to hav ea type field if I also have an instance field anyway?
+        newCombinedCompartment.GetComponent<CombinedCompartment>().CompartmentPrefab = EmptyCompartmentPrefab;// DO i even need to hav ea type field if I also have an instance field anyway?
         newCombinedCompartment.name = "EmptyCompartment";
 
 
@@ -113,9 +114,16 @@ public class ShipRow : MonoBehaviour
         foreach (Transform child in transform)
         {
             RowsCombinedCompartments.Add(child.gameObject);
-            if (child.GetComponent<BridgeCompartment>()!=null)
-                HasBridge= true;
-
+            if (child.GetComponent<BridgeCompartment>() != null)
+            {
+                HasBridge = true;
+                Isolated = false;
+            }
+            else {
+                HasBridge = false;
+                //isolated = true. Probably shouldt do that here
+            
+            }
 
         }
 

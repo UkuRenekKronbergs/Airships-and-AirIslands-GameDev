@@ -42,7 +42,7 @@ public class PlayerShip : MonoBehaviour
         foreach(ShipRow row in RowCompartments)
         {
             foreach(GameObject elem in row.RowsCombinedCompartments) {
-                string key = elem.GetComponent<CombinedCompartment>().CompartmentType.name;
+                string key = elem.GetComponent<CombinedCompartment>().CompartmentType.Name;
                 if (AllCompartments.TryGetValue(key, out List<CombinedCompartment> value))
                 {
                     AllCompartments[key].Add(elem.GetComponent<CombinedCompartment>());
