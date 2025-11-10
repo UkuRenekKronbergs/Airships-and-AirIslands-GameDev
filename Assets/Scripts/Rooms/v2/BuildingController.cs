@@ -63,43 +63,10 @@ public class BuildingController : MonoBehaviour
                 //ColumnsContinuous = all columns are next to eachother, columns.Count = correct number of columns for this compartment, result = Each square of each column returned the same column.
                 if (buildingShadow.GetComponent<PlacementShadow>().ColumnsContinuous(columns) && columns.Count == compartmentType.Size && result)
                 {
-                    if (compartmentType is ElevatorCompartment) {
-                        row = columns[0].GetComponentInParent<ShipRow>().gameObject;
-                        if (row.GetComponent<ShipRow>().HasBridge) { 
-                        
-                        
-                        }
 
+                    (GameObject left, GameObject right) Check = CheckMerge(columns, compartmentType);
 
-
-
-
-
-
-
-
-
-                    }
-
-
-
-
-
-                    GameObject CombinedCompartment = CheckMerge(columns, compartmentType);
-                    //Debug.Log(CombinedCompartment);
-                    if (CombinedCompartment == null)
-                    {
-                        CombinedCompartment = Instantiate(CompartmentCards[_currentlySelected].GetComponent<CompartmentCardPresenter>().CompartmentPrefab);
-                        CombinedCompartment.name = compartmentType.name;// unity editor name
-                        CombinedCompartment.AddComponent<CombinedCompartment>();
-                        CombinedCompartment.GetComponent<CombinedCompartment>().CompartmentPrefab = CompartmentCards[_currentlySelected].GetComponent<CompartmentCardPresenter>().CompartmentPrefab;
-                        CombinedCompartment.GetComponent<CombinedCompartment>().CompartmentType = compartmentType;
-                        CombinedCompartment.GetComponent<CombinedCompartment>().CurrentTier = 1;
-                        Debug.Log(CombinedCompartment);
-                    }
-                    else
-                        CombinedCompartment.GetComponent<CombinedCompartment>().CurrentTier++;
-
+                    GameObject CCGO;//combined compartment object
                     GameObject subCompartment = new GameObject("sub");
                     row = columns[0].GetComponentInParent<ShipRow>().gameObject;
                     foreach (Column column in columns)
@@ -107,9 +74,59 @@ public class BuildingController : MonoBehaviour
                         column.transform.SetParent(subCompartment.transform);
                         tempcolor(column);
                     }
-                    subCompartment.transform.SetParent(CombinedCompartment.transform);
+                    // no merge
+                    if (Check.right == null && Check.left == null)
+                    {
+                        CCGO = Instantiate(CompartmentCards[_currentlySelected].GetComponent<CompartmentCardPresenter>().CompartmentPrefab);
+                        CCGO.name = compartmentType.name;// unity editor name
+                        CCGO.AddComponent<CombinedCompartment>();
+                        CCGO.GetComponent<CombinedCompartment>().CompartmentPrefab = CompartmentCards[_currentlySelected].GetComponent<CompartmentCardPresenter>().CompartmentPrefab;
+                        CCGO.GetComponent<CombinedCompartment>().CompartmentType = compartmentType;
+                        CCGO.GetComponent<CombinedCompartment>().CurrentTier = 1;
+                        subCompartment.transform.SetParent(CCGO.transform);
+                        CCGO.GetComponent<CombinedCompartment>().SubCompartments.Add(subCompartment);
+                        foreach (Column column in columns) {
+                            CCGO.GetComponent<CombinedCompartment>().Columns.Add(column.gameObject);
+                        }
+
+
+
+                        //Debug.Log(CCGO);
+                    }
+                    else
+                    {
+                        //Merge Both
+                        if (Check.left != null && Check.right != null) {
+                            CCGO = Check.left;
+                            MergeCombinedAndSub(CCGO, subCompartment, "left");
+                            MergeTwoCombinedCompartments(CCGO, Check.right);
+                        }
+                        //merge with left
+                        else if (Check.left != null)
+                        {
+                            CCGO = Check.left;
+                            MergeCombinedAndSub(CCGO, subCompartment, "left");
+                            CCGO.GetComponent<CombinedCompartment>().CurrentTier++;
+                        }
+                        // merge with right
+                        else  {
+                            Debug.Log("Merge with right");
+                            CCGO = Check.right;
+                            MergeCombinedAndSub(CCGO, subCompartment, "right");
+                        }
+
+                    }
+                    //row = columns[0].GetComponentInParent<ShipRow>().gameObject;
+
+                    //subCompartment.transform.SetParent(CCGO.transform);
+                    //CCGO.GetComponent<CombinedCompartment>().SubCompartments.Add(subCompartment);
                     //CombinedCompartment.transform.SetParent(row.transform);
-                    AddCombinedCompartmentToRow(CombinedCompartment, row);
+                    AddCombinedCompartmentToRow(CCGO, row);
+                    if (compartmentType is ElevatorCompartment)// should work, not tested!
+                    {
+                        row.GetComponent<ShipRow>().ElevatorCompartments.Add(CCGO);
+                    }
+                    PlayerShip.Instance.GetAllCompartments();
 
                 }
 
@@ -158,41 +175,66 @@ public class BuildingController : MonoBehaviour
     // Checks left of leftmost column and right of rightmos column (also works if only one column exists in list)
     // if null, no merge
     // if tie, choose  left side.
-    //
-    public GameObject CheckMerge(List<Column> columns, CompartmentType type)
+    // Had to rework it so its messy, didnt merge correctly when placed inbetween two compartments before.
+    public (GameObject left, GameObject right) CheckMerge(List<Column> columns, CompartmentType type)
     {
         Debug.Log(type);
 
-        // Return
-        int HighestFoundTier = 0;
-        GameObject returncompartment = null;
+  
+        //GameObject returncompartment = null;
         // Do NOT RETURN
         CombinedCompartment compartment = null;
 
 
+        bool leftside = (columns[0].LeftColumn != null && columns[0].LeftColumn.GetComponentInParent<CombinedCompartment>().CompartmentType == type);
+        int leftsideTier = 0;
+        GameObject leftCompartment = null;
+
+        bool rightside = (columns[columns.Count - 1].RightColumn != null && columns[columns.Count - 1].RightColumn.GetComponentInParent<CombinedCompartment>().CompartmentType == type);
+        int rightsideTier = 0;
+        GameObject rightCompartment = null;
+
+
+
         //Debug.Log(columns[0].LeftColumn != null && columns[0].LeftColumn.GetComponentInParent<CombinedCompartment>().CompartmentType == type);
-        if (columns[0].LeftColumn != null && columns[0].LeftColumn.GetComponentInParent<CombinedCompartment>().CompartmentType == type)
+        if (leftside)
         {
             compartment = columns[0].LeftColumn.GetComponentInParent<CombinedCompartment>();
-            Debug.Log(compartment.CurrentTier < compartment.CompartmentType.MaxTier && compartment.CurrentTier > HighestFoundTier);
-            if (compartment.CurrentTier < compartment.CompartmentType.MaxTier && compartment.CurrentTier > HighestFoundTier)
+            //Debug.Log(compartment.CurrentTier < compartment.CompartmentType.MaxTier && compartment.CurrentTier > HighestFoundTier);
+            if (compartment.CurrentTier < compartment.CompartmentType.MaxTier)
             {
-                HighestFoundTier = compartment.CurrentTier;
-                returncompartment = compartment.gameObject;
+                leftsideTier = compartment.CurrentTier;
+                leftCompartment = compartment.gameObject;
 
             }
 
         }
-        if (columns[columns.Count - 1].RightColumn != null && columns[columns.Count - 1].RightColumn.GetComponentInParent<CombinedCompartment>().CompartmentType == type)
+        if (rightside)
         {
             compartment = columns[columns.Count - 1].RightColumn.GetComponentInParent<CombinedCompartment>();
-            if (compartment.CurrentTier < compartment.CompartmentType.MaxTier && compartment.CurrentTier > HighestFoundTier)
+            if (compartment.CurrentTier < compartment.CompartmentType.MaxTier)
             {
-                HighestFoundTier = compartment.CurrentTier;
-                returncompartment = compartment.gameObject;
+                rightsideTier = compartment.CurrentTier;
+                rightCompartment = compartment.gameObject;
             }
         }
-        return returncompartment;
+        if (leftside && rightside) {
+            if (leftsideTier + rightsideTier < type.MaxTier) { 
+            }
+            return (leftCompartment, rightCompartment);
+        }
+        if(leftsideTier>rightsideTier)
+            return (leftCompartment, null);
+        if (rightsideTier > leftsideTier)
+            return (null, rightCompartment);
+        if (rightsideTier==leftsideTier&&leftsideTier!=0)//tiebreaker
+            return (leftCompartment, null);
+        return (null, null);
+
+
+
+
+
     }
 
     // temporary way to show visually where compartments are
@@ -223,31 +265,76 @@ public class BuildingController : MonoBehaviour
         row.GetComponent<ShipRow>().RefreshValues();
     }
 
-
-
-
-
-    /// <summary>
-    /// If Bridge on this floor -> always allow placement. Any free tile on floor.
-    /// If not bridge floor, but already have an elevator connection to bridge floor -> allow free placement. 
-    /// If not bridge floor, and not connected to bridge floor (either directly or trough another floor) . Force placement above, bellow an elevator on another floor.
-    /// There is the problem with free placement, that you could build an elevator anywhere, and then attach another compartment to it, then delete the elevator. So the rule that you can only place compartments nexto existing compartments could be easily ignored...
-    /// So only free placement on bridge actually.....
-    /// </summary>
-    /// <param name="elevatorcolumn"></param>
-    public void AllowBuildElevator(Column elevatorcolumn) { 
-
-    
-    
-    
-    
+    // Merges two combined compartments.
+    GameObject MergeTwoCombinedCompartments(GameObject left,GameObject right) 
+    {
+        CombinedCompartment CombinedLeft = left.GetComponent<CombinedCompartment>();
+        CombinedCompartment CombinedRight = right.GetComponent<CombinedCompartment>();
+        CombinedLeft.CurrentTier += CombinedRight.CurrentTier;//should be +1 usually 
+        CombinedLeft.SubCompartments.AddRange(CombinedRight.SubCompartments);
+        CombinedLeft.Columns.AddRange(CombinedRight.Columns);
+        foreach (GameObject elem in CombinedLeft.SubCompartments) {
+            elem.transform.SetParent(left.transform);
+        }
+        Destroy(right);
+        return left;
     }
-    public void BuildElevator(Column elevatorcolumn) { 
 
-    
-    
-    
+    // Left as in to the left of the new sub.
+    // Right as in right of the new sub
+    GameObject MergeCombinedAndSub(GameObject CombinedGameObject, GameObject sub, string side) {
+        CombinedCompartment CC = CombinedGameObject.GetComponent<CombinedCompartment>();
+        CC.CurrentTier++;
+        if (side == "left")
+        {
+            //Debug.Log("triggered left");
+
+            CC.SubCompartments.Add(sub);
+            foreach (Transform child in sub.transform) {
+                CC.Columns.Add(child.gameObject);
+                Debug.Log(child.gameObject.name);
+            }
+            sub.transform.SetParent(CombinedGameObject.transform);
+            return CombinedGameObject;
+
+        }
+        if (side == "right") {
+            //Debug.Log("triggered right");
+            CC.SubCompartments.Insert(0, sub);
+            List<GameObject> templist = new List<GameObject>();
+            foreach (Transform child in sub.transform)
+            {
+                templist.Add(child.gameObject);
+            }
+            templist.AddRange(CC.Columns);
+            CC.Columns = templist;
+            sub.transform.SetParent(CombinedGameObject.transform);
+            sub.transform.SetAsFirstSibling();
+            return CombinedGameObject;
+
+
+
+        }
+        return null;
+
+
+
+
+
+
+
+
+
+
     }
+
+
+
+
+
+
+
+
 
 
 

@@ -10,7 +10,7 @@ public class CombinedCompartment : MonoBehaviour
     public GameObject CompartmentPrefab;
     //public GameObject test;
     public int CurrentTier = 0;
-    public List<GameObject> SingleCompartment = new List<GameObject>();
+    public List<GameObject> SubCompartments = new List<GameObject>();
     public List<GameObject> Columns = new List<GameObject>(); // len is size of compartment
 
     // Could I just check the list?
@@ -25,28 +25,7 @@ public class CombinedCompartment : MonoBehaviour
 
     void Start()
     {
-        //Debug.Log("How many times is this triggered");
-        // Needs to be updated later somehow
-        foreach (Transform child in transform)
-        {
-            Columns.Add(child.gameObject);
-        }
 
-
-
-
-
-
-        if (CompartmentType is EmptyCompartment)
-        {
-            // Debug.Log(CompartmentType is EmptyCompartment);
-
-        }
-        else
-        {
-            //Debug.Log(CompartmentPrefab);
-            ApplyRoomSprite();
-        }
 
     }
 
@@ -56,16 +35,17 @@ public class CombinedCompartment : MonoBehaviour
 
     }
 
-    // Allows us to do thing like delete 1 tier off a tier 2 or 3 room.
-    public void ExpandCommpartment(List<GameObject> columns)
+    /*
+    public void ExpandCommpartment(GameObject CombinedCompartment)
     {
-        GameObject newComp = new GameObject();
-        foreach (GameObject child in columns)
-        {
-            child.transform.SetParent(newComp.transform);
-        }
-        newComp.transform.SetParent(this.transform);
+
+
+ 
     }
+    */
+    
+
+
 
     public void ApplyRoomSprite()
     {
