@@ -23,7 +23,8 @@ public class BuildingController : MonoBehaviour
 
     private void Awake()
     {
-        foreach (GameObject card in CompartmentCardPrefabs) {
+        foreach (GameObject card in CompartmentCardPrefabs)
+        {
             GameObject c = Instantiate(card);
 
             CompartmentCards.Add(c);
@@ -50,7 +51,8 @@ public class BuildingController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (IsBuilding) {
+        if (IsBuilding)
+        {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
             GameObject row;
@@ -85,7 +87,8 @@ public class BuildingController : MonoBehaviour
                         CCGO.GetComponent<CombinedCompartment>().CurrentTier = 1;
                         subCompartment.transform.SetParent(CCGO.transform);
                         CCGO.GetComponent<CombinedCompartment>().SubCompartments.Add(subCompartment);
-                        foreach (Column column in columns) {
+                        foreach (Column column in columns)
+                        {
                             CCGO.GetComponent<CombinedCompartment>().Columns.Add(column.gameObject);
                         }
 
@@ -96,7 +99,8 @@ public class BuildingController : MonoBehaviour
                     else
                     {
                         //Merge Both
-                        if (Check.left != null && Check.right != null) {
+                        if (Check.left != null && Check.right != null)
+                        {
                             CCGO = Check.left;
                             MergeCombinedAndSub(CCGO, subCompartment, "left");
                             MergeTwoCombinedCompartments(CCGO, Check.right);
@@ -109,7 +113,8 @@ public class BuildingController : MonoBehaviour
                             CCGO.GetComponent<CombinedCompartment>().CurrentTier++;
                         }
                         // merge with right
-                        else  {
+                        else
+                        {
                             Debug.Log("Merge with right");
                             CCGO = Check.right;
                             MergeCombinedAndSub(CCGO, subCompartment, "right");
@@ -125,6 +130,7 @@ public class BuildingController : MonoBehaviour
                     if (compartmentType is ElevatorCompartment)// should work, not tested!
                     {
                         row.GetComponent<ShipRow>().ElevatorCompartments.Add(CCGO);
+                        ConnectElevators(CCGO);
                     }
                     PlayerShip.Instance.GetAllCompartments();
 
@@ -142,14 +148,16 @@ public class BuildingController : MonoBehaviour
 
     }
 
-    public void ToggleBuildMode() {
+    public void ToggleBuildMode()
+    {
         IsBuilding = !IsBuilding;
         BuildPanel.SetActive(IsBuilding);
 
         //Todo, finalisebuild. subdract resources, finalize.
     }
 
-    public void CardSelected(int cardIndex) {
+    public void CardSelected(int cardIndex)
+    {
         Debug.Log(cardIndex);
         _currentlySelected = cardIndex;
 
@@ -158,7 +166,8 @@ public class BuildingController : MonoBehaviour
         {
             Destroy(buildingShadow);
         }
-        else {
+        else
+        {
             buildingShadow = Instantiate(ShadowPrefab);
             buildingShadow.GetComponent<PlacementShadow>().CompartmentType = CompartmentCards[cardIndex].GetComponent<CompartmentCardPresenter>().CompartmentType;
             buildingShadow.GetComponent<PlacementShadow>().ShadowSize = CompartmentCards[cardIndex].GetComponent<CompartmentCardPresenter>().CompartmentType.Size;
@@ -180,7 +189,7 @@ public class BuildingController : MonoBehaviour
     {
         Debug.Log(type);
 
-  
+
         //GameObject returncompartment = null;
         // Do NOT RETURN
         CombinedCompartment compartment = null;
@@ -218,16 +227,18 @@ public class BuildingController : MonoBehaviour
                 rightCompartment = compartment.gameObject;
             }
         }
-        if (leftside && rightside) {
-            if (leftsideTier + rightsideTier < type.MaxTier) { 
+        if (leftside && rightside)
+        {
+            if (leftsideTier + rightsideTier < type.MaxTier)
+            {
             }
             return (leftCompartment, rightCompartment);
         }
-        if(leftsideTier>rightsideTier)
+        if (leftsideTier > rightsideTier)
             return (leftCompartment, null);
         if (rightsideTier > leftsideTier)
             return (null, rightCompartment);
-        if (rightsideTier==leftsideTier&&leftsideTier!=0)//tiebreaker
+        if (rightsideTier == leftsideTier && leftsideTier != 0)//tiebreaker
             return (leftCompartment, null);
         return (null, null);
 
@@ -266,14 +277,15 @@ public class BuildingController : MonoBehaviour
     }
 
     // Merges two combined compartments.
-    GameObject MergeTwoCombinedCompartments(GameObject left,GameObject right) 
+    GameObject MergeTwoCombinedCompartments(GameObject left, GameObject right)
     {
         CombinedCompartment CombinedLeft = left.GetComponent<CombinedCompartment>();
         CombinedCompartment CombinedRight = right.GetComponent<CombinedCompartment>();
         CombinedLeft.CurrentTier += CombinedRight.CurrentTier;//should be +1 usually 
         CombinedLeft.SubCompartments.AddRange(CombinedRight.SubCompartments);
         CombinedLeft.Columns.AddRange(CombinedRight.Columns);
-        foreach (GameObject elem in CombinedLeft.SubCompartments) {
+        foreach (GameObject elem in CombinedLeft.SubCompartments)
+        {
             elem.transform.SetParent(left.transform);
         }
         Destroy(right);
@@ -282,7 +294,8 @@ public class BuildingController : MonoBehaviour
 
     // Left as in to the left of the new sub.
     // Right as in right of the new sub
-    GameObject MergeCombinedAndSub(GameObject CombinedGameObject, GameObject sub, string side) {
+    GameObject MergeCombinedAndSub(GameObject CombinedGameObject, GameObject sub, string side)
+    {
         CombinedCompartment CC = CombinedGameObject.GetComponent<CombinedCompartment>();
         CC.CurrentTier++;
         if (side == "left")
@@ -290,7 +303,8 @@ public class BuildingController : MonoBehaviour
             //Debug.Log("triggered left");
 
             CC.SubCompartments.Add(sub);
-            foreach (Transform child in sub.transform) {
+            foreach (Transform child in sub.transform)
+            {
                 CC.Columns.Add(child.gameObject);
                 Debug.Log(child.gameObject.name);
             }
@@ -298,7 +312,8 @@ public class BuildingController : MonoBehaviour
             return CombinedGameObject;
 
         }
-        if (side == "right") {
+        if (side == "right")
+        {
             //Debug.Log("triggered right");
             CC.SubCompartments.Insert(0, sub);
             List<GameObject> templist = new List<GameObject>();
@@ -327,6 +342,48 @@ public class BuildingController : MonoBehaviour
 
 
     }
+    //Connects recently built Elevators to the network.
+    public void ConnectElevators(GameObject ElevatorObject)
+    {
+        Collider2D collider = ElevatorObject.GetComponentInChildren<Collider2D>();
+        ElevatorCompartment elevator = ElevatorObject.GetComponent<ElevatorCompartment>();
+        Vector2 shootposition;
+        Column hitcolumn;
+
+
+        //Up
+        shootposition = new Vector2(
+                    collider.bounds.center.x,
+                    collider.bounds.max.y + 0.01f);
+        RaycastHit2D hit = Physics2D.Raycast(shootposition, Vector2.up, Mathf.Infinity, buildingShadow.GetComponent<PlacementShadow>().CollisionLayerMask);
+
+        if (hit.collider != null)
+        {
+            hitcolumn = hit.collider.gameObject.GetComponent<Column>();
+            if (hitcolumn.GetComponentInParent<CombinedCompartment>().CompartmentType is ElevatorCompartment)
+            {
+                elevator.UpColumn = hitcolumn;
+                hitcolumn.GetComponentInParent<ElevatorCompartment>().DownColumn = ElevatorObject.GetComponentInChildren<Column>();
+
+            }
+        }
+        //Down
+        shootposition = new Vector2(
+            collider.bounds.center.x,
+            collider.bounds.min.y - 0.01f);
+        hit = Physics2D.Raycast(shootposition, Vector2.down, Mathf.Infinity, buildingShadow.GetComponent<PlacementShadow>().CollisionLayerMask);
+
+        if (hit.collider != null)
+        {
+            hitcolumn = hit.collider.gameObject.GetComponent<Column>();
+            if (hitcolumn.GetComponentInParent<CombinedCompartment>().CompartmentType is ElevatorCompartment)
+            {
+                Debug.Log("This should not trigger");
+                elevator.DownColumn = hitcolumn;
+                hitcolumn.GetComponentInParent<ElevatorCompartment>().UpColumn = ElevatorObject.GetComponentInChildren<Column>();
+
+            }
+        }
 
 
 
@@ -339,4 +396,6 @@ public class BuildingController : MonoBehaviour
 
 
 
+
+    }
 }

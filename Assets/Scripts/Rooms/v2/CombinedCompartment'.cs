@@ -16,7 +16,7 @@ public class CombinedCompartment : MonoBehaviour
     // Could I just check the list?
     public GameObject LeftMostColumn;
     public GameObject RightMostColumn;
-    public int CenterColumn; //where door.
+    public int CenterColumn; //where door.//TODO
 
     private void Awake()
     {

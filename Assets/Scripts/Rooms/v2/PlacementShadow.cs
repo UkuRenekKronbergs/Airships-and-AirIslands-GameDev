@@ -488,8 +488,7 @@ public class PlacementShadow : MonoBehaviour
                     hit = Physics2D.Raycast(shootposition, Vector2.down, Mathf.Infinity, CollisionLayerMask);
                     if (hit.collider != null)
                     {
-                        if (hit.collider.gameObject != SquareMatrix[i][j].collider.gameObject)
-                            Debug.Log("Different Objects");
+  
 
                         hitcolumn = hit.collider.gameObject.GetComponent<Column>();
                         if (hitcolumn.GetComponentInParent<CombinedCompartment>().CompartmentType is not ElevatorCompartment)
@@ -525,7 +524,7 @@ public class PlacementShadow : MonoBehaviour
                 if (hitcolumn.LeftColumn.GetComponentInParent<CombinedCompartment>().CompartmentType is not EmptyCompartment)
                     return true;
             if (hitcolumn.RightColumn != null)
-                if (hitcolumn.LeftColumn.GetComponentInParent<CombinedCompartment>().CompartmentType is not EmptyCompartment)
+                if (hitcolumn.RightColumn.GetComponentInParent<CombinedCompartment>().CompartmentType is not EmptyCompartment)
                     return true;
         }
         return false;
