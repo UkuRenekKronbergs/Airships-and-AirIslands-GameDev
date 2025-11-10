@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class BuildingController : MonoBehaviour
 {
@@ -199,7 +200,18 @@ public class BuildingController : MonoBehaviour
     {
         foreach (Transform square in column.transform)
         {
-            square.Find("Centre").GetComponent<SpriteRenderer>().color = Color.blue;
+            var a = square.Find("Centre").GetComponent<SpriteRenderer>();
+            var type = CompartmentCards[_currentlySelected].GetComponent<CompartmentCardPresenter>().CompartmentType;
+            if (type is BridgeCompartment)
+                a.color = Color.blue;
+            else if (type is EngineCompartment)
+                a.color = Color.red;
+            else
+                a.color = Color.green;
+
+
+
+
 
 
         }
