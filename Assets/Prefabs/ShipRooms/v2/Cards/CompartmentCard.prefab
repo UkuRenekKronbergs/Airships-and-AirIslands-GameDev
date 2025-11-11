@@ -896,9 +896,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CompartmentPrefab: {fileID: 0}
   Icon: {fileID: 4571774049737350176}
+  CompartmentType: {fileID: 0}
   NameText: {fileID: 2445006625243894554}
   CostText: {fileID: 8708686854579890904}
   MinText: {fileID: 860788943587238221}
   MaxText: {fileID: 370950864731964409}
   CurrentText: {fileID: 7551152441180805597}
-  ShadowPrefab: {fileID: 5185987246915442958, guid: ae696f9d49fb3934bbf7808db59af32b, type: 3}

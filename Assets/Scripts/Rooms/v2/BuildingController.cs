@@ -21,8 +21,11 @@ public class BuildingController : MonoBehaviour
 
     //cardselected
     private int _currentlySelected;
-    //private int _selectedLastUpdate;
     private CompartmentType _compartmentType = null;
+
+    private int _selectedLastUpdate;
+    private GameObject _newbuildingshadow;
+
 
 
 
@@ -63,14 +66,40 @@ public class BuildingController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_newbuildingshadow != null) {
+            for (int i = 0; i < CompartmentCards.Count; i++)
+            {
+                int index = i;
+                CompartmentCards[index].GetComponent<Button>().enabled = false;
+            }
+
+            IsBuilding = true;
+            Destroy(buildingShadow);
+            buildingShadow = _newbuildingshadow;
+            _newbuildingshadow = null;
+            _currentlySelected = _selectedLastUpdate;
+
+            for (int i = 0; i < CompartmentCards.Count; i++)
+            {
+                int index = i;
+                CompartmentCards[index].GetComponent<Button>().enabled=true;
+            }
+        }
+
+
+
+
         if (IsBuilding&& InBuildMode)
         {
+            Debug.Log("test");
+            Debug.Log(buildingShadow != null);
             //int selectedThisCycle = _currentlySelected;
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
             GameObject row;
             if (Input.GetMouseButtonDown(0))
             {
+                
                 CompartmentType compartmentType = CompartmentCards[_currentlySelected].GetComponent<CompartmentCardPresenter>().CompartmentType;
                 (bool result, List<Column> columns) = buildingShadow.GetComponent<PlacementShadow>().GetHitColumnV2();
 
@@ -156,15 +185,18 @@ public class BuildingController : MonoBehaviour
                 }
 
                 IsBuilding = false;
+                Destroy(buildingShadow);
+                for (int i = 0; i < CompartmentCards.Count; i++)
+                {
+                    CompartmentCards[i].GetComponent<CompartmentCardPresenter>().UpdateButtons();
+                }
+                /*
                 if (buildingShadow != null)
                    {
                     Destroy(buildingShadow);
-                    for (int i = 0; i < CompartmentCards.Count; i++)
-                    {
-                        CompartmentCards[i].GetComponent<CompartmentCardPresenter>().UpdateButtons();
-                    }
-                }
-        
+
+                }*/
+
 
             }// if mouseubuttondown
         }
@@ -182,18 +214,19 @@ public class BuildingController : MonoBehaviour
     public void CardSelected(int cardIndex)
     {
         Debug.Log(cardIndex);
-        _currentlySelected = cardIndex;
+        _selectedLastUpdate = cardIndex;
 
-        IsBuilding = true;
+        //IsBuilding = true;
 
-
+        /*
         if (buildingShadow != null)
         {
             Destroy(buildingShadow);
         }
-        buildingShadow = Instantiate(ShadowPrefab);
-        buildingShadow.GetComponent<PlacementShadow>().CompartmentType = CompartmentCards[cardIndex].GetComponent<CompartmentCardPresenter>().CompartmentType;
-        buildingShadow.GetComponent<PlacementShadow>().ShadowSize = CompartmentCards[cardIndex].GetComponent<CompartmentCardPresenter>().CompartmentType.Size;
+        */
+        _newbuildingshadow = Instantiate(ShadowPrefab);
+        _newbuildingshadow.GetComponent<PlacementShadow>().CompartmentType = CompartmentCards[cardIndex].GetComponent<CompartmentCardPresenter>().CompartmentType;
+        _newbuildingshadow.GetComponent<PlacementShadow>().ShadowSize = CompartmentCards[cardIndex].GetComponent<CompartmentCardPresenter>().CompartmentType.Size;
 
 
         

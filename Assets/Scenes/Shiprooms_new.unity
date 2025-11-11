@@ -1659,9 +1659,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 236a9348672b5f74fa5ea05e4431465d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EmptyCompartment: {fileID: 6620575666070676495, guid: bc5e234816eba1c4196522e56048b8cf, type: 3}
-  BridgeCompartment: {fileID: 203636011591564442, guid: 71e494b5fe5463147a0d8a6ccde3b8ae, type: 3}
-  EngineCompartment: {fileID: 4590714885604550276, guid: 913c87cb14d0e334f94509784f34b4ce, type: 3}
 --- !u!1 &524580997
 GameObject:
   m_ObjectHideFlags: 0
@@ -2504,6 +2501,7 @@ MonoBehaviour:
   BuildModeButton: {fileID: 524580997}
   BuildPanel: {fileID: 737937145}
   IsBuilding: 0
+  InBuildMode: 0
   CompartmentCardPrefabs:
   - {fileID: 4740849916376545134, guid: 9cf3e4fe04165fe45ab3d952199d56f0, type: 3}
   - {fileID: 8626850734079568973, guid: 4d9b3e797c831f5499aee5aea7dbed87, type: 3}
@@ -2561,9 +2559,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a654e86d34be446b4c2de8a53d8eca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShadowPrefab: {fileID: 5185987246915442958, guid: ae696f9d49fb3934bbf7808db59af32b, type: 3}
-  _isbuilding: 0
-  compartment: {fileID: 203636011591564442, guid: 71e494b5fe5463147a0d8a6ccde3b8ae, type: 3}
 --- !u!114 &900487412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2761,6 +2756,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5732479590903115063, guid: bcb94cca4bffa074fb868beda786133c, type: 3}
+      propertyPath: EmptyCompartmentPrefab
+      value: 
+      objectReference: {fileID: 6620575666070676495, guid: bc5e234816eba1c4196522e56048b8cf, type: 3}
     - target: {fileID: 6065993318233228691, guid: bcb94cca4bffa074fb868beda786133c, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -3856,6 +3855,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5732479590903115063, guid: bcb94cca4bffa074fb868beda786133c, type: 3}
+      propertyPath: EmptyCompartmentPrefab
+      value: 
+      objectReference: {fileID: 6620575666070676495, guid: bc5e234816eba1c4196522e56048b8cf, type: 3}
     - target: {fileID: 6065993318233228691, guid: bcb94cca4bffa074fb868beda786133c, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -4282,6 +4285,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5732479590903115063, guid: bcb94cca4bffa074fb868beda786133c, type: 3}
+      propertyPath: EmptyCompartmentPrefab
+      value: 
+      objectReference: {fileID: 6620575666070676495, guid: bc5e234816eba1c4196522e56048b8cf, type: 3}
     - target: {fileID: 6065993318233228691, guid: bcb94cca4bffa074fb868beda786133c, type: 3}
       propertyPath: m_Enabled
       value: 0
