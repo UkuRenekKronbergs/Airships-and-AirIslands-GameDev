@@ -7,8 +7,12 @@ namespace Airships.Ship
         public GameObject location;
 
         // Update is called once per frame
-        void Update()
+        void Start()
         {
+            location = GameObject.Find(DataManager.Instance.playerLocationName);
+
+            var destinationPos = location.transform.position;
+            transform.position = destinationPos + new Vector3(0f, 1f, 0f);
         }
 
         public void moveLocation(GameObject destination)
@@ -16,6 +20,7 @@ namespace Airships.Ship
             if (destination == null) return;
 
             location = destination;
+            DataManager.Instance.playerLocationName = destination.name;
 
             var destinationPos = destination.transform.position;
             transform.position = destinationPos + new Vector3(0f, 1f, 0f);
