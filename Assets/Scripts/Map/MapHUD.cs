@@ -20,6 +20,26 @@ public class MapHUD : MonoBehaviour
         WireButton(shipRoomsButton, LoadShipRoomsScene);
         WireButton(cityButton, LoadCityScene);
     WireButton(battleButton, LoadBattleScene);
+        // Map should only have the Ship button play the click SFX. Ensure shipRoomsButton has it and remove from others.
+        if (shipRoomsButton != null && shipRoomsButton.GetComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>() == null)
+        {
+            if (shipRoomsButton.GetComponent<AirshipsAndAirIslands.Audio.UIButtonSound>() == null)
+            {
+                shipRoomsButton.gameObject.AddComponent<AirshipsAndAirIslands.Audio.UIButtonSound>();
+            }
+        }
+
+        if (cityButton != null)
+        {
+            var comp = cityButton.GetComponent<AirshipsAndAirIslands.Audio.UIButtonSound>();
+            if (comp != null) Destroy(comp);
+        }
+
+        if (battleButton != null)
+        {
+            var comp = battleButton.GetComponent<AirshipsAndAirIslands.Audio.UIButtonSound>();
+            if (comp != null) Destroy(comp);
+        }
     }
 
     private void WireButton(Button button, UnityAction callback)

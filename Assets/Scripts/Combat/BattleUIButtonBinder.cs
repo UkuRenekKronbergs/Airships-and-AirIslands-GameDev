@@ -163,6 +163,11 @@ namespace AirshipsAndAirIslands.Combat
             }
 
             button.onClick.AddListener(action);
+            // Ensure battle UI buttons play click SFX unless explicitly marked otherwise
+            if (button.GetComponent<AirshipsAndAirIslands.Audio.UIButtonSound>() == null && button.GetComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>() == null)
+            {
+                button.gameObject.AddComponent<AirshipsAndAirIslands.Audio.UIButtonSound>();
+            }
         }
 
         private static void UnwireButton(Button button, UnityAction action)

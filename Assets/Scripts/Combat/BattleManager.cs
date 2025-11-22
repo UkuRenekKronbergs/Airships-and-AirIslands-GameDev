@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using AirshipsAndAirIslands.Events;
 using AirshipsAndAirIslands.Ship;
+using AirshipsAndAirIslands.Audio;
 using UnityEngine;
 
 namespace AirshipsAndAirIslands.Combat
@@ -124,6 +125,7 @@ namespace AirshipsAndAirIslands.Combat
             UpdateResourceCaches(forceNotify: true);
             TransitionState(BattleState.Intro);
             _stateTimer = introDurationSeconds;
+            AudioManager.Instance?.PlayEnemyEncounter();
         }
 
         public void RegisterEnemy(EnemyAIController enemy)
