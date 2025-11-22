@@ -74,7 +74,11 @@ namespace AirshipsAndAirIslands.Audio
         {
             try
             {
+                #if UNITY_2023_1_OR_NEWER
+                var buttons = UnityEngine.Object.FindObjectsByType<UnityEngine.UI.Button>(UnityEngine.FindObjectsSortMode.None);
+                #else
                 var buttons = FindObjectsOfType<UnityEngine.UI.Button>();
+                #endif
                 foreach (var btn in buttons)
                 {
                     if (btn == null) continue;

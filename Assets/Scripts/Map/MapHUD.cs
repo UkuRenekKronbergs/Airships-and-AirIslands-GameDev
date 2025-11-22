@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using AirshipsAndAirIslands.Events;
 
 public class MapHUD : MonoBehaviour
 {
@@ -14,9 +16,29 @@ public class MapHUD : MonoBehaviour
     [SerializeField] private string shipRoomsSceneName = "ShipRooms";
     [SerializeField] private string citySceneName = "City";
     [SerializeField] private string battleSceneName = "Battle";
+    [Header("Events")]
+    [SerializeField] private GameEventManager gameEventManager;
+    [SerializeField] private EventUI eventUI;
 
     private void Awake()
     {
+        // Auto-find and wire event manager + UI if they weren't assigned in the inspector
+        if (gameEventManager == null)
+        {
+            gameEventManager = GameState.Instance?.GetComponent<GameEventManager>() ?? UnityEngine.Object.FindFirstObjectByType<GameEventManager>();
+        }
+
+        if (eventUI == null)
+        {
+            eventUI = UnityEngine.Object.FindFirstObjectByType<EventUI>();
+        }
+
+        if (eventUI != null && gameEventManager != null)
+        {
+            eventUI.SetGameEventManager(gameEventManager);
+            SetEventReferences(gameEventManager, eventUI);
+        }
+
         WireButton(shipRoomsButton, LoadShipRoomsScene);
         WireButton(cityButton, LoadCityScene);
     WireButton(battleButton, LoadBattleScene);
@@ -60,12 +82,59 @@ public class MapHUD : MonoBehaviour
 
     private void LoadCityScene()
     {
-        TryLoadScene(citySceneName);
+        StartCoroutine(HandleEventThenLoad(citySceneName));
     }
 
     private void LoadBattleScene()
     {
-        TryLoadScene(battleSceneName);
+        StartCoroutine(HandleEventThenLoad(battleSceneName));
+    }
+
+    private System.Collections.IEnumerator HandleEventThenLoad(string sceneName)
+    {
+        if (gameEventManager == null || eventUI == null)
+        {
+            TryLoadScene(sceneName);
+            yield break;
+        }
+
+        // Get a random event and show it. If player skips, just load the scene.
+        GameEvent gameEvent = null;
+        try
+        {
+            gameEvent = gameEventManager.GetRandomEvent();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning($"Failed to get random event: {ex.Message}");
+        }
+
+        if (gameEvent == null)
+        {
+            TryLoadScene(sceneName);
+            yield break;
+        }
+
+        bool finished = false;
+        EventResult resolvedResult = null;
+        bool usedEvent = false;
+
+        yield return StartCoroutine(eventUI.ShowEventCoroutine(gameEvent, (result, applied) =>
+        {
+            resolvedResult = result;
+            usedEvent = applied;
+            finished = true;
+        }));
+
+        // If the event triggered combat, prefer loading the Battle scene.
+        if (resolvedResult != null && resolvedResult.TriggersCombat)
+        {
+            TryLoadScene(battleSceneName);
+            yield break;
+        }
+
+        // Otherwise proceed to the requested scene.
+        TryLoadScene(sceneName);
     }
 
     private void TryLoadScene(string sceneName)
@@ -84,5 +153,14 @@ public class MapHUD : MonoBehaviour
         {
             Debug.LogWarning($"MapHUD could not load scene '{sceneName}'. Ensure it is added to Build Settings.");
         }
+    }
+
+    /// <summary>
+    /// Allows runtime wiring of the event manager and UI when scenes are set up programmatically.
+    /// </summary>
+    public void SetEventReferences(GameEventManager manager, AirshipsAndAirIslands.Events.EventUI ui)
+    {
+        gameEventManager = manager;
+        eventUI = ui;
     }
 }

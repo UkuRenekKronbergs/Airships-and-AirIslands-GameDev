@@ -10,6 +10,33 @@ namespace AirshipsAndAirIslands.Events
     /// </summary>
     public class GameState : MonoBehaviour
     {
+        private static GameState _instance;
+
+        /// <summary>
+        /// Global singleton instance. Use `GameState.Instance` to access from other code.
+        /// The instance created in the Main Menu will persist across scene loads.
+        /// </summary>
+        public static GameState Instance => _instance;
+
+        private void Awake()
+        {
+            if (_instance == null)
+            {
+                _instance = this;
+                DontDestroyOnLoad(gameObject);
+                return;
+            }
+
+            if (_instance == this)
+            {
+                // already the singleton
+                return;
+            }
+
+            // A persistent instance already exists — destroy this duplicate GameObject
+            Debug.Log("GameState: duplicate instance detected, destroying duplicate.");
+            Destroy(gameObject);
+        }
         [Header("Core Resources")]
         [SerializeField] private int gold = 20;
         [SerializeField] private int fuel = 10;

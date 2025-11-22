@@ -28,7 +28,8 @@ namespace AirshipsAndAirIslands.Events
         {
             if (gameState == null)
             {
-                gameState = FindFirstObjectByType<GameState>();
+                // Prefer the persistent singleton instance if available
+                gameState = GameState.Instance ?? FindFirstObjectByType<GameState>();
             }
         }
 
@@ -42,7 +43,6 @@ namespace AirshipsAndAirIslands.Events
             var index = _rng.Next(_events.Count);
             return _events[index];
         }
-
         public EventResult ResolveChoice(GameEvent gameEvent, string choiceId)
         {
             if (gameEvent == null)
@@ -110,7 +110,8 @@ namespace AirshipsAndAirIslands.Events
             _events.Clear();
             if (gameState == null)
             {
-                gameState = FindFirstObjectByType<GameState>();
+                // Prefer the persistent singleton instance when available
+                gameState = GameState.Instance ?? FindFirstObjectByType<GameState>();
                 if (gameState == null)
                 {
                     Debug.LogWarning("GameState not found in scene. Event effects will still be generated but not applied.");
@@ -172,14 +173,46 @@ namespace AirshipsAndAirIslands.Events
                         "Rush the salvage to beat any scavengers, risking damage.",
                         state =>
                         {
-                            var gains = new []
-                            {
-                                new ResourceDelta(ResourceType.Fuel, UnityEngine.Random.Range(1, 5)),
-                                new ResourceDelta(ResourceType.Food, UnityEngine.Random.Range(2, 7))
-                            };
+                            // Base random gains
+                            var fuelGain = UnityEngine.Random.Range(1, 5);
+                            var foodGain = UnityEngine.Random.Range(2, 7);
+
+                            // Adjust chance for extra haul based on crew morale vs fatigue
+                            var morale = state.GetResource(ResourceType.CrewMorale);
+                            var fatigueVal = state.GetResource(ResourceType.CrewFatigue);
+                            var baseChance = 0.25f; // small chance to score extra
+                            var successChance = Mathf.Clamp01(baseChance + (morale - fatigueVal) / 400f);
+                            var roll = UnityEngine.Random.Range(0f, 1f);
+
                             var resultText = "Your crew rushes the job, scoring extra supplies but a crate ruptures, coating the deck.";
+                            var deltas = new List<ResourceDelta>();
+
+                            if (roll < successChance)
+                            {
+                                // bonus haul
+                                var extraFuel = UnityEngine.Random.Range(1, 3);
+                                var extraFood = UnityEngine.Random.Range(1, 4);
+                                fuelGain += extraFuel;
+                                foodGain += extraFood;
+                                resultText = $"The rush paid off — you hauled extra supplies.";
+                                // mention morale effect if any
+                                var adjPct = Mathf.RoundToInt((successChance - baseChance) * 100f);
+                                if (adjPct != 0)
+                                {
+                                    resultText += $" (Crew morale affected the chance by {(adjPct>0?"+":"")}{adjPct}%.)";
+                                }
+                            }
+                            else
+                            {
+                                // mishap: small hull damage and more fatigue
+                                resultText = "A crate ruptures during the rush, coating the deck and denting the hull.";
+                                deltas.Add(new ResourceDelta(ResourceType.Hull, -1));
+                            }
+
+                            deltas.Add(new ResourceDelta(ResourceType.Fuel, fuelGain));
+                            deltas.Add(new ResourceDelta(ResourceType.Food, foodGain));
                             var fatigue = new ResourceDelta(ResourceType.CrewFatigue, UnityEngine.Random.Range(4, 9));
-                            var deltas = new List<ResourceDelta>(gains) { fatigue };
+                            deltas.Add(fatigue);
                             return new EventResult(resultText, deltas);
                         }
                     )
@@ -313,14 +346,28 @@ namespace AirshipsAndAirIslands.Events
                     new EventChoice(
                         "pay_toll",
                         "Hand over supplies to avoid a fight.",
-                        state => new EventResult(
-                            "The marauders sneer but wave you through after counting the goods.",
-                            new []
+                        state =>
+                        {
+                            // High morale can negotiate a smaller toll; fatigue reduces bargaining effectiveness.
+                            var morale = state.GetResource(ResourceType.CrewMorale);
+                            var fatigue = state.GetResource(ResourceType.CrewFatigue);
+                            var basePayment = 8;
+                            var discountChance = Mathf.Clamp01((morale - fatigue) / 200f);
+                            var roll = UnityEngine.Random.Range(0f, 1f);
+                            var payment = basePayment;
+                            var resultText = "The marauders sneer but wave you through after counting the goods.";
+                            if (roll < discountChance)
                             {
-                                new ResourceDelta(ResourceType.Gold, -8),
-                                new ResourceDelta(ResourceType.Food, -3)
+                                payment = Math.Max(1, basePayment - 2);
+                                resultText += $" Your negotiators found a better deal (saved {basePayment - payment} Gold).";
                             }
-                        ),
+
+                            return new EventResult(resultText, new []
+                            {
+                                new ResourceDelta(ResourceType.Gold, -payment),
+                                new ResourceDelta(ResourceType.Food, -3)
+                            });
+                        },
                         state => state.HasResource(ResourceType.Gold, 8) && state.HasResource(ResourceType.Food, 3)
                     ),
                     new EventChoice(
@@ -352,15 +399,39 @@ namespace AirshipsAndAirIslands.Events
                     new EventChoice(
                         "evasive",
                         "Burn hard to clear the field before more mines arm.",
-                        state => new EventResult(
-                            "Engines roar as you thread through the pattern, but the deck rattles and hull plates groan.",
-                            new []
+                        state =>
+                        {
+                            var morale = state.GetResource(ResourceType.CrewMorale);
+                            var fatigue = state.GetResource(ResourceType.CrewFatigue);
+                            var baseAvoidDamageChance = 0.25f;
+                            var avoidChance = Mathf.Clamp01(baseAvoidDamageChance + (morale - fatigue) / 400f);
+                            var roll = UnityEngine.Random.Range(0f, 1f);
+                            if (roll < avoidChance)
                             {
-                                new ResourceDelta(ResourceType.Fuel, -5),
-                                new ResourceDelta(ResourceType.Hull, -3),
-                                new ResourceDelta(ResourceType.CrewFatigue, 6)
+                                var resultText = "Engines roar as you thread through the pattern. Your crew performs expertly and you avoid major hits.";
+                                var deltas = new []
+                                {
+                                    new ResourceDelta(ResourceType.Fuel, -5),
+                                    new ResourceDelta(ResourceType.CrewFatigue, 6)
+                                };
+                                var adjPct = Mathf.RoundToInt((avoidChance - baseAvoidDamageChance) * 100f);
+                                if (adjPct != 0)
+                                {
+                                    resultText += $" (Crew morale influenced this by {(adjPct>0?"+":"")}{adjPct}%).";
+                                }
+                                return new EventResult(resultText, deltas);
                             }
-                        )
+
+                            return new EventResult(
+                                "Your crew pushes hard but a mine punches the hull as you clear the field.",
+                                new []
+                                {
+                                    new ResourceDelta(ResourceType.Fuel, -5),
+                                    new ResourceDelta(ResourceType.Hull, -4),
+                                    new ResourceDelta(ResourceType.CrewFatigue, 8)
+                                }
+                            );
+                        }
                     ),
                     new EventChoice(
                         "brace_for_impact",
@@ -405,14 +476,28 @@ namespace AirshipsAndAirIslands.Events
                     new EventChoice(
                         "sell_fuel",
                         "Sell a portion of your fuel reserves for gold.",
-                        state => new EventResult(
-                            "Guild factors stamp approval and credit your account.",
-                            new []
+                        state =>
+                        {
+                            var morale = state.GetResource(ResourceType.CrewMorale);
+                            var fatigue = state.GetResource(ResourceType.CrewFatigue);
+                            var baseGold = 9;
+                            var bonusChance = Mathf.Clamp01((morale - fatigue) / 300f);
+                            var roll = UnityEngine.Random.Range(0f, 1f);
+                            var gold = baseGold;
+                            var resultText = "Guild factors stamp approval and credit your account.";
+                            if (roll < bonusChance)
+                            {
+                                var bonus = UnityEngine.Random.Range(2, 6);
+                                gold += bonus;
+                                resultText += $" You negotiated a better price (+{bonus} Gold).";
+                            }
+
+                            return new EventResult(resultText, new []
                             {
                                 new ResourceDelta(ResourceType.Fuel, -3),
-                                new ResourceDelta(ResourceType.Gold, 9)
-                            }
-                        ),
+                                new ResourceDelta(ResourceType.Gold, gold)
+                            });
+                        },
                         state => state.HasResource(ResourceType.Fuel, 3)
                     ),
                     new EventChoice(
@@ -482,21 +567,39 @@ namespace AirshipsAndAirIslands.Events
                     new EventChoice(
                         "accept_escort",
                         "Escort the caravan for a share of their cargo.",
-                        state => new EventResult(
-                            "You align speed with the caravan. They'll follow your signal beacon.",
-                            Array.Empty<ResourceDelta>(),
-                            new QuestInfo(
+                        state =>
+                        {
+                            var morale = state.GetResource(ResourceType.CrewMorale);
+                            var fatigue = state.GetResource(ResourceType.CrewFatigue);
+                            var goldReward = 10;
+                            var fuelReward = 4;
+                            var bonusFactor = Mathf.Clamp01((morale - fatigue) / 200f);
+                            if (bonusFactor > 0.1f)
+                            {
+                                var extraGold = Mathf.RoundToInt(5 * bonusFactor);
+                                goldReward += extraGold;
+                            }
+
+                            var quest = new QuestInfo(
                                 "quest_escort_caravan",
                                 QuestType.Escort,
                                 "Protect the civilian caravan for two jumps without losing more than 2 hull.",
                                 new []
                                 {
-                                    new ResourceDelta(ResourceType.Fuel, 4),
-                                    new ResourceDelta(ResourceType.Gold, 10),
+                                    new ResourceDelta(ResourceType.Fuel, fuelReward),
+                                    new ResourceDelta(ResourceType.Gold, goldReward),
                                 },
                                 durationDays: 2
-                            )
-                        )
+                            );
+
+                            var resultText = "You align speed with the caravan. They'll follow your signal beacon.";
+                            if (bonusFactor > 0.1f)
+                            {
+                                resultText += " Your crew's high morale improves the promised payment.";
+                            }
+
+                            return new EventResult(resultText, Array.Empty<ResourceDelta>(), quest);
+                        }
                     ),
                     new EventChoice(
                         "decline_escort",
@@ -524,11 +627,23 @@ namespace AirshipsAndAirIslands.Events
                         "Match the signal using navigation crystals.",
                         state =>
                         {
+                            var morale = state.GetResource(ResourceType.CrewMorale);
+                            var fatigue = state.GetResource(ResourceType.CrewFatigue);
+                            var baseSuccess = 0.4f;
+                            var successChance = Mathf.Clamp01(baseSuccess + (morale - fatigue) / 400f);
                             var outcomeRoll = UnityEngine.Random.Range(0f, 1f);
-                            if (outcomeRoll < 0.4f)
+
+                            if (outcomeRoll < successChance)
                             {
+                                var adjPct = Mathf.RoundToInt((successChance - baseSuccess) * 100f);
+                                var text = "The beacon flares, revealing a hidden cache nearby!";
+                                if (adjPct != 0)
+                                {
+                                    text += $" (Crew morale affected the chance by {(adjPct>0?"+":"")}{adjPct}%.)";
+                                }
+
                                 return new EventResult(
-                                    "The beacon flares, revealing a hidden cache nearby!",
+                                    text,
                                     new []
                                     {
                                         new ResourceDelta(ResourceType.Fuel, 4),
@@ -537,7 +652,7 @@ namespace AirshipsAndAirIslands.Events
                                 );
                             }
 
-                            if (outcomeRoll < 0.8f)
+                            if (outcomeRoll < successChance + 0.4f)
                             {
                                 return new EventResult(
                                     "Visions unsettle the crew. Sleepless nights follow.",
