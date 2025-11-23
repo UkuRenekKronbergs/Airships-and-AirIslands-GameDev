@@ -2446,6 +2446,7 @@ MonoBehaviour:
   hull: 10
   crewMorale: 60
   crewFatigue: 40
+  playerLocation: City
 --- !u!114 &1525300252
 MonoBehaviour:
   m_ObjectHideFlags: 0

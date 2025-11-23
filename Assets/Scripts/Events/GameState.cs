@@ -46,8 +46,10 @@ namespace AirshipsAndAirIslands.Events
         [SerializeField, Min(0)] private int hull = 10;
 
         [Header("Crew Stats (0-100)")]
-        [Range(0, 100)] [SerializeField] private int crewMorale = 60;
-        [Range(0, 100)] [SerializeField] private int crewFatigue = 40;
+        [Range(0, 100)][SerializeField] private int crewMorale = 60;
+        [Range(0, 100)][SerializeField] private int crewFatigue = 40;
+
+        [SerializeField] private string playerLocation;
 
         private readonly List<QuestInfo> _activeQuests = new();
         public IReadOnlyList<QuestInfo> ActiveQuests => _activeQuests;
@@ -150,6 +152,17 @@ namespace AirshipsAndAirIslands.Events
             _activeQuests.RemoveAt(index);
             ApplyResourceChanges(completedQuest.Rewards);
             return true;
+        }
+
+        public void MovePlayerLocation(string newLocation)
+        {
+            Debug.Log("AAA"+newLocation);
+            playerLocation = newLocation;
+        }
+
+        public string GetPlayerLocation()
+        {
+            return playerLocation;
         }
     }
 }
