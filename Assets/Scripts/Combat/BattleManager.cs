@@ -29,6 +29,7 @@ namespace AirshipsAndAirIslands.Combat
         [Header("Behaviour")]
         [SerializeField] private bool autoStart = true;
         [SerializeField, Min(0f)] private float introDurationSeconds = 1.25f;
+        [SerializeField, Min(0f)] private float actionDelaySeconds = 0.6f;
         [SerializeField] private List<ResourceDelta> victoryRewards = new();
         [SerializeField] private List<ResourceDelta> defeatPenalties = new();
         [SerializeField, Min(1)] private int maxTrackedEnemies = 1;
@@ -41,6 +42,9 @@ namespace AirshipsAndAirIslands.Combat
         private readonly List<EnemySubsystem> _activeSubsystems = new();
         private readonly Dictionary<EnemySubsystem, EnemyAIController> _subsystemOwners = new();
         private float _stateTimer;
+        private bool _playerGoesFirst;
+        private bool _allowEnemyAction;
+        private bool _allowPlayerAction;
         private int _cachedHull = int.MinValue;
         private int _cachedAmmo = int.MinValue;
         private IReadOnlyList<ResourceDelta> _lastOutcomeChanges = Array.Empty<ResourceDelta>();
@@ -54,8 +58,23 @@ namespace AirshipsAndAirIslands.Combat
         public BattleState LastOutcomeState => _lastOutcomeState;
         public IReadOnlyList<ResourceDelta> VictoryRewards => victoryRewards;
         public IReadOnlyList<ResourceDelta> DefeatPenalties => defeatPenalties;
+        public bool PlayerGoesFirst => _playerGoesFirst;
+        public bool AllowEnemyAction => _allowEnemyAction;
+        public bool AllowPlayerAction => _allowPlayerAction;
+        public float ActionDelaySeconds => actionDelaySeconds;
 
         public event Action<BattleState> StateChanged;
+        public event Action<string> CombatLogMessage;
+
+        /// <summary>
+        /// Safe method for other classes to post messages into the combat log.
+        /// Events cannot be invoked from outside the declaring type, so this helper
+        /// provides a safe public entrypoint.
+        /// </summary>
+        public void PostCombatLog(string message)
+        {
+            CombatLogMessage?.Invoke(message);
+        }
         public event Action<BattleState> BattleEnded;
         public event Action<int> PlayerHullChanged;
         public event Action<int> PlayerAmmoChanged;
@@ -123,6 +142,13 @@ namespace AirshipsAndAirIslands.Combat
             _lastOutcomeChanges = Array.Empty<ResourceDelta>();
             _lastOutcomeState = BattleState.Inactive;
             UpdateResourceCaches(forceNotify: true);
+            // Decide initiative: randomized for now. Player gets an initial advantage if true.
+            _playerGoesFirst = UnityEngine.Random.value < 0.5f;
+            // Start with both sides disabled; we will perform the initial action sequence
+            // once the battle transitions to Running to avoid races.
+            _allowEnemyAction = false;
+            _allowPlayerAction = false;
+
             TransitionState(BattleState.Intro);
             _stateTimer = introDurationSeconds;
             AudioManager.Instance?.PlayEnemyEncounter();
@@ -146,6 +172,7 @@ namespace AirshipsAndAirIslands.Combat
 
             _activeEnemies.Add(enemy);
             enemy.Destroyed += HandleEnemyDestroyed;
+            Debug.Log($"BattleManager: Registered enemy {enemy.name}. ActiveEnemies={_activeEnemies.Count}");
             EnemyRegistered?.Invoke(enemy);
 
             RegisterEnemySubsystems(enemy);
@@ -161,6 +188,7 @@ namespace AirshipsAndAirIslands.Combat
             if (_activeEnemies.Remove(enemy))
             {
                 enemy.Destroyed -= HandleEnemyDestroyed;
+                Debug.Log($"BattleManager: Unregistered enemy {enemy.name}. ActiveEnemies={_activeEnemies.Count}");
                 EnemyRemoved?.Invoke(enemy);
             }
 
@@ -260,7 +288,11 @@ namespace AirshipsAndAirIslands.Combat
             CullMissingEnemies();
             UpdateResourceCaches();
 
-            if (_activeSubsystems.Count == 0)
+            // Consider the battle finished when there are no active enemies.
+            // Previously this checked for active subsystems, which could cause
+            // an immediate victory if enemies did not expose subsystems. Use
+            // the tracked enemy list to determine terminal victory instead.
+            if (_activeEnemies.Count == 0)
             {
                 HandleBattleFinished(BattleState.Victory, victoryRewards);
                 return;
@@ -382,6 +414,29 @@ namespace AirshipsAndAirIslands.Combat
             }
         }
 
+        /// <summary>
+        /// Called when the player performs an action (fires). This will allow enemies to start
+        /// firing if initiative granted the player the first action.
+        /// </summary>
+        public void NotifyPlayerActed()
+        {
+            // Player has used their action this turn; enable the enemy's action.
+            _allowPlayerAction = false;
+            _allowEnemyAction = true;
+            Debug.Log($"BattleManager: NotifyPlayerActed() -> allowPlayer={_allowPlayerAction} allowEnemy={_allowEnemyAction}");
+        }
+
+        /// <summary>
+        /// Called by enemies after they perform their action to transfer the turn
+        /// back to the player.
+        /// </summary>
+        public void NotifyEnemyActed()
+        {
+            _allowEnemyAction = false;
+            _allowPlayerAction = true;
+            Debug.Log($"BattleManager: NotifyEnemyActed() -> allowPlayer={_allowPlayerAction} allowEnemy={_allowEnemyAction}");
+        }
+
         private void CollectEnemies()
         {
 #if UNITY_2023_1_OR_NEWER
@@ -459,6 +514,35 @@ namespace AirshipsAndAirIslands.Combat
             }
 
             StateChanged?.Invoke(currentState);
+
+            // When the battle becomes Running, perform the initial action sequence in a coroutine
+            // to avoid race conditions between manual initial hits and enemy attack coroutines.
+            if (currentState == BattleState.Running)
+            {
+                StartCoroutine(RunInitiativeSequence());
+            }
+        }
+
+        private System.Collections.IEnumerator RunInitiativeSequence()
+        {
+            // Announce initiative
+            CombatLogMessage?.Invoke(_playerGoesFirst ? "Player goes first." : "Enemy goes first.");
+
+            // Enable the first actor's action and leave the other disabled. Actors
+            // must call NotifyPlayerActed/NotifyEnemyActed to transfer the turn.
+            if (_playerGoesFirst)
+            {
+                _allowPlayerAction = true;
+                _allowEnemyAction = false;
+            }
+            else
+            {
+                _allowPlayerAction = false;
+                _allowEnemyAction = true;
+            }
+
+            // Small delay to let HUD initialize before players can act.
+            yield return new WaitForSeconds(actionDelaySeconds);
         }
 
         private void HandleBattleFinished(BattleState terminalState, IReadOnlyList<ResourceDelta> resourceChanges)
@@ -488,6 +572,24 @@ namespace AirshipsAndAirIslands.Combat
             _lastOutcomeChanges = appliedChanges;
             _lastOutcomeState = terminalState;
 
+            // When the battle finishes, ensure no further actions are possible and
+            // stop enemy coroutines immediately.
+            _allowEnemyAction = false;
+            _allowPlayerAction = false;
+            // Also stop attack coroutines on all active enemies to prevent any remaining
+            // scheduled FireWeapons calls from running after the battle ends.
+            foreach (var enemy in _activeEnemies)
+            {
+                try
+                {
+                    enemy?.StopAttacking();
+                }
+                catch (Exception)
+                {
+                    // ignore issues stopping coroutines on already-destroyed enemies
+                }
+            }
+
             TransitionState(terminalState);
             BattleEnded?.Invoke(terminalState);
             BattleResult?.Invoke(terminalState, appliedChanges);
@@ -504,6 +606,13 @@ namespace AirshipsAndAirIslands.Combat
             var hull = gameState.ModifyResource(ResourceType.Hull, -damage);
             UpdateResourceCaches(forceNotify: true);
             PlayerDamaged?.Invoke(damage, source);
+
+            // Emit a concise combat-log message so the HUD and log show incoming damage.
+            if (damage > 0)
+            {
+                var attacker = source != null && source.Stats != null ? source.Stats.EnemyName : "Enemy";
+                PostCombatLog($"{attacker} hits you for {damage} damage.");
+            }
 
             if (hull <= 0)
             {

@@ -14,7 +14,7 @@ namespace AirshipsAndAirIslands.Combat
         [SerializeField, TextArea] private string description = "Light raider craft armed with chain guns.";
 
         [Header("Attributes")]
-        [SerializeField, Min(1)] private int maxHull = 20;
+        [SerializeField, Min(1)] private int maxHull = 12;
         [SerializeField, Min(0)] private int armor = 2;
         [SerializeField, Min(1)] private int attackDamage = 4;
         [SerializeField, Min(0)] private float attackIntervalSeconds = 2.5f;
