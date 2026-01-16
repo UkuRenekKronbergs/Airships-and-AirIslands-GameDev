@@ -91,8 +91,8 @@ public class BuildingController : MonoBehaviour
 
         if (IsBuilding&& InBuildMode)
         {
-            Debug.Log("test");
-            Debug.Log(buildingShadow != null);
+            //Debug.Log("test");
+            //Debug.Log(buildingShadow != null);
             //int selectedThisCycle = _currentlySelected;
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
