@@ -116,7 +116,13 @@ namespace AirshipsAndAirIslands.Combat
 
             if (fireButton != null)
             {
-                fireButton.interactable = isRunning && playerCombat != null && !playerCombat.IsReloading && battleManager?.CurrentSubsystem != null;
+                // Allow firing when:
+                // - battle is running
+                // - playerCombat exists and is not reloading
+                // - and either a subsystem is selected OR there is at least one active enemy (fallback to hull)
+                var hasFallbackTarget = (battleManager?.ActiveEnemies != null && battleManager.ActiveEnemies.Count > 0);
+                var hasSubsystemTarget = battleManager?.CurrentSubsystem != null;
+                fireButton.interactable = isRunning && playerCombat != null && !playerCombat.IsReloading && (hasSubsystemTarget || hasFallbackTarget);
             }
 
             if (nextSubsystemButton != null)
@@ -163,6 +169,11 @@ namespace AirshipsAndAirIslands.Combat
             }
 
             button.onClick.AddListener(action);
+            // Ensure battle UI buttons play click SFX unless explicitly marked otherwise
+            if (button.GetComponent<AirshipsAndAirIslands.Audio.UIButtonSound>() == null && button.GetComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>() == null)
+            {
+                button.gameObject.AddComponent<AirshipsAndAirIslands.Audio.UIButtonSound>();
+            }
         }
 
         private static void UnwireButton(Button button, UnityAction action)

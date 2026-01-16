@@ -1,4 +1,5 @@
 using UnityEngine;
+using AirshipsAndAirIslands.Audio;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
@@ -36,6 +37,11 @@ public class CompartmentCard : MonoBehaviour
         if (_button != null)
         {
             _button.onClick.AddListener(Pressed);
+            // This presenter plays its own build SFX in code; mark the button so the AudioManager won't auto-add the click SFX
+            if (_button.GetComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>() == null)
+            {
+                _button.gameObject.AddComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>();
+            }
         }
         mouse_hotspot = new Vector2(Mouse_Icon_Neutral.width / 2f, Mouse_Icon_Neutral.height / 2f);
     }
@@ -148,6 +154,7 @@ public class CompartmentCard : MonoBehaviour
             comp.Is_Empty = false;
 
 
+            AudioManager.Instance?.PlayBuild();
             Player_Ship.Instance.AllCompartments_func();
             SetMinMaxCurrent(Compartment);
 
@@ -175,6 +182,7 @@ public class CompartmentCard : MonoBehaviour
             comp.Is_Empty = false;
 
 
+            AudioManager.Instance?.PlayBuild();
             Player_Ship.Instance.AllCompartments_func();
             SetMinMaxCurrent(Compartment);
 

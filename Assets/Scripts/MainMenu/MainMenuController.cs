@@ -155,6 +155,11 @@ public class MainMenuController : MonoBehaviour
         }
 
         button.onClick.AddListener(action);
+        // Ensure main menu buttons play the default click SFX
+        if (button.GetComponent<AirshipsAndAirIslands.Audio.UIButtonSound>() == null && button.GetComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>() == null)
+        {
+            button.gameObject.AddComponent<AirshipsAndAirIslands.Audio.UIButtonSound>();
+        }
     }
 
     private static void TogglePanel(GameObject panel)
