@@ -6,7 +6,7 @@ using TMPro;
 public class HUD : MonoBehaviour
 {
 
-    public GameObject Build_Panel;
+    public GameObject BuildButton;
     public TextMeshProUGUI Currency_Counter;
     public HUD Instance;
     [SerializeField] private string mapSceneName = "Map";
@@ -32,20 +32,25 @@ public class HUD : MonoBehaviour
 
     }
 
-    public void Toggle_Build_Panel()
-    {
-        // If active, set inactive
-        if (Build_Panel.activeSelf)
+
+    public void EnableBuildButton() {
+
+        if (BuildButton.activeSelf)
         {
-            Build_Panel.SetActive(false);
+            BuildButton.SetActive(false);
         }
         else { 
-            Build_Panel.SetActive(true);
-        
+            BuildButton.SetActive(true);
         
         }
-
+    
+    
+    
+    
+    
     }
+
+
 
     public void LoadMapScene()
     {
