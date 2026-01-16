@@ -793,7 +793,7 @@ MonoBehaviour:
   githubButton: {fileID: 28340478}
   settingsPanel: {fileID: 1382064442}
   creditsPanel: {fileID: 2107358475}
-  playSceneName: ShipRooms
+  playSceneName: Shiprooms_new
   githubUrl: https://github.com/UkuRenekKronbergs/Airships-and-AirIslands-GameDev/tree/main
 --- !u!4 &684256981
 Transform:

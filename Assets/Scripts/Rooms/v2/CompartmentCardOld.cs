@@ -3,7 +3,7 @@ using AirshipsAndAirIslands.Audio;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
-public class Compartment_Card_Presenter : MonoBehaviour
+public class CompartmentCard : MonoBehaviour
 {
 
     public GameObject Compartment_Prefab;

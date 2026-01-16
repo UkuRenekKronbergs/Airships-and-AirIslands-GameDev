@@ -351,7 +351,7 @@ MonoBehaviour:
   shipRoomsButton: {fileID: 1071596874}
   cityButton: {fileID: 1353032903}
   battleButton: {fileID: 502499224}
-  shipRoomsSceneName: ShipRooms
+  shipRoomsSceneName: ShipRooms_new
   citySceneName: City
   battleSceneName: Battle
   gameEventManager: {fileID: 0}
