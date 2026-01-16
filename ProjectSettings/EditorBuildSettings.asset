@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 218114f05f8a6904e98de4a492eec86a
   - enabled: 1
+    path: Assets/Scenes/Shiprooms_new.unity
+    guid: 927c75c07e2505845abc368f9cf8fe94
+  - enabled: 0
     path: Assets/Scenes/ShipRooms.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
