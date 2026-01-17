@@ -10,8 +10,8 @@ public class PlayerShip : MonoBehaviour
     public Dictionary<string, List<CombinedCompartment>> AllCompartments = new Dictionary<string, List<CombinedCompartment>>();
 
     public static PlayerShip Instance;
-    public int Hull = 10;
-    public int Currency = 100;
+    //public int Hull = 0;
+    //public int Currency = 0;
 
 
     private void Awake()
@@ -33,6 +33,7 @@ public class PlayerShip : MonoBehaviour
         {
             RowCompartments.Add(elem.GetComponentInChildren<ShipRow>());
         }
+
 
 
     }

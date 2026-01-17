@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using AirshipsAndAirIslands.Events;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class BuildingController : MonoBehaviour
     public GameObject BuildPanel;
     public bool IsBuilding = false;
     public bool InBuildMode = false;
+    public GameState GameState;
     // Add in editor
     public List<GameObject> CompartmentCardPrefabs = new List<GameObject>();
     private List<GameObject> CompartmentCards = new List<GameObject>();
@@ -45,6 +47,8 @@ public class BuildingController : MonoBehaviour
             CompartmentCards[index].GetComponent<Button>().onClick.AddListener(() => CardSelected(index));
             //CompartmentCards[index].GetComponent<CompartmentCardPresenter>().UpdateButtons();
         }
+        GameState = FindFirstObjectByType<GameState>();
+
 
 
 
@@ -55,7 +59,7 @@ public class BuildingController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        CurrencyCounter.GetComponent< TextMeshProUGUI >().text = PlayerShip.Instance.Currency.ToString();
+        CurrencyCounter.GetComponent< TextMeshProUGUI >().text = GameState.Instance.GetGold().ToString();
         for (int i = 0; i < CompartmentCards.Count; i++)
         {
             CompartmentCards[i].GetComponent<CompartmentCardPresenter>().UpdateButtons();
@@ -176,10 +180,11 @@ public class BuildingController : MonoBehaviour
                     }
                     PlayerShip.Instance.GetAllCompartments();
                     /// THIS SHOULDNT BE HERE OR AT LEAST LIKE THIS
-                    if(PlayerShip.Instance.CountTiersOrSubs(compartmentType)>compartmentType.MinAmmount)
-                        PlayerShip.Instance.Currency -= compartmentType.Cost;
-                    CurrencyCounter.GetComponent<TextMeshProUGUI>().text = PlayerShip.Instance.Currency.ToString();
-
+                    if (PlayerShip.Instance.CountTiersOrSubs(compartmentType) > compartmentType.MinAmmount)
+                        GameState.ModifyResource(ResourceType.Gold, -compartmentType.Cost);
+                    //PlayerShip.Instance.Currency -= compartmentType.Cost;
+                    //CurrencyCounter.GetComponent<TextMeshProUGUI>().text = PlayerShip.Instance.Currency.ToString();
+                    CurrencyCounter.GetComponent<TextMeshProUGUI>().text = GameState.Instance.GetGold().ToString();
 
 
                 }
