@@ -1693,7 +1693,8 @@ MonoBehaviour:
   pathController: {fileID: 1149148038}
   dashLength: 0.05
   lineWidth: 0.05
-  lineMaterial: {fileID: 2100000, guid: 3ffd628ea12684144b11e033b1671220, type: 2}
+  validLineMaterial: {fileID: 2100000, guid: 3ffd628ea12684144b11e033b1671220, type: 2}
+  invalidLineMaterial: {fileID: 2100000, guid: bee7faa0e4360044fa49556795bbffca, type: 2}
 --- !u!4 &1149148036
 Transform:
   m_ObjectHideFlags: 0
