@@ -1,5 +1,6 @@
 using System.Text;
 using AirshipsAndAirIslands.Events;
+using AirshipsAndAirIslands.Audio;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -119,6 +120,7 @@ namespace AirshipsAndAirIslands.Locations
             SetFeedback(restored > 0
                 ? $"Repaired {restored} hull for {healCost} gold."
                 : "Hull repairs provided no additional benefit.");
+            AudioManager.Instance?.PlayHeal();
             UpdateStats();
         }
 
@@ -144,6 +146,7 @@ namespace AirshipsAndAirIslands.Locations
             gameState.ModifyResource(tradeInputType, -tradeInputAmount);
             gameState.ModifyResource(ResourceType.Gold, tradeGoldReward);
             SetFeedback($"Received {tradeGoldReward} gold for {tradeInputAmount} {tradeInputType}.");
+            AudioManager.Instance?.PlayPurchase();
             UpdateStats();
         }
 
@@ -172,12 +175,22 @@ namespace AirshipsAndAirIslands.Locations
             {
                 healButton.onClick.RemoveListener(HealShip);
                 healButton.onClick.AddListener(HealShip);
+                // This button plays its own heal SFX via code, mark it so AudioManager doesn't add the default click SFX
+                if (healButton.GetComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>() == null)
+                {
+                    healButton.gameObject.AddComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>();
+                }
             }
 
             if (tradeButton != null)
             {
                 tradeButton.onClick.RemoveListener(TradeForGold);
                 tradeButton.onClick.AddListener(TradeForGold);
+                // This button plays its own purchase SFX via code, mark it so AudioManager doesn't add the default click SFX
+                if (tradeButton.GetComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>() == null)
+                {
+                    tradeButton.gameObject.AddComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>();
+                }
             }
 
             if (closeButton != null)

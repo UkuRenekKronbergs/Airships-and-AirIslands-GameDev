@@ -351,9 +351,11 @@ MonoBehaviour:
   shipRoomsButton: {fileID: 1071596874}
   cityButton: {fileID: 1353032903}
   battleButton: {fileID: 502499224}
-  shipRoomsSceneName: ShipRooms
+  shipRoomsSceneName: ShipRooms_new
   citySceneName: City
   battleSceneName: Battle
+  gameEventManager: {fileID: 0}
+  eventUI: {fileID: 732240490}
 --- !u!4 &439878840
 Transform:
   m_ObjectHideFlags: 0
@@ -695,6 +697,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 589672022}
   m_CullTransparentMesh: 1
+--- !u!1 &732240489
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 732240491}
+  - component: {fileID: 732240490}
+  m_Layer: 0
+  m_Name: EventUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &732240490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 732240489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76aaa01940a3b7e40bbdc9b9b595bee9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameEventManager: {fileID: 0}
+--- !u!4 &732240491
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 732240489}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.36724895, y: 0.57517254, z: 0.026713565}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &764837652 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6938512735845109778, guid: 955c6ebaada7b8449be8b57b58a29a2d, type: 3}
@@ -3343,4 +3390,4 @@ SceneRoots:
   - {fileID: 921733704}
   - {fileID: 439878840}
   - {fileID: 874332556}
-  - {fileID: 1933384426}
+  - {fileID: 732240491}

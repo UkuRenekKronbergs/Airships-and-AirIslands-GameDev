@@ -21,6 +21,10 @@ namespace AirshipsAndAirIslands.Combat
         [SerializeField] private TMP_Text hullValueText;
         [SerializeField] private TMP_Text ammoValueText;
         [SerializeField] private TMP_Text statusText;
+        [SerializeField] private TMP_Text combatLogText;
+        [SerializeField] private ScrollRect combatLogScrollRect;
+        [SerializeField, Min(0f)] private float logMessageDelay = 0.8f;
+        [SerializeField, Min(10)] private int maxLogLines = 200;
         [SerializeField] private TMP_Text subsystemNameText;
         [SerializeField] private TMP_Text damageIndicatorText;
         [SerializeField] private TMP_Text reloadStatusText;
@@ -31,6 +35,9 @@ namespace AirshipsAndAirIslands.Combat
         [SerializeField, Min(0f)] private float damageIndicatorDuration = 1.5f;
 
         private float _damageIndicatorTimer;
+        private readonly Queue<string> _logQueue = new();
+        private readonly List<string> _logLines = new();
+        private bool _processingLog;
 
         private void Awake()
         {
@@ -48,6 +55,7 @@ namespace AirshipsAndAirIslands.Combat
                 battleManager.PlayerHullChanged += HandleHullChanged;
                 battleManager.PlayerAmmoChanged += HandleAmmoChanged;
                 battleManager.StateChanged += HandleStateChanged;
+                battleManager.CombatLogMessage += HandleCombatLogMessage;
                 battleManager.PlayerDamaged += HandlePlayerDamaged;
                 battleManager.SubsystemChanged += HandleSubsystemChanged;
                 battleManager.BattleResult += HandleBattleResult;
@@ -70,6 +78,7 @@ namespace AirshipsAndAirIslands.Combat
                 battleManager.PlayerHullChanged -= HandleHullChanged;
                 battleManager.PlayerAmmoChanged -= HandleAmmoChanged;
                 battleManager.StateChanged -= HandleStateChanged;
+                battleManager.CombatLogMessage -= HandleCombatLogMessage;
                 battleManager.PlayerDamaged -= HandlePlayerDamaged;
                 battleManager.SubsystemChanged -= HandleSubsystemChanged;
                 battleManager.BattleResult -= HandleBattleResult;
@@ -175,17 +184,24 @@ namespace AirshipsAndAirIslands.Combat
             {
                 HideResultPanel();
             }
+            // Note: initiative messages are sent via BattleManager.CombatLogMessage to avoid duplication.
         }
 
-        private void HandlePlayerDamaged(int damage, EnemyAIController _)
+        private void HandlePlayerDamaged(int damage, EnemyAIController source)
         {
-            if (damageIndicatorText == null)
+            if (damageIndicatorText != null)
             {
-                return;
+                damageIndicatorText.text = damage > 0 ? $"Hit: -{damage}" : string.Empty;
+                _damageIndicatorTimer = damageIndicatorDuration;
             }
 
-            damageIndicatorText.text = damage > 0 ? $"Hit: -{damage}" : string.Empty;
-            _damageIndicatorTimer = damageIndicatorDuration;
+            // If no damage indicator is wired, fall back to the combat log so
+            // the player still receives feedback about hits.
+            if (damageIndicatorText == null)
+            {
+                var attacker = source != null && source.Stats != null ? source.Stats.EnemyName : "Enemy";
+                EnqueueLogLine($"{attacker} hits you for {damage} damage.");
+            }
         }
 
         private void HandleSubsystemChanged(EnemySubsystem subsystem)
@@ -230,11 +246,81 @@ namespace AirshipsAndAirIslands.Combat
             {
                 resultDetailsText.text = FormatResourceChanges(deltas);
             }
+
+            // Also log a concise summary to the combat log for clarity.
+            if (state == BattleManager.BattleState.Victory)
+            {
+                EnqueueLogLine($"Victory! Rewards:\n{FormatResourceChanges(deltas)}");
+            }
+            else if (state == BattleManager.BattleState.Defeat)
+            {
+                EnqueueLogLine($"Defeat. Penalties:\n{FormatResourceChanges(deltas)}");
+            }
         }
 
-        private void HandleWeaponFired(int _)
+        private void HandleWeaponFired(int damage)
         {
             UpdateReloadWidgets();
+            EnqueueLogLine($"You fire for {damage} damage.");
+        }
+
+        private void EnqueueLogLine(string line)
+        {
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                return;
+            }
+
+            _logQueue.Enqueue(line);
+            if (!_processingLog)
+            {
+                StartCoroutine(ProcessLogQueue());
+            }
+        }
+
+        private System.Collections.IEnumerator ProcessLogQueue()
+        {
+            _processingLog = true;
+            while (_logQueue.Count > 0)
+            {
+                var line = _logQueue.Dequeue();
+
+                // Maintain a bounded history for scrolling/backlog.
+                _logLines.Add(line);
+                if (_logLines.Count > maxLogLines)
+                {
+                    _logLines.RemoveAt(0);
+                }
+
+                if (combatLogText != null)
+                {
+                    combatLogText.text = string.Join("\n", _logLines);
+                    // If a ScrollRect is provided, scroll to bottom.
+                    if (combatLogScrollRect != null)
+                    {
+                        Canvas.ForceUpdateCanvases();
+                        combatLogScrollRect.verticalNormalizedPosition = 0f;
+                    }
+                }
+                else if (damageIndicatorText != null)
+                {
+                    damageIndicatorText.text = line;
+                    _damageIndicatorTimer = damageIndicatorDuration;
+                }
+                else
+                {
+                    Debug.Log(line);
+                }
+
+                yield return new WaitForSeconds(logMessageDelay);
+            }
+
+            _processingLog = false;
+        }
+
+        private void HandleCombatLogMessage(string msg)
+        {
+            EnqueueLogLine(msg);
         }
 
         private void HandleReloadStarted()

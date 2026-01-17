@@ -14,8 +14,6 @@ TagManager:
   - 
   - Water
   - UI
-  - Ship
-  - Row
   - 
   - 
   - 
@@ -32,6 +30,8 @@ TagManager:
   - 
   - 
   - 
+  - 
+  - Column
   - 
   - 
   - 
@@ -43,6 +43,15 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Row
+    uniqueID: 2447972943
+    locked: 0
+  - name: Ship
+    uniqueID: 2765260587
+    locked: 0
+  - name: Column
+    uniqueID: 920710409
     locked: 0
   m_RenderingLayers:
   - Default

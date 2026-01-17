@@ -10,6 +10,33 @@ namespace AirshipsAndAirIslands.Events
     /// </summary>
     public class GameState : MonoBehaviour
     {
+        private static GameState _instance;
+
+        /// <summary>
+        /// Global singleton instance. Use `GameState.Instance` to access from other code.
+        /// The instance created in the Main Menu will persist across scene loads.
+        /// </summary>
+        public static GameState Instance => _instance;
+
+        private void Awake()
+        {
+            if (_instance == null)
+            {
+                _instance = this;
+                DontDestroyOnLoad(gameObject);
+                return;
+            }
+
+            if (_instance == this)
+            {
+                // already the singleton
+                return;
+            }
+
+            // A persistent instance already exists — destroy this duplicate GameObject
+            Debug.Log("GameState: duplicate instance detected, destroying duplicate.");
+            Destroy(gameObject);
+        }
         [Header("Core Resources")]
         [SerializeField] private int gold = 20;
         [SerializeField] private int fuel = 10;
@@ -19,12 +46,19 @@ namespace AirshipsAndAirIslands.Events
         [SerializeField, Min(0)] private int hull = 10;
 
         [Header("Crew Stats (0-100)")]
-        [Range(0, 100)] [SerializeField] private int crewMorale = 60;
-        [Range(0, 100)] [SerializeField] private int crewFatigue = 40;
+        [Range(0, 100)][SerializeField] private int crewMorale = 60;
+        [Range(0, 100)][SerializeField] private int crewFatigue = 40;
+
+        [SerializeField] private string playerLocation;
 
         private readonly List<QuestInfo> _activeQuests = new();
         public IReadOnlyList<QuestInfo> ActiveQuests => _activeQuests;
         public int MaxHull => maxHull;
+
+        public GameObject ShipObject;
+        public int GetGold() { 
+            return gold;
+        }
 
         public int GetResource(ResourceType type)
         {
@@ -123,6 +157,17 @@ namespace AirshipsAndAirIslands.Events
             _activeQuests.RemoveAt(index);
             ApplyResourceChanges(completedQuest.Rewards);
             return true;
+        }
+
+        public void MovePlayerLocation(string newLocation)
+        {
+            Debug.Log("AAA"+newLocation);
+            playerLocation = newLocation;
+        }
+
+        public string GetPlayerLocation()
+        {
+            return playerLocation;
         }
     }
 }
