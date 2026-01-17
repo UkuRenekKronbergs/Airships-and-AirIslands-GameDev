@@ -10,18 +10,35 @@ public class PlayerShip : MonoBehaviour
     public Dictionary<string, List<CombinedCompartment>> AllCompartments = new Dictionary<string, List<CombinedCompartment>>();
 
     public static PlayerShip Instance;
-    public int Hull = 10;
-    public int Currency = 100;
+    //public int Hull = 0;
+    //public int Currency = 0;
 
 
     private void Awake()
     {
-        Instance = this;
-        foreach (GameObject elem in Rows) {
+
+        if (Instance == this)
+        {
+            // already the singleton
+            return;
+        }
+
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
+
+        foreach (GameObject elem in Rows)
+        {
             RowCompartments.Add(elem.GetComponentInChildren<ShipRow>());
         }
-        
-      
+        //transform.GetChild(0).gameObject.SetActive(false);
+        //transform.position = Vector3.zero;
+
+
+
     }
 
 
@@ -54,6 +71,8 @@ public class PlayerShip : MonoBehaviour
                 }
             }
         }
+        foreach(var key in AllCompartments.Keys)
+            Debug.Log(key);
     }
 
     public int CountCombinedCompartments(CompartmentType type) {

@@ -55,6 +55,11 @@ namespace AirshipsAndAirIslands.Events
         public IReadOnlyList<QuestInfo> ActiveQuests => _activeQuests;
         public int MaxHull => maxHull;
 
+        public GameObject ShipObject;
+        public int GetGold() { 
+            return gold;
+        }
+
         public int GetResource(ResourceType type)
         {
             return type switch
