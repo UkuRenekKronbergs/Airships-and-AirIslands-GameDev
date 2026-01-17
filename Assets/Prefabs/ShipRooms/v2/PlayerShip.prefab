@@ -49,8 +49,6 @@ MonoBehaviour:
   - {fileID: 3055798883278491725}
   - {fileID: 4186127491537738329}
   - {fileID: 7996331037583463761}
-  Hull: 10
-  Currency: 100
 --- !u!1 &7297496942934630565
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,7 +153,7 @@ PrefabInstance:
       objectReference: {fileID: 6620575666070676495, guid: bc5e234816eba1c4196522e56048b8cf, type: 3}
     - target: {fileID: 6065993318233228691, guid: bcb94cca4bffa074fb868beda786133c, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6505010057165330525, guid: bcb94cca4bffa074fb868beda786133c, type: 3}
       propertyPath: m_Enabled

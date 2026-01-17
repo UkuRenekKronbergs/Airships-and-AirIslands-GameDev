@@ -121,7 +121,7 @@ public class BuildingController : MonoBehaviour
                     foreach (Column column in columns)
                     {
                         column.transform.SetParent(subCompartment.transform);
-                        tempcolor(column);
+                        //tempcolor(column);
                     }
                     // no merge
                     if (Check.right == null && Check.left == null)
@@ -138,6 +138,9 @@ public class BuildingController : MonoBehaviour
                         {
                             CCGO.GetComponent<CombinedCompartment>().Columns.Add(column.gameObject);
                         }
+                        //TEST
+                        //CCGO.GetComponent<CombinedCompartment>().ApplyRoomSprite_v2();
+                        //CCGO.GetComponent<CombinedCompartment>().OnlyIcon();
 
 
 
@@ -333,6 +336,7 @@ public class BuildingController : MonoBehaviour
 
     public void AddCombinedCompartmentToRow(GameObject newCombined, GameObject row)
     {
+        newCombined.GetComponent<CombinedCompartment>().OnlyIcon();
         newCombined.transform.SetParent(row.transform);
         row.GetComponent<ShipRow>().RefreshValues();
     }
