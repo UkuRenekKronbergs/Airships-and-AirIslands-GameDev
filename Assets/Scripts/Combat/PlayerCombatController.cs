@@ -88,8 +88,21 @@ namespace AirshipsAndAirIslands.Combat
 
         public bool TryFire()
         {
-            if (battleManager == null || battleManager.CurrentState != BattleManager.BattleState.Running)
+            if (battleManager == null)
             {
+                Debug.Log("PlayerCombatController.TryFire blocked: no BattleManager assigned.");
+                return false;
+            }
+
+            if (battleManager.CurrentState != BattleManager.BattleState.Running)
+            {
+                Debug.Log($"PlayerCombatController.TryFire blocked: BattleState={battleManager.CurrentState}");
+                return false;
+            }
+
+            if (!battleManager.AllowPlayerAction)
+            {
+                Debug.Log("PlayerCombatController.TryFire blocked: AllowPlayerAction=false");
                 return false;
             }
 
@@ -98,9 +111,19 @@ namespace AirshipsAndAirIslands.Combat
 
         public bool TryFireAt(EnemySubsystem subsystem)
         {
+            // If no subsystem is selected, allow firing directly at the first
+            // active enemy's hull (fallback for enemies without subsystems).
+            EnemyAIController owner = null;
             if (subsystem == null)
             {
-                return false;
+                if (battleManager != null && battleManager.ActiveEnemies.Count > 0)
+                {
+                    owner = battleManager.ActiveEnemies[0];
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             if (_reloadTimer > 0f)
@@ -113,37 +136,51 @@ namespace AirshipsAndAirIslands.Combat
                 return false;
             }
 
-            EnemyAIController owner = null;
-            if (battleManager != null)
+            if (owner == null)
             {
-                owner = battleManager.GetSubsystemOwner(subsystem);
-                if (owner == null)
+                if (battleManager != null)
                 {
-                    return false;
+                    owner = battleManager.GetSubsystemOwner(subsystem);
+                    if (owner == null)
+                    {
+                        return false;
+                    }
                 }
-            }
-            else
-            {
-                owner = subsystem.GetComponentInParent<EnemyAIController>();
-                if (owner == null)
+                else
                 {
-                    return false;
+                    owner = subsystem?.GetComponentInParent<EnemyAIController>();
+                    if (owner == null)
+                    {
+                        return false;
+                    }
                 }
             }
 
             gameState.ModifyResource(ResourceType.Ammo, -ammoPerShot);
             var damage = CalculateDamageRoll();
-            if (battleManager != null)
+
+            // If we have a subsystem target, apply to subsystem; otherwise apply
+            // directly to the enemy's hull as a fallback.
+            if (subsystem != null)
             {
-                battleManager.ApplyDamageToSubsystem(subsystem, damage);
+                if (battleManager != null)
+                {
+                    battleManager.ApplyDamageToSubsystem(subsystem, damage);
+                }
+                else
+                {
+                    owner.ApplyDamageToSubsystem(subsystem, damage);
+                }
             }
             else
             {
-                owner.ApplyDamageToSubsystem(subsystem, damage);
+                owner.ApplyDamage(damage);
             }
             SpawnMuzzleEffect();
             BeginReload();
             WeaponFired?.Invoke(damage);
+            // Notify the battle manager that the player used their action so turns alternate.
+            battleManager?.NotifyPlayerActed();
             return true;
         }
 
