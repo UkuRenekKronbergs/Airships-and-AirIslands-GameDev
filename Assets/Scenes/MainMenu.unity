@@ -634,6 +634,71 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 484964367}
   m_CullTransparentMesh: 1
+--- !u!1001 &527237393
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 971176195942785394, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.8124733
+      objectReference: {fileID: 0}
+    - target: {fileID: 971176195942785394, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -5.2918696
+      objectReference: {fileID: 0}
+    - target: {fileID: 971176195942785394, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 971176195942785394, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 971176195942785394, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 971176195942785394, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 971176195942785394, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 971176195942785394, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 971176195942785394, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 971176195942785394, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6790812997377555550, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
+      propertyPath: m_Name
+      value: PlayerShip
+      objectReference: {fileID: 0}
+    - target: {fileID: 6790812997377555550, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7297496942934630565, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
 --- !u!1 &551616596
 GameObject:
   m_ObjectHideFlags: 0
@@ -2447,6 +2512,7 @@ MonoBehaviour:
   crewMorale: 60
   crewFatigue: 40
   playerLocation: City
+  ShipObject: {fileID: 6790812997377555550, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
 --- !u!114 &1525300252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3022,3 +3088,4 @@ SceneRoots:
   - {fileID: 1974590979}
   - {fileID: 1283300452}
   - {fileID: 1525300253}
+  - {fileID: 527237393}

@@ -16,12 +16,25 @@ public class PlayerShip : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
-        foreach (GameObject elem in Rows) {
+
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            return;
+        }
+
+        if (Instance == this)
+        {
+            // already the singleton
+            return;
+        }
+        foreach (GameObject elem in Rows)
+        {
             RowCompartments.Add(elem.GetComponentInChildren<ShipRow>());
         }
-        
-      
+
+
     }
 
 
