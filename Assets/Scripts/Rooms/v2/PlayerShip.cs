@@ -17,22 +17,25 @@ public class PlayerShip : MonoBehaviour
     private void Awake()
     {
 
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            return;
-        }
-
         if (Instance == this)
         {
             // already the singleton
             return;
         }
+
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
+
         foreach (GameObject elem in Rows)
         {
             RowCompartments.Add(elem.GetComponentInChildren<ShipRow>());
         }
+        //transform.GetChild(0).gameObject.SetActive(false);
+        //transform.position = Vector3.zero;
 
 
 
@@ -68,6 +71,8 @@ public class PlayerShip : MonoBehaviour
                 }
             }
         }
+        foreach(var key in AllCompartments.Keys)
+            Debug.Log(key);
     }
 
     public int CountCombinedCompartments(CompartmentType type) {

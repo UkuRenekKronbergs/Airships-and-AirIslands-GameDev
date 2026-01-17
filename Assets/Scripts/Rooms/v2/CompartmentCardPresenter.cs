@@ -83,6 +83,7 @@ public class CompartmentCardPresenter : MonoBehaviour
 
 
     public void UpdateButtons() {
+        PlayerShip.Instance.GetAllCompartments();
 
         if (SetMinMaxCurrent())
         {

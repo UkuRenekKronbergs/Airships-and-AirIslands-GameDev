@@ -10,6 +10,7 @@ public class SpawnPlayerShip : MonoBehaviour
     {
         ship = FindFirstObjectByType<PlayerShip>();
         ship.transform.GetChild(0).gameObject.SetActive(true);
+        //ship.GetAllCompartments();
 
 
         
