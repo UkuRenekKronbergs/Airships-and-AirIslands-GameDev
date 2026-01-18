@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace AirshipsAndAirIslands.Events
 {
+    public enum BattleEncounterType
+    {
+        Encounter1 = 0,
+        Encounter2 = 1,
+        Encounter3 = 2,
+    }
+
     /// <summary>
     /// Centralised mutable game state used by the event system. Designed to be referenced
     /// by other systems (UI, combat, economy) without tightly coupling their implementations.
@@ -50,13 +57,23 @@ namespace AirshipsAndAirIslands.Events
         [Range(0, 100)][SerializeField] private int crewFatigue = 40;
 
         [SerializeField] private string playerLocation;
+        [SerializeField, Min(0)] private int damageUpgrades = 0;
 
         private readonly List<QuestInfo> _activeQuests = new();
         public IReadOnlyList<QuestInfo> ActiveQuests => _activeQuests;
         public int MaxHull => maxHull;
+        public int DamageUpgrades => damageUpgrades;
 
         private NodePair selectedPath;
         public GameObject ShipObject;
+        
+        private BattleEncounterType _currentEncounterType = BattleEncounterType.Encounter1;
+        public BattleEncounterType CurrentEncounterType 
+        { 
+            get => _currentEncounterType;
+            set => _currentEncounterType = value;
+        }
+        
         public int GetGold() { 
             return gold;
         }
@@ -79,6 +96,11 @@ namespace AirshipsAndAirIslands.Events
         public bool HasResource(ResourceType type, int amount)
         {
             return GetResource(type) >= amount;
+        }
+
+        public void IncrementDamageUpgrades(int amount = 1)
+        {
+            damageUpgrades += Mathf.Max(0, amount);
         }
 
         public int ModifyResource(ResourceType type, int delta)

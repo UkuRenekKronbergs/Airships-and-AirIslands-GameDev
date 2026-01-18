@@ -209,7 +209,9 @@ namespace AirshipsAndAirIslands.Combat
         private int CalculateDamageRoll()
         {
             var bonus = Mathf.RoundToInt(_systemsState.WeaponDamageBonus);
-            var damage = Mathf.Max(1, baseDamage + bonus);
+            // Add damage upgrades from GameState (each upgrade grants +2 damage)
+            var upgradeBonus = gameState != null ? gameState.DamageUpgrades * 2 : 0;
+            var damage = Mathf.Max(1, baseDamage + bonus + upgradeBonus);
             var critRoll = UnityEngine.Random.value;
             if (critRoll <= criticalChance)
             {
