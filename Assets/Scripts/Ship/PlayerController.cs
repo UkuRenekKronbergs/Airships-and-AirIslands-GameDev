@@ -15,6 +15,7 @@ namespace Airships.Ship
 
         public void moveLocation(GameObject destination)
         {
+            Debug.Log(destination);
             if (destination == null) return;
             
             if (!GameState.Instance.IsMovementPossible()) return;

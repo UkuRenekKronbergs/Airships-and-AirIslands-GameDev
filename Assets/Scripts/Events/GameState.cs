@@ -56,6 +56,10 @@ namespace AirshipsAndAirIslands.Events
         public int MaxHull => maxHull;
 
         private NodePair selectedPath;
+        public GameObject ShipObject;
+        public int GetGold() { 
+            return gold;
+        }
 
         public int GetResource(ResourceType type)
         {

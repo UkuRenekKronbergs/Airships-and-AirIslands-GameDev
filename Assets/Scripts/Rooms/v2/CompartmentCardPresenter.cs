@@ -1,8 +1,9 @@
-using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
 using System.Collections.Generic;
+using AirshipsAndAirIslands.Events;
+using TMPro;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine;
+using UnityEngine.UI;
 public class CompartmentCardPresenter : MonoBehaviour
 {
 
@@ -18,13 +19,17 @@ public class CompartmentCardPresenter : MonoBehaviour
     //public GameObject ShadowPrefab;
     //private GameObject buildingShadow;
     private Color green = new Color(0.5f, 0.6f, 0.3f);
+    public GameState GameState;
 
-    
+
+
+
     private Button _button;
     private bool _selected = false;
 
     private void Awake()
     {
+        GameState = FindFirstObjectByType<GameState>();
         CompartmentType = CompartmentPrefab.GetComponent<CompartmentType>();//I cant be bothered to write out the whole line 9 times.
         NameText.SetText(CompartmentType.Name);
         //Debug.Log(Compartment.MaxAmmount);
@@ -78,6 +83,7 @@ public class CompartmentCardPresenter : MonoBehaviour
 
 
     public void UpdateButtons() {
+        PlayerShip.Instance.GetAllCompartments();
 
         if (SetMinMaxCurrent())
         {
@@ -90,7 +96,7 @@ public class CompartmentCardPresenter : MonoBehaviour
             CostText.color = green;
 
         }
-        else if (PlayerShip.Instance.Currency < CompartmentType.Cost)
+        else if (GameState.Instance.GetGold() < CompartmentType.Cost)
         {
             CostText.SetText("Cost: " + CompartmentType.Cost.ToString());
             CostText.color = Color.red;
