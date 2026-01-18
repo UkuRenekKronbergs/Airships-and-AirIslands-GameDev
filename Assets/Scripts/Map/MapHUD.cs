@@ -89,7 +89,7 @@ public class MapHUD : MonoBehaviour
 
     private void LoadCityScene()
     {
-        if (!GameState.Instance.IsHoveredMovementPossible()) return;
+        if (!GameState.Instance.IsHoveredMovementPossible() && !GameState.Instance.IsPlayerOnHoveredLocation()) return;
 
         StartCoroutine(HandleEventThenLoad(citySceneName));
     }

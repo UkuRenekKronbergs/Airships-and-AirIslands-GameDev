@@ -40,6 +40,9 @@ public class TravelNodeController : MonoBehaviour
     {
         mouseOver = true;
 
+        gameState.SetSelectedLocation(gameObject.name);
+        if (gameState.IsPlayerOnHoveredLocation()) return;
+
         NodePair path = new NodePair();
         foreach (NodePair pair in pathController.pairs)
         {
@@ -60,6 +63,7 @@ public class TravelNodeController : MonoBehaviour
         }
 
         gameState.SetSelectedPath(path);
+        
 
         if (!GameState.Instance.checkMovementFoodRequirement()) errorTextController.setErrorText("Not enough food");
         if (!GameState.Instance.checkMovementFuelRequirement()) errorTextController.setErrorText("Not enough fuel");
