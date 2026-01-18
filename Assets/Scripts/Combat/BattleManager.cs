@@ -152,6 +152,7 @@ namespace AirshipsAndAirIslands.Combat
             TransitionState(BattleState.Intro);
             _stateTimer = introDurationSeconds;
             AudioManager.Instance?.PlayEnemyEncounter();
+            AudioManager.Instance?.PlayBattleMusic();
         }
 
         public void RegisterEnemy(EnemyAIController enemy)
