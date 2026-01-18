@@ -9,7 +9,7 @@ namespace AirshipsAndAirIslands.Combat
     /// </summary>
     public class EncounterSetup : MonoBehaviour
     {
-        [SerializeField] private GameObject enemy0; // PirateCrew
+        [SerializeField] private GameObject enemy0; // Encounter1
         [SerializeField] private GameObject enemy1; // Encounter2
         [SerializeField] private GameObject enemy2; // Encounter3
 

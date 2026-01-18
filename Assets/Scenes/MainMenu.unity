@@ -4320,7 +4320,6 @@ MonoBehaviour:
   healClip: {fileID: 8300000, guid: 5f30340e119135244810c7ede9e5d234, type: 3}
   purchaseClip: {fileID: 8300000, guid: c01d318ae1ecb3548975b6fec74ebff6, type: 3}
   buildClip: {fileID: 8300000, guid: f7ac8f6df0f30ed4a869deae648aa49d, type: 3}
-  gameOverClip: {fileID: 0}
   mainMenuMusic: {fileID: 8300000, guid: 45035d52f05527e48958b5992b8ee6c0, type: 3}
   battleMusic: {fileID: 8300000, guid: f3b69fdd704a1ca47994a94b9dfebfac, type: 3}
   cityMusic: {fileID: 8300000, guid: 244ef950d220450478c97a5ca691fcfb, type: 3}
@@ -5362,7 +5361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 50
-  fuel: 30
+  fuel: 50
   food: 15
   ammo: 10
   maxHull: 100
@@ -5370,6 +5369,7 @@ MonoBehaviour:
   crewMorale: 60
   crewFatigue: 40
   playerLocation: City
+  damageUpgrades: 0
   ShipObject: {fileID: 0}
 --- !u!114 &1525300252
 MonoBehaviour:

@@ -6,6 +6,12 @@ public class BattleNodeController : MonoBehaviour
 {
     [SerializeField] private BattleEncounterType encounterType = BattleEncounterType.Encounter1;
     [SerializeField] private string battleSceneName = "Battle";
+    private MapHUD mapHUD;
+
+    private void Start()
+    {
+        mapHUD = FindFirstObjectByType<MapHUD>();
+    }
 
     private void OnMouseDown()
     {
@@ -15,17 +21,22 @@ public class BattleNodeController : MonoBehaviour
             return;
         }
 
-        // Set encounter type (TravelNodeController will handle the movement and fuel deduction)
+        // Set encounter type
         GameState.Instance.CurrentEncounterType = encounterType;
 
-        // Load battle scene
-        if (Application.CanStreamedLevelBeLoaded(battleSceneName))
+        // Load with event system (TravelNodeController handles fuel deduction)
+        if (mapHUD != null)
         {
-            SceneManager.LoadScene(battleSceneName);
+            mapHUD.LoadBattleWithEvents();
         }
         else
         {
-            Debug.LogWarning($"BattleNodeController: Could not load battle scene '{battleSceneName}'");
+            // Fallback: load directly
+            if (Application.CanStreamedLevelBeLoaded(battleSceneName))
+            {
+                SceneManager.LoadScene(battleSceneName);
+            }
         }
     }
 }
+

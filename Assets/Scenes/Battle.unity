@@ -2413,8 +2413,6 @@ MonoBehaviour:
   battleManager: {fileID: 1989115547}
   baseDamage: 9
   baseReloadSeconds: 2.5
-  criticalChance: 0.08
-  criticalMultiplier: 1.75
   ammoPerShot: 1
   muzzlePoint: {fileID: 1195412600}
   muzzleFlashPrefab: {fileID: 0}
@@ -3269,7 +3267,7 @@ MonoBehaviour:
   shieldOverloadBonusArmor: 3
   battleManager: {fileID: 1989115547}
   subsystemOverrides: []
-  currentHull: 20
+  currentHull: 40
   currentState: 0
 --- !u!50 &1738303539
 Rigidbody2D:
@@ -3766,7 +3764,7 @@ MonoBehaviour:
   shieldOverloadBonusArmor: 3
   battleManager: {fileID: 1989115547}
   subsystemOverrides: []
-  currentHull: 20
+  currentHull: 50
   currentState: 0
 --- !u!50 &2051670898
 Rigidbody2D:

@@ -104,6 +104,11 @@ public class MapHUD : MonoBehaviour
         StartCoroutine(HandleEventThenLoad(battleSceneName));
     }
 
+    public void LoadBattleWithEvents()
+    {
+        StartCoroutine(HandleEventThenLoad(battleSceneName));
+    }
+
     private System.Collections.IEnumerator HandleEventThenLoad(string sceneName)
     {
         if (gameEventManager == null || eventUI == null)
