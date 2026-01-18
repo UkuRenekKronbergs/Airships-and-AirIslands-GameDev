@@ -1257,7 +1257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20715e1b4ffcf0e428e420ebf7698b94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Build_Panel: {fileID: 1417590704}
+  BuildButton: {fileID: 0}
   Currency_Counter: {fileID: 504075452}
   Instance: {fileID: 787598526}
   mapSceneName: Map

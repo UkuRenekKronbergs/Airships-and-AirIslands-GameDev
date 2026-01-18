@@ -25,7 +25,7 @@ namespace AirshipsAndAirIslands.Locations
         [SerializeField] private Button healButton;
         [SerializeField] private Button tradeButton;
         [SerializeField] private Button closeButton;
-    [SerializeField] private Button roomsButton;
+        [SerializeField] private Button roomsButton;
 
         [Header("City Settings")]
         [SerializeField] private string cityName = "Nimbus Gate";
@@ -34,8 +34,8 @@ namespace AirshipsAndAirIslands.Locations
         [SerializeField] private ResourceType tradeInputType = ResourceType.Food;
         [SerializeField, Min(1)] private int tradeInputAmount = 4;
         [SerializeField, Min(1)] private int tradeGoldReward = 2;
-    [SerializeField] private bool loadSceneOnExit;
-    [SerializeField] private string exitSceneName = "Map";
+        [SerializeField] private bool loadSceneOnExit;
+        [SerializeField] private string exitSceneName = "Map";
         [SerializeField] private string roomsSceneName = "Rooms";
 
         private void Awake()

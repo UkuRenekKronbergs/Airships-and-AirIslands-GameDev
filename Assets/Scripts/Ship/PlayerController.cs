@@ -18,10 +18,10 @@ namespace Airships.Ship
             Debug.Log(destination);
             if (destination == null) return;
             
+            if (!GameState.Instance.IsHoveredMovementPossible()) return;
 
-            location = destination;
             GameState.Instance.MovePlayerLocation(destination.name);
-
+            location = destination;
             var destinationPos = destination.transform.position;
             transform.position = destinationPos + new Vector3(0f, 1f, 0f);
         }

@@ -1,12 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
+using AirshipsAndAirIslands.Events;
 
 public class AllPathsDottedLines : MonoBehaviour
 {
     public PathController pathController;
     public float dashLength = 0.2f;
     public float lineWidth = 0.05f;
-    public Material lineMaterial;
+    public Material validLineMaterial;
+    public Material invalidLineMaterial;
 
     private List<LineRenderer> lineRenderers = new List<LineRenderer>();
 
@@ -23,7 +25,7 @@ public class AllPathsDottedLines : MonoBehaviour
             lineObj.transform.parent = this.transform;
 
             LineRenderer lr = lineObj.AddComponent<LineRenderer>();
-            lr.material = lineMaterial;
+            lr.material = GameState.Instance.GetResource(ResourceType.Fuel) >= pair.distance ? validLineMaterial : invalidLineMaterial;
             lr.startWidth = lineWidth;
             lr.endWidth = lineWidth;
             lr.useWorldSpace = true;
@@ -52,5 +54,9 @@ public class AllPathsDottedLines : MonoBehaviour
             lr.SetPositions(dashPoints.ToArray());
             lineRenderers.Add(lr);
         }
+    }
+
+    private void Update() {
+        DrawAllPaths();
     }
 }

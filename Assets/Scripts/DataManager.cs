@@ -9,6 +9,7 @@ public class DataManager : MonoBehaviour
     public int food = 0;
     public int currency = 0;
     public int health = 0;
+    public string playerLocationName;
 
 
     public void Awake()

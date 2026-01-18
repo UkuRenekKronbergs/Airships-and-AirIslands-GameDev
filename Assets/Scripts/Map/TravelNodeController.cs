@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using Airships.Ship;
+using AirshipsAndAirIslands.Events;
 
 public class TravelNodeController : MonoBehaviour
 {
@@ -12,12 +13,18 @@ public class TravelNodeController : MonoBehaviour
     bool mouseOver = false;
     int distance = 0;
 
+    public GameState gameState;
+
+    public ErrorTextController errorTextController;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         travel_text = GameObject.FindGameObjectsWithTag("TravelText")[0].GetComponent<TMP_Text>();
         pathController = GameObject.FindGameObjectsWithTag("PathRenderController")[0].GetComponent<PathController>();
         playerController = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<PlayerController>();
+        gameState ??= FindFirstObjectByType<GameState>();
+        errorTextController ??= FindFirstObjectByType<ErrorTextController>();
     }
 
     // Update is called once per frame
@@ -32,6 +39,9 @@ public class TravelNodeController : MonoBehaviour
     void OnMouseEnter()
     {
         mouseOver = true;
+
+        gameState.SetSelectedLocation(gameObject.name);
+        if (gameState.IsPlayerOnHoveredLocation()) return;
 
         NodePair path = new NodePair();
         foreach (NodePair pair in pathController.pairs)
@@ -51,6 +61,12 @@ public class TravelNodeController : MonoBehaviour
             travel_text.text = "No path to destination";
             distance = 0;
         }
+
+        gameState.SetSelectedPath(path);
+        
+
+        if (!GameState.Instance.checkMovementFoodRequirement()) errorTextController.setErrorText("Not enough food");
+        if (!GameState.Instance.checkMovementFuelRequirement()) errorTextController.setErrorText("Not enough fuel");
     }
 
     void OnMouseExit()
@@ -58,5 +74,6 @@ public class TravelNodeController : MonoBehaviour
         mouseOver = false;
         distance = 0;
         travel_text.text = "";
+        errorTextController.clearErrorText();
     }
 }

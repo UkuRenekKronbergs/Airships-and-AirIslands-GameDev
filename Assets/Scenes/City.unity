@@ -545,7 +545,7 @@ GameObject:
   - component: {fileID: 447608302}
   - component: {fileID: 447608301}
   m_Layer: 5
-  m_Name: TradeForGoldButtonText
+  m_Name: TradeForGoldButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1796,7 +1796,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 141}
+  m_AnchoredPosition: {x: 54, y: 141}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1885669390
