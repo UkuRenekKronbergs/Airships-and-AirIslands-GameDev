@@ -5362,13 +5362,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gold: 50
   fuel: 30
-  food: 15
+  food: 40
   ammo: 10
   maxHull: 100
   hull: 10
   crewMorale: 60
   crewFatigue: 40
   playerLocation: City
+  ShipObject: {fileID: 0}
 --- !u!114 &1525300252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6897,3 +6898,4 @@ SceneRoots:
   - {fileID: 716652281}
   - {fileID: 1283300452}
   - {fileID: 1525300253}
+  - {fileID: 86102772}

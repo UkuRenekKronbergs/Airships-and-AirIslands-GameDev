@@ -165,20 +165,34 @@ namespace AirshipsAndAirIslands.Events
             return true;
         }
 
-        public bool IsMovementPossible()
+        public bool IsHoveredMovementPossible()
         {
             if (selectedPath.a.name != playerLocation && selectedPath.b.name != playerLocation) return false;
-            if (selectedPath.distance > fuel) return false;
+            if (!checkMovementFuelRequirement()) return false;
+            if (!checkMovementFoodRequirement()) return false;
 
+            return true;
+        }
+
+        public bool checkMovementFuelRequirement()
+        {
+            if (selectedPath.a.name != playerLocation && selectedPath.b.name != playerLocation) return false;
+            return true;
+        }
+
+        public bool checkMovementFoodRequirement()
+        {
+            if (selectedPath.distance + (int) (crewFatigue*0.1) > food) return false;
             return true;
         }
 
         public void MovePlayerLocation(string newLocation)
         {
-            if (!IsMovementPossible()) return;
+            if (!IsHoveredMovementPossible()) return;
 
             playerLocation = newLocation;
             ModifyResource(ResourceType.Fuel, -selectedPath.distance);
+            ModifyResource(ResourceType.Food, -(selectedPath.distance + (int) (crewFatigue*0.1)));
         }
 
         public string GetPlayerLocation()

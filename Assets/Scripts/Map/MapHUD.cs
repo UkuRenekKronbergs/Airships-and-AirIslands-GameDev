@@ -89,14 +89,14 @@ public class MapHUD : MonoBehaviour
 
     private void LoadCityScene()
     {
-        if (!GameState.Instance.IsMovementPossible()) return;
+        if (!GameState.Instance.IsHoveredMovementPossible()) return;
 
         StartCoroutine(HandleEventThenLoad(citySceneName));
     }
 
     private void LoadBattleScene()
     {
-        if (!GameState.Instance.IsMovementPossible()) return;
+        if (!GameState.Instance.IsHoveredMovementPossible()) return;
 
         StartCoroutine(HandleEventThenLoad(battleSceneName));
     }

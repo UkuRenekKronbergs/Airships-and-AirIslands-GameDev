@@ -13,7 +13,9 @@ public class TravelNodeController : MonoBehaviour
     bool mouseOver = false;
     int distance = 0;
 
-    [SerializeField] private GameState gameState;
+    public GameState gameState;
+
+    public ErrorTextController errorTextController;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -22,6 +24,7 @@ public class TravelNodeController : MonoBehaviour
         pathController = GameObject.FindGameObjectsWithTag("PathRenderController")[0].GetComponent<PathController>();
         playerController = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<PlayerController>();
         gameState ??= FindFirstObjectByType<GameState>();
+        errorTextController ??= FindFirstObjectByType<ErrorTextController>();
     }
 
     // Update is called once per frame
@@ -57,6 +60,9 @@ public class TravelNodeController : MonoBehaviour
         }
 
         gameState.SetSelectedPath(path);
+
+        if (!GameState.Instance.checkMovementFoodRequirement()) errorTextController.setErrorText("Not enough food");
+        if (!GameState.Instance.checkMovementFuelRequirement()) errorTextController.setErrorText("Not enough fuel");
     }
 
     void OnMouseExit()
@@ -64,5 +70,6 @@ public class TravelNodeController : MonoBehaviour
         mouseOver = false;
         distance = 0;
         travel_text.text = "";
+        errorTextController.clearErrorText();
     }
 }
