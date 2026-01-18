@@ -29,25 +29,22 @@ namespace AirshipsAndAirIslands.Combat
         [SerializeField] private BattleManager battleManager;
         [SerializeField] private EnemySubsystem[] subsystemOverrides;
 
-    [Header("Runtime Debug")]
-    [SerializeField] private int currentHull;
-    [SerializeField] private EnemyState currentState;
+        [Header("Runtime Debug")]
+        [SerializeField] private int currentHull;
+        [SerializeField] private EnemyState currentState;
 
-    public event Action<EnemyAIController> Destroyed;
+        public event Action<EnemyAIController> Destroyed;
 
         private Rigidbody2D _rigidbody;
         private Coroutine _attackRoutine;
         private float _shieldOverloadTimer;
         private readonly List<EnemySubsystem> _subsystems = new();
-    private bool _warnedMissingBattleManager;
+        private bool _warnedMissingBattleManager;
 
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
-            if (stats != null)
-            {
-                currentHull = stats.MaxHull;
-            }
+            // Note: currentHull is set via Inspector, not overridden by stats.MaxHull
 
             CollectSubsystems();
         }
@@ -107,8 +104,49 @@ namespace AirshipsAndAirIslands.Combat
             {
                 if (currentState == EnemyState.Attacking)
                 {
-                    FireWeapons();
-                    yield return new WaitForSeconds(stats.AttackIntervalSeconds);
+                    // Respect battle manager pacing, initiative and battle state when available.
+                    EnsureBattleManagerReference();
+                    if (battleManager != null)
+                    {
+                        // Only fire while the battle is actively running and the enemy
+                        // has the single allowed action this turn.
+                        if (battleManager.CurrentState != BattleManager.BattleState.Running)
+                        {
+                            // Throttle when the battle hasn't reached Running yet to avoid tight-loop spam.
+                            yield return new WaitForSeconds(0.1f);
+                            continue;
+                        }
+
+                        if (!battleManager.AllowEnemyAction)
+                        {
+                            // Wait a short time before re-checking so we don't log or spin every frame.
+                            yield return new WaitForSeconds(0.05f);
+                            continue;
+                        }
+
+                        FireWeapons();
+
+                        // After performing the single enemy action, notify the manager
+                        // so the turn transfers back to the player.
+                        try
+                        {
+                            battleManager.NotifyEnemyActed();
+                        }
+                        catch (Exception)
+                        {
+                            // ignore
+                        }
+
+                        // Small pacing delay before the next possible action.
+                        var wait = stats.AttackIntervalSeconds + Mathf.Max(0f, battleManager.ActionDelaySeconds);
+                        yield return new WaitForSeconds(wait);
+                    }
+                    else
+                    {
+                        // No BattleManager available yet; wait a short time until one is found.
+                        yield return new WaitForSeconds(0.1f);
+                        continue;
+                    }
                 }
                 else
                 {
@@ -119,33 +157,31 @@ namespace AirshipsAndAirIslands.Combat
 
         public EnemyStats Stats => stats;
         public int CurrentHull => currentHull;
-    public IReadOnlyList<EnemySubsystem> GetSubsystems() => _subsystems;
+        public IReadOnlyList<EnemySubsystem> GetSubsystems() => _subsystems;
 
         private void FireWeapons()
         {
             var baseDamage = stats.AttackDamage;
             var bonus = IsAtOptimalRange() ? stats.OptimalRangeBonus : 0;
-            var critRoll = UnityEngine.Random.value;
             var damage = baseDamage + bonus;
-            if (critRoll <= stats.CriticalChance)
-            {
-                damage = Mathf.CeilToInt(damage * stats.CriticalMultiplier);
-            }
 
-            // TODO: Integrate with player's combat system.
-            Debug.Log($"{stats.EnemyName} fires for {damage} damage (bonus {bonus}).");
-
+            // Send this event to the in-game combat log (if available) and apply damage.
             EnsureBattleManagerReference();
             EnsureGameStateReference();
 
             if (battleManager != null)
             {
+                // Do not emit a per-shot combat log line here. The battle manager
+                // emits a concise initiative notice and the HUD shows damage via
+                // existing indicators; emitting a separate "fires for" line
+                // created noisy/duplicate output.
                 battleManager.ApplyDamageToPlayer(damage, this);
             }
             else if (gameState != null)
             {
+                // Fallback: apply damage directly to GameState. Avoid emitting
+                // a console log for each shot to keep runtime output clean.
                 gameState.ModifyResource(ResourceType.Hull, -damage);
-
                 if (!_warnedMissingBattleManager)
                 {
                     Debug.LogWarning("EnemyAIController could not locate a BattleManager; applying damage directly to GameState will bypass damage indicators.", this);
@@ -197,11 +233,9 @@ namespace AirshipsAndAirIslands.Combat
             var distance = Vector2.Distance(transform.position, target.position);
             var hullPercent = stats.MaxHull > 0 ? (float)currentHull / stats.MaxHull : 0f;
 
-            if (hullPercent <= stats.DisengageThreshold)
-            {
-                currentState = EnemyState.Disengaging;
-                return;
-            }
+            // Do not auto-disengage on low hull; keep enemies engaged so the player
+            // can finish them off. (Disengage behaviour was causing them to become
+            // untargetable or non-responsive in some scenarios.)
 
             if (distance <= stats.EngagementRange)
             {
@@ -251,10 +285,8 @@ namespace AirshipsAndAirIslands.Combat
             subsystem.ApplyDamage(amount);
             ApplyDamage(amount);
 
-            if (subsystem.IsCritical && subsystem.IsDestroyed)
-            {
-                HandleDestroyed();
-            }
+            // Do not instantly destroy the enemy when a critical subsystem goes down.
+            // The enemy will be destroyed when its hull reaches 0 via ApplyDamage.
         }
 
         private int GetEffectiveArmor()
@@ -272,6 +304,26 @@ namespace AirshipsAndAirIslands.Combat
             if (_attackRoutine != null)
             {
                 StopCoroutine(_attackRoutine);
+            }
+
+            Debug.Log($"EnemyAIController.HandleDestroyed: {stats?.EnemyName ?? name} destroyed (invoking Destroyed). Current hull={currentHull}");
+
+            // Announce destruction to the combat log and notify listeners.
+            try
+            {
+                if (battleManager == null)
+                {
+                    EnsureBattleManagerReference();
+                }
+
+                if (battleManager != null && stats != null)
+                {
+                    battleManager.PostCombatLog($"{stats.EnemyName} destroyed!");
+                }
+            }
+            catch (Exception)
+            {
+                // ignore logging failures
             }
 
             // TODO: Grant loot / update game state.
@@ -307,6 +359,7 @@ namespace AirshipsAndAirIslands.Combat
                 }
             }
         }
+
         public void ApplyStatusEffectShieldOverload(float durationSeconds)
         {
             if (stats == null || !stats.HasShieldOverload)
@@ -316,6 +369,27 @@ namespace AirshipsAndAirIslands.Combat
 
             _shieldOverloadTimer = Mathf.Max(_shieldOverloadTimer, durationSeconds);
             Debug.Log($"{stats.EnemyName} activates Shield Overload for {durationSeconds:0.0}s.");
+        }
+
+        /// <summary>
+        /// Stop the attack coroutine immediately. Used by BattleManager when the
+        /// battle finishes to ensure enemies do not continue firing.
+        /// </summary>
+        public void StopAttacking()
+        {
+            if (_attackRoutine != null)
+            {
+                try
+                {
+                    StopCoroutine(_attackRoutine);
+                }
+                catch (Exception)
+                {
+                    // ignored - coroutine may have already stopped.
+                }
+
+                _attackRoutine = null;
+            }
         }
 
         private void EnsureBattleManagerReference()

@@ -4,12 +4,46 @@ using UnityEngine;
 
 namespace AirshipsAndAirIslands.Events
 {
+    public enum BattleEncounterType
+    {
+        Encounter1 = 0,
+        Encounter2 = 1,
+        Encounter3 = 2,
+    }
+
     /// <summary>
     /// Centralised mutable game state used by the event system. Designed to be referenced
     /// by other systems (UI, combat, economy) without tightly coupling their implementations.
     /// </summary>
     public class GameState : MonoBehaviour
     {
+        private static GameState _instance;
+
+        /// <summary>
+        /// Global singleton instance. Use `GameState.Instance` to access from other code.
+        /// The instance created in the Main Menu will persist across scene loads.
+        /// </summary>
+        public static GameState Instance => _instance;
+
+        private void Awake()
+        {
+            if (_instance == null)
+            {
+                _instance = this;
+                DontDestroyOnLoad(gameObject);
+                return;
+            }
+
+            if (_instance == this)
+            {
+                // already the singleton
+                return;
+            }
+
+            // A persistent instance already exists — destroy this duplicate GameObject
+            Debug.Log("GameState: duplicate instance detected, destroying duplicate.");
+            Destroy(gameObject);
+        }
         [Header("Core Resources")]
         [SerializeField] private int gold = 20;
         [SerializeField] private int fuel = 10;
@@ -19,12 +53,32 @@ namespace AirshipsAndAirIslands.Events
         [SerializeField, Min(0)] private int hull = 10;
 
         [Header("Crew Stats (0-100)")]
-        [Range(0, 100)] [SerializeField] private int crewMorale = 60;
-        [Range(0, 100)] [SerializeField] private int crewFatigue = 40;
+        [Range(0, 100)][SerializeField] private int crewMorale = 60;
+        [Range(0, 100)][SerializeField] private int crewFatigue = 40;
+
+        [SerializeField] private string playerLocation;
+        [SerializeField, Min(0)] private int damageUpgrades = 0;
 
         private readonly List<QuestInfo> _activeQuests = new();
         public IReadOnlyList<QuestInfo> ActiveQuests => _activeQuests;
         public int MaxHull => maxHull;
+        public int DamageUpgrades => damageUpgrades;
+
+        private NodePair selectedPath;
+        private string selectedLocation;
+
+        public GameObject ShipObject;
+        
+        private BattleEncounterType _currentEncounterType = BattleEncounterType.Encounter1;
+        public BattleEncounterType CurrentEncounterType 
+        { 
+            get => _currentEncounterType;
+            set => _currentEncounterType = value;
+        }
+        
+        public int GetGold() { 
+            return gold;
+        }
 
         public int GetResource(ResourceType type)
         {
@@ -44,6 +98,11 @@ namespace AirshipsAndAirIslands.Events
         public bool HasResource(ResourceType type, int amount)
         {
             return GetResource(type) >= amount;
+        }
+
+        public void IncrementDamageUpgrades(int amount = 1)
+        {
+            damageUpgrades += Mathf.Max(0, amount);
         }
 
         public int ModifyResource(ResourceType type, int delta)
@@ -89,6 +148,16 @@ namespace AirshipsAndAirIslands.Events
             }
         }
 
+        public void SetSelectedPath(NodePair path)
+        {
+            selectedPath = path;
+        }
+
+        public void SetSelectedLocation(string location)
+        {
+            selectedLocation = location;
+        }
+
         public bool TryAddQuest(QuestInfo quest)
         {
             if (quest == null)
@@ -123,6 +192,71 @@ namespace AirshipsAndAirIslands.Events
             _activeQuests.RemoveAt(index);
             ApplyResourceChanges(completedQuest.Rewards);
             return true;
+        }
+
+        public bool IsHoveredMovementPossible()
+        {
+            try
+            {
+                if (selectedPath == null) return false;
+                if (selectedPath.a.name != playerLocation && selectedPath.b.name != playerLocation) return false;
+                if (!checkMovementFuelRequirement()) return false;
+                if (!checkMovementFoodRequirement()) return false;
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+        }
+
+        public bool checkMovementFuelRequirement()
+        {
+            try
+            {
+                if (selectedPath == null) return false;
+                if (selectedPath.a.name != playerLocation && selectedPath.b.name != playerLocation) return false;
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool checkMovementFoodRequirement()
+        {
+            try
+            {
+                if (selectedPath == null) return false;
+                if (selectedPath.distance + (int)(crewFatigue * 0.1) > food) return false;
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool IsPlayerOnHoveredLocation()
+        {
+            return playerLocation == selectedLocation;
+        }
+
+        public void MovePlayerLocation(string newLocation)
+        {
+            if (!IsHoveredMovementPossible()) return;
+
+            playerLocation = newLocation;
+            ModifyResource(ResourceType.Fuel, -selectedPath.distance);
+            ModifyResource(ResourceType.Food, -(selectedPath.distance + (int)(crewFatigue * 0.1)));
+        }
+
+        public string GetPlayerLocation()
+        {
+            return playerLocation;
         }
     }
 }

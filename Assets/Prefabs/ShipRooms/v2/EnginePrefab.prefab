@@ -50,7 +50,16 @@ MonoBehaviour:
   Health: 1
   Cost: 20
   MaxTier: 3
-  Icon: {fileID: 0}
+  Icon: {fileID: 7906634178465093631, guid: 620891dc458fe774b8213879228a0fbb, type: 3}
   Size: 3
   prefabs: []
-  sprites: []
+  sprites:
+  - {fileID: 5845250535511975192, guid: 33dbfec3c46ca0149819bec3f7bd7527, type: 3}
+  - {fileID: 1405465485789638114, guid: 33dbfec3c46ca0149819bec3f7bd7527, type: 3}
+  - {fileID: 5654006720289389903, guid: 33dbfec3c46ca0149819bec3f7bd7527, type: 3}
+  - {fileID: 0}
+  - {fileID: -8880918490468353959, guid: 33dbfec3c46ca0149819bec3f7bd7527, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: -7046822124877184851, guid: 33dbfec3c46ca0149819bec3f7bd7527, type: 3}
+  - {fileID: 0}

@@ -11,7 +11,7 @@ public class Column : MonoBehaviour
     public Column LeftColumn = null;
     public Column RightColumn = null;
 
-    private bool _outline = false;
+    private bool _outline = true;
     // Not TESTED!!
     public bool Outline {
         get { return _outline;}
@@ -21,11 +21,17 @@ public class Column : MonoBehaviour
                 Top.transform.Find("Outline").GetComponent<SpriteRenderer>().enabled = true;
                 Middle.transform.Find("Outline").GetComponent<SpriteRenderer>().enabled = true;
                 Bottom.transform.Find("Outline").GetComponent<SpriteRenderer>().enabled = true;
+                Top.transform.Find("Centre").GetComponent<SpriteRenderer>().enabled = true;
+                Middle.transform.Find("Centre").GetComponent<SpriteRenderer>().enabled = true;
+                Bottom.transform.Find("Centre").GetComponent<SpriteRenderer>().enabled = true;
             }
             else {
                 Top.transform.Find("Outline").GetComponent<SpriteRenderer>().enabled = false;
                 Middle.transform.Find("Outline").GetComponent<SpriteRenderer>().enabled = false;
                 Bottom.transform.Find("Outline").GetComponent<SpriteRenderer>().enabled = false;
+                Top.transform.Find("Centre").GetComponent<SpriteRenderer>().enabled = false;
+                Middle.transform.Find("Centre").GetComponent<SpriteRenderer>().enabled = false;
+                Bottom.transform.Find("Centre").GetComponent<SpriteRenderer>().enabled = false;
 
             }
 
