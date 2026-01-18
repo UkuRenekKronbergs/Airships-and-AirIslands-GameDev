@@ -644,11 +644,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 971176195942785394, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.8124733
+      value: -6
       objectReference: {fileID: 0}
     - target: {fileID: 971176195942785394, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.2918696
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 971176195942785394, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -858,6 +858,10 @@ MonoBehaviour:
   githubButton: {fileID: 28340478}
   settingsPanel: {fileID: 1382064442}
   creditsPanel: {fileID: 2107358475}
+  musicVolumeSlider: {fileID: 0}
+  sfxVolumeSlider: {fileID: 0}
+  musicVolumeLabel: {fileID: 0}
+  sfxVolumeLabel: {fileID: 0}
   playSceneName: Shiprooms_new
   githubUrl: https://github.com/UkuRenekKronbergs/Airships-and-AirIslands-GameDev/tree/main
 --- !u!4 &684256981
@@ -1888,11 +1892,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sfxSource: {fileID: 0}
+  musicSource: {fileID: 0}
   clickClip: {fileID: 8300000, guid: dabb98c1f32ed0544ada716b91f9353c, type: 3}
   enemyEncounterClip: {fileID: 8300000, guid: e9a9534af9737474e834bacea894a0e9, type: 3}
   healClip: {fileID: 8300000, guid: 5f30340e119135244810c7ede9e5d234, type: 3}
   purchaseClip: {fileID: 8300000, guid: c01d318ae1ecb3548975b6fec74ebff6, type: 3}
   buildClip: {fileID: 8300000, guid: f7ac8f6df0f30ed4a869deae648aa49d, type: 3}
+  mainMenuMusic: {fileID: 8300000, guid: 45035d52f05527e48958b5992b8ee6c0, type: 3}
+  battleMusic: {fileID: 8300000, guid: f3b69fdd704a1ca47994a94b9dfebfac, type: 3}
+  bossMusic: {fileID: 8300000, guid: 66f7502d779780648b11deea9ebcd691, type: 3}
+  cityMusic: {fileID: 8300000, guid: 244ef950d220450478c97a5ca691fcfb, type: 3}
+  mapMusic: {fileID: 8300000, guid: d5198eb9ec5b7d542ba1a0fdd163beec, type: 3}
   autoAssignUIButtonSound: 1
 --- !u!4 &1283300452
 Transform:
@@ -2512,6 +2522,7 @@ MonoBehaviour:
   crewMorale: 60
   crewFatigue: 40
   playerLocation: City
+  damageUpgrades: 0
   ShipObject: {fileID: 6790812997377555550, guid: 535fa1dde2705ff4c83c116c12c84dd4, type: 3}
 --- !u!114 &1525300252
 MonoBehaviour:
@@ -2969,6 +2980,7 @@ MonoBehaviour:
   food: 0
   currency: 0
   health: 0
+  playerLocationName: 
 --- !u!4 &1974590979
 Transform:
   m_ObjectHideFlags: 0
