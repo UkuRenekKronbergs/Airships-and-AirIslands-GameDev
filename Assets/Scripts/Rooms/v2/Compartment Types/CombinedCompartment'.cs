@@ -189,7 +189,7 @@ public class CombinedCompartment : MonoBehaviour
             else if (CompartmentType is EngineCompartment)
                 a.color = Color.cyan;
             else
-                a.color = Color.gray;
+                a.color = Color.magenta;
         }
         if (CompartmentPrefab.GetComponent<CompartmentType>().Icon != null)
         {
