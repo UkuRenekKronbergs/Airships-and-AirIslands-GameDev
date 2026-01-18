@@ -65,6 +65,8 @@ namespace AirshipsAndAirIslands.Events
         public int DamageUpgrades => damageUpgrades;
 
         private NodePair selectedPath;
+        private string selectedLocation;
+
         public GameObject ShipObject;
         
         private BattleEncounterType _currentEncounterType = BattleEncounterType.Encounter1;
@@ -151,6 +153,11 @@ namespace AirshipsAndAirIslands.Events
             selectedPath = path;
         }
 
+        public void SetSelectedLocation(string location)
+        {
+            selectedLocation = location;
+        }
+
         public bool TryAddQuest(QuestInfo quest)
         {
             if (quest == null)
@@ -187,20 +194,64 @@ namespace AirshipsAndAirIslands.Events
             return true;
         }
 
-        public bool IsMovementPossible()
+        public bool IsHoveredMovementPossible()
         {
-            if (selectedPath.a.name != playerLocation && selectedPath.b.name != playerLocation) return false;
-            if (selectedPath.distance > fuel) return false;
+            try
+            {
+                if (selectedPath == null) return false;
+                if (selectedPath.a.name != playerLocation && selectedPath.b.name != playerLocation) return false;
+                if (!checkMovementFuelRequirement()) return false;
+                if (!checkMovementFoodRequirement()) return false;
 
-            return true;
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+        }
+
+        public bool checkMovementFuelRequirement()
+        {
+            try
+            {
+                if (selectedPath == null) return false;
+                if (selectedPath.a.name != playerLocation && selectedPath.b.name != playerLocation) return false;
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool checkMovementFoodRequirement()
+        {
+            try
+            {
+                if (selectedPath == null) return false;
+                if (selectedPath.distance + (int)(crewFatigue * 0.1) > food) return false;
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool IsPlayerOnHoveredLocation()
+        {
+            return playerLocation == selectedLocation;
         }
 
         public void MovePlayerLocation(string newLocation)
         {
-            if (!IsMovementPossible()) return;
+            if (!IsHoveredMovementPossible()) return;
 
             playerLocation = newLocation;
             ModifyResource(ResourceType.Fuel, -selectedPath.distance);
+            ModifyResource(ResourceType.Food, -(selectedPath.distance + (int)(crewFatigue * 0.1)));
         }
 
         public string GetPlayerLocation()

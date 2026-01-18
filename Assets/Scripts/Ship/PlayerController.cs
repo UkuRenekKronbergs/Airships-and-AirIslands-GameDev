@@ -18,7 +18,7 @@ namespace Airships.Ship
             Debug.Log(destination);
             if (destination == null) return;
             
-            if (!GameState.Instance.IsMovementPossible()) return;
+            if (!GameState.Instance.IsHoveredMovementPossible()) return;
 
             GameState.Instance.MovePlayerLocation(destination.name);
             location = destination;

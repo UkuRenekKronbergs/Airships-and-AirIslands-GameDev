@@ -89,14 +89,14 @@ public class MapHUD : MonoBehaviour
 
     private void LoadCityScene()
     {
-        if (!GameState.Instance.IsMovementPossible()) return;
+        if (!GameState.Instance.IsHoveredMovementPossible() && !GameState.Instance.IsPlayerOnHoveredLocation()) return;
 
         StartCoroutine(HandleEventThenLoad(citySceneName));
     }
 
     private void LoadBattleScene()
     {
-        if (!GameState.Instance.IsMovementPossible()) return;
+        if (!GameState.Instance.IsHoveredMovementPossible()) return;
 
         // Set the encounter type before loading
         GameState.Instance.CurrentEncounterType = BattleEncounterType.Encounter1;

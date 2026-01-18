@@ -26,7 +26,7 @@ namespace AirshipsAndAirIslands.Locations
         [SerializeField] private Button tradeButton;
         [SerializeField] private Button closeButton;
         [SerializeField] private Button roomsButton;
-        
+
         [Header("Purchase Buttons")]
         [SerializeField] private Button buyFuelButton;
         [SerializeField] private Button visitTavernButton;
@@ -39,23 +39,23 @@ namespace AirshipsAndAirIslands.Locations
         [SerializeField] private ResourceType tradeInputType = ResourceType.Food;
         [SerializeField, Min(1)] private int tradeInputAmount = 4;
         [SerializeField, Min(1)] private int tradeGoldReward = 2;
-        
+
         [Header("Fuel Station")]
         [SerializeField, Min(0.1f)] private float fuelCostPerUnit = 0.5f;
         [SerializeField, Min(1)] private int maxFuelPurchase = 20;
-        
+
         [Header("Tavern (Morale & Fatigue)")]
         [SerializeField, Min(1)] private int tavernCost = 4;
         [SerializeField, Min(1)] private int moraleRestore = 15;
         [SerializeField, Min(1)] private int fatigueReduction = 10;
-        
+
         [Header("Upgrade Shop")]
         [SerializeField, Min(1)] private int damageUpgradeCost = 5;
         [SerializeField, Min(0)] private int damageUpgradeBonus = 2;
         [SerializeField, Min(1)] private int maxDamageUpgrades = 5;
-        
-    [SerializeField] private bool loadSceneOnExit;
-    [SerializeField] private string exitSceneName = "Map";
+
+        [SerializeField] private bool loadSceneOnExit;
+        [SerializeField] private string exitSceneName = "Map";
         [SerializeField] private string roomsSceneName = "Rooms";
 
         private void Awake()
@@ -304,7 +304,7 @@ namespace AirshipsAndAirIslands.Locations
                 roomsButton.onClick.RemoveListener(OnRoomsButtonPressed);
                 roomsButton.onClick.AddListener(OnRoomsButtonPressed);
             }
-            
+
             // Wire purchase buttons
             if (buyFuelButton != null)
             {
