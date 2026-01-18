@@ -16,7 +16,7 @@ public class BattleNodeController : MonoBehaviour
     private void OnMouseDown()
     {
         // Use the same fuel and path validation as travel nodes
-        if (GameState.Instance == null || !GameState.Instance.IsMovementPossible())
+        if (GameState.Instance == null || !GameState.Instance.IsHoveredMovementPossible())
         {
             return;
         }
