@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using AirshipsAndAirIslands.Events;
 
 namespace AirshipsAndAirIslands.Audio
 {
@@ -25,8 +26,8 @@ namespace AirshipsAndAirIslands.Audio
         [Header("Music Clips")]
         [SerializeField] private AudioClip mainMenuMusic;
         [SerializeField] private AudioClip battleMusic;
+        [SerializeField] private AudioClip bossMusic;
         [SerializeField] private AudioClip cityMusic;
-        [SerializeField] private AudioClip buildMusic;
         [SerializeField] private AudioClip mapMusic;
 
         [Header("Auto-assign")]
@@ -82,52 +83,44 @@ namespace AirshipsAndAirIslands.Audio
 
         private void PlayMusicForScene(string sceneName)
         {
-            // Stop current music
-            if (musicSource.isPlaying)
+            AudioClip targetClip = null;
+            string lowerScene = sceneName.ToLower();
+
+            // Determine which music to play
+            if (lowerScene.Contains("mainmenu"))
             {
-                musicSource.Stop();
+                targetClip = mainMenuMusic;
+            }
+            else if (lowerScene.Contains("battle"))
+            {
+                // For battle scenes, check encounter type to decide between battle and boss music
+                targetClip = (GameState.Instance != null && GameState.Instance.CurrentEncounterType == BattleEncounterType.Encounter3)
+                    ? bossMusic
+                    : battleMusic;
+            }
+            else if (lowerScene.Contains("city"))
+            {
+                targetClip = cityMusic;
+            }
+            else if (lowerScene.Contains("shiprooms") || lowerScene.Contains("map") || lowerScene.Contains("shiprooms_new"))
+            {
+                // Map and ShipRooms use the same music (mapMusic)
+                targetClip = mapMusic;
             }
 
-            // Play appropriate music based on scene name
-            if (sceneName.Contains("MainMenu"))
+            Debug.Log($"PlayMusicForScene: Scene={sceneName}, targetClip={targetClip?.name}, currentClip={musicSource.clip?.name}");
+
+            // Only switch if we're changing to a different clip
+            if (targetClip != null && musicSource.clip != targetClip)
             {
-                if (mainMenuMusic != null)
-                {
-                    musicSource.clip = mainMenuMusic;
-                    musicSource.Play();
-                }
+                Debug.Log($"Switching music from {musicSource.clip?.name} to {targetClip.name}");
+                musicSource.Stop();
+                musicSource.clip = targetClip;
+                musicSource.Play();
             }
-            else if (sceneName.Contains("Battle"))
+            else if (targetClip == null)
             {
-                if (battleMusic != null)
-                {
-                    musicSource.clip = battleMusic;
-                    musicSource.Play();
-                }
-            }
-            else if (sceneName.Contains("City"))
-            {
-                if (cityMusic != null)
-                {
-                    musicSource.clip = cityMusic;
-                    musicSource.Play();
-                }
-            }
-            else if (sceneName.Contains("ShipRooms") || sceneName.Contains("ShipRooms_new"))
-            {
-                if (buildMusic != null)
-                {
-                    musicSource.clip = buildMusic;
-                    musicSource.Play();
-                }
-            }
-            else if (sceneName.Contains("Map"))
-            {
-                if (mapMusic != null)
-                {
-                    musicSource.clip = mapMusic;
-                    musicSource.Play();
-                }
+                Debug.LogWarning($"PlayMusicForScene: No music clip found for scene '{sceneName}'");
             }
         }
 
@@ -220,6 +213,24 @@ namespace AirshipsAndAirIslands.Audio
         public void PlayBuild()
         {
             PlayOneShot(buildClip);
+        }
+
+        /// <summary>
+        /// Plays the appropriate battle music based on the current encounter type.
+        /// Boss music plays for Encounter3 (Enemy 3), regular battle music for others.
+        /// </summary>
+        public void PlayBattleMusic()
+        {
+            AudioClip targetClip = (GameState.Instance.CurrentEncounterType == BattleEncounterType.Encounter3) 
+                ? bossMusic 
+                : battleMusic;
+
+            if (targetClip != null && musicSource.clip != targetClip)
+            {
+                musicSource.Stop();
+                musicSource.clip = targetClip;
+                musicSource.Play();
+            }
         }
 
         private void PlayOneShot(AudioClip clip)

@@ -27,6 +27,11 @@ namespace AirshipsAndAirIslands.Locations
         [SerializeField] private Button closeButton;
         [SerializeField] private Button roomsButton;
 
+        [Header("Purchase Buttons")]
+        [SerializeField] private Button buyFuelButton;
+        [SerializeField] private Button visitTavernButton;
+        [SerializeField] private Button upgradeDamageButton;
+
         [Header("City Settings")]
         [SerializeField] private string cityName = "Nimbus Gate";
         [SerializeField, Min(1)] private int healCost = 6;
@@ -34,17 +39,27 @@ namespace AirshipsAndAirIslands.Locations
         [SerializeField] private ResourceType tradeInputType = ResourceType.Food;
         [SerializeField, Min(1)] private int tradeInputAmount = 4;
         [SerializeField, Min(1)] private int tradeGoldReward = 2;
+
+        [Header("Fuel Station")]
+        [SerializeField, Min(0.1f)] private float fuelCostPerUnit = 0.5f;
+        [SerializeField, Min(1)] private int maxFuelPurchase = 20;
+
+        [Header("Tavern (Morale & Fatigue)")]
+        [SerializeField, Min(1)] private int tavernCost = 4;
+        [SerializeField, Min(1)] private int moraleRestore = 15;
+        [SerializeField, Min(1)] private int fatigueReduction = 10;
+
+        [Header("Upgrade Shop")]
+        [SerializeField, Min(1)] private int damageUpgradeCost = 5;
+        [SerializeField, Min(0)] private int damageUpgradeBonus = 2;
+        [SerializeField, Min(1)] private int maxDamageUpgrades = 5;
+
         [SerializeField] private bool loadSceneOnExit;
         [SerializeField] private string exitSceneName = "Map";
         [SerializeField] private string roomsSceneName = "Rooms";
 
         private void Awake()
         {
-            if (cityUiRoot != null)
-            {
-                cityUiRoot.SetActive(false);
-            }
-
             WireButtonListeners();
         }
 
@@ -150,6 +165,91 @@ namespace AirshipsAndAirIslands.Locations
             UpdateStats();
         }
 
+        public void BuyFuel(int amount = 5)
+        {
+            if (!EnsureGameState())
+            {
+                return;
+            }
+
+            amount = Mathf.Clamp(amount, 1, maxFuelPurchase);
+            int totalCost = Mathf.RoundToInt(amount * fuelCostPerUnit);
+
+            if (!gameState.HasResource(ResourceType.Gold, totalCost))
+            {
+                SetFeedback($"Need {totalCost} gold to buy {amount} fuel.");
+                return;
+            }
+
+            gameState.ModifyResource(ResourceType.Gold, -totalCost);
+            gameState.ModifyResource(ResourceType.Fuel, amount);
+            SetFeedback($"Purchased {amount} fuel for {totalCost} gold.");
+            AudioManager.Instance?.PlayPurchase();
+            UpdateStats();
+        }
+
+        public void RestoreCrewMorale()
+        {
+            if (!EnsureGameState())
+            {
+                return;
+            }
+
+            int currentMorale = gameState.GetResource(ResourceType.CrewMorale);
+            int currentFatigue = gameState.GetResource(ResourceType.CrewFatigue);
+
+            if (currentMorale >= 100 && currentFatigue <= 0)
+            {
+                SetFeedback("Crew is already in peak condition.");
+                return;
+            }
+
+            if (!gameState.HasResource(ResourceType.Gold, tavernCost))
+            {
+                SetFeedback($"Need {tavernCost} gold for a tavern visit.");
+                return;
+            }
+
+            gameState.ModifyResource(ResourceType.Gold, -tavernCost);
+            gameState.ModifyResource(ResourceType.CrewMorale, moraleRestore);
+            gameState.ModifyResource(ResourceType.CrewFatigue, -fatigueReduction);
+            SetFeedback($"Tavern visit for {tavernCost} gold: +{moraleRestore} morale, -{fatigueReduction} fatigue.");
+            AudioManager.Instance?.PlayPurchase();
+            UpdateStats();
+        }
+
+        public void ReduceCrewFatigue()
+        {
+            // This method is deprecated - use RestoreCrewMorale() instead for tavern visits
+            RestoreCrewMorale();
+        }
+
+        public void UpgradeDamage()
+        {
+            if (!EnsureGameState())
+            {
+                return;
+            }
+
+            if (gameState.DamageUpgrades >= maxDamageUpgrades)
+            {
+                SetFeedback($"Damage upgrades maxed out ({maxDamageUpgrades}).");
+                return;
+            }
+
+            if (!gameState.HasResource(ResourceType.Gold, damageUpgradeCost))
+            {
+                SetFeedback($"Need {damageUpgradeCost} gold for a damage upgrade.");
+                return;
+            }
+
+            gameState.ModifyResource(ResourceType.Gold, -damageUpgradeCost);
+            gameState.IncrementDamageUpgrades();
+            SetFeedback($"Weapons upgraded (+{damageUpgradeBonus} damage) for {damageUpgradeCost} gold.");
+            AudioManager.Instance?.PlayPurchase();
+            UpdateStats();
+        }
+
         public void OnCloseButtonPressed()
         {
             if (loadSceneOnExit && !string.IsNullOrWhiteSpace(exitSceneName))
@@ -203,6 +303,37 @@ namespace AirshipsAndAirIslands.Locations
             {
                 roomsButton.onClick.RemoveListener(OnRoomsButtonPressed);
                 roomsButton.onClick.AddListener(OnRoomsButtonPressed);
+            }
+
+            // Wire purchase buttons
+            if (buyFuelButton != null)
+            {
+                buyFuelButton.onClick.RemoveListener(() => BuyFuel());
+                buyFuelButton.onClick.AddListener(() => BuyFuel());
+                if (buyFuelButton.GetComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>() == null)
+                {
+                    buyFuelButton.gameObject.AddComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>();
+                }
+            }
+
+            if (visitTavernButton != null)
+            {
+                visitTavernButton.onClick.RemoveListener(RestoreCrewMorale);
+                visitTavernButton.onClick.AddListener(RestoreCrewMorale);
+                if (visitTavernButton.GetComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>() == null)
+                {
+                    visitTavernButton.gameObject.AddComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>();
+                }
+            }
+
+            if (upgradeDamageButton != null)
+            {
+                upgradeDamageButton.onClick.RemoveListener(UpgradeDamage);
+                upgradeDamageButton.onClick.AddListener(UpgradeDamage);
+                if (upgradeDamageButton.GetComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>() == null)
+                {
+                    upgradeDamageButton.gameObject.AddComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>();
+                }
             }
         }
 

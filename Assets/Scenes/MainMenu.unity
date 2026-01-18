@@ -4322,9 +4322,9 @@ MonoBehaviour:
   buildClip: {fileID: 8300000, guid: f7ac8f6df0f30ed4a869deae648aa49d, type: 3}
   mainMenuMusic: {fileID: 8300000, guid: 45035d52f05527e48958b5992b8ee6c0, type: 3}
   battleMusic: {fileID: 8300000, guid: f3b69fdd704a1ca47994a94b9dfebfac, type: 3}
+  bossMusic: {fileID: 8300000, guid: 66f7502d779780648b11deea9ebcd691, type: 3}
   cityMusic: {fileID: 8300000, guid: 244ef950d220450478c97a5ca691fcfb, type: 3}
-  buildMusic: {fileID: 0}
-  mapMusic: {fileID: 0}
+  mapMusic: {fileID: 8300000, guid: d5198eb9ec5b7d542ba1a0fdd163beec, type: 3}
   autoAssignUIButtonSound: 1
 --- !u!4 &1283300452
 Transform:
@@ -5361,14 +5361,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 50
-  fuel: 30
+  fuel: 50
   food: 40
   ammo: 10
   maxHull: 100
-  hull: 10
+  hull: 20
   crewMorale: 60
   crewFatigue: 40
   playerLocation: City
+  damageUpgrades: 0
   ShipObject: {fileID: 0}
 --- !u!114 &1525300252
 MonoBehaviour:

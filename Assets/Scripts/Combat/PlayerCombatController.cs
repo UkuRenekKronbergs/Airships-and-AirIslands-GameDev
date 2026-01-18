@@ -18,8 +18,6 @@ namespace AirshipsAndAirIslands.Combat
         [Header("Weapon Stats")]
         [SerializeField, Min(1)] private int baseDamage = 6;
         [SerializeField, Min(0f)] private float baseReloadSeconds = 2.5f;
-        [SerializeField, Range(0f, 1f)] private float criticalChance = 0.08f;
-        [SerializeField, Range(1f, 3f)] private float criticalMultiplier = 1.75f;
         [SerializeField, Min(1)] private int ammoPerShot = 1;
 
         [Header("Effects")]
@@ -209,13 +207,9 @@ namespace AirshipsAndAirIslands.Combat
         private int CalculateDamageRoll()
         {
             var bonus = Mathf.RoundToInt(_systemsState.WeaponDamageBonus);
-            var damage = Mathf.Max(1, baseDamage + bonus);
-            var critRoll = UnityEngine.Random.value;
-            if (critRoll <= criticalChance)
-            {
-                damage = Mathf.CeilToInt(damage * criticalMultiplier);
-            }
-
+            // Add damage upgrades from GameState (each upgrade grants +2 damage)
+            var upgradeBonus = gameState != null ? gameState.DamageUpgrades * 2 : 0;
+            var damage = Mathf.Max(1, baseDamage + bonus + upgradeBonus);
             return damage;
         }
 

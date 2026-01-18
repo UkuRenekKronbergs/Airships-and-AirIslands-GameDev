@@ -44,10 +44,7 @@ namespace AirshipsAndAirIslands.Combat
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
-            if (stats != null)
-            {
-                currentHull = stats.MaxHull;
-            }
+            // Note: currentHull is set via Inspector, not overridden by stats.MaxHull
 
             CollectSubsystems();
         }
@@ -166,12 +163,7 @@ namespace AirshipsAndAirIslands.Combat
         {
             var baseDamage = stats.AttackDamage;
             var bonus = IsAtOptimalRange() ? stats.OptimalRangeBonus : 0;
-            var critRoll = UnityEngine.Random.value;
             var damage = baseDamage + bonus;
-            if (critRoll <= stats.CriticalChance)
-            {
-                damage = Mathf.CeilToInt(damage * stats.CriticalMultiplier);
-            }
 
             // Send this event to the in-game combat log (if available) and apply damage.
             EnsureBattleManagerReference();

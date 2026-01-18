@@ -14,12 +14,11 @@ namespace AirshipsAndAirIslands.Combat
         [SerializeField, TextArea] private string description = "Light raider craft armed with chain guns.";
 
         [Header("Attributes")]
-        [SerializeField, Min(1)] private int maxHull = 12;
+        [SerializeField, Min(1)] private int maxHull = 100;
         [SerializeField, Min(0)] private int armor = 2;
         [SerializeField, Min(1)] private int attackDamage = 4;
         [SerializeField, Min(0)] private float attackIntervalSeconds = 2.5f;
-        [SerializeField, Range(0f, 1f)] private float criticalChance = 0.1f;
-        [SerializeField, Range(1f, 2f)] private float criticalMultiplier = 1.5f;
+
 
         [Header("Behavior")]
         [SerializeField] private float engagementRange = 12f;
@@ -37,8 +36,6 @@ namespace AirshipsAndAirIslands.Combat
         public int Armor => armor;
         public int AttackDamage => attackDamage;
         public float AttackIntervalSeconds => attackIntervalSeconds;
-        public float CriticalChance => criticalChance;
-        public float CriticalMultiplier => criticalMultiplier;
         public float EngagementRange => engagementRange;
         public float PursuitSpeed => pursuitSpeed;
         public float DisengageThreshold => disengageThreshold;
