@@ -49,7 +49,7 @@ public class CombinedCompartment : MonoBehaviour
     public void ApplyRoomSprite()
     {
         //Elevators later
-        if (Columns.Count == 1 || Columns.Count > 3)
+        if (Columns.Count == 1)
         {
             return;
         }
