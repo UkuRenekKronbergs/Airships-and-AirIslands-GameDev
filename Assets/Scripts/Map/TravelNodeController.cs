@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using Airships.Ship;
+using AirshipsAndAirIslands.Events;
 
 public class TravelNodeController : MonoBehaviour
 {
@@ -12,12 +13,15 @@ public class TravelNodeController : MonoBehaviour
     bool mouseOver = false;
     int distance = 0;
 
+    [SerializeField] private GameState gameState;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         travel_text = GameObject.FindGameObjectsWithTag("TravelText")[0].GetComponent<TMP_Text>();
         pathController = GameObject.FindGameObjectsWithTag("PathRenderController")[0].GetComponent<PathController>();
         playerController = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<PlayerController>();
+        gameState ??= FindFirstObjectByType<GameState>();
     }
 
     // Update is called once per frame
@@ -51,6 +55,8 @@ public class TravelNodeController : MonoBehaviour
             travel_text.text = "No path to destination";
             distance = 0;
         }
+
+        gameState.SetSelectedPath(path);
     }
 
     void OnMouseExit()

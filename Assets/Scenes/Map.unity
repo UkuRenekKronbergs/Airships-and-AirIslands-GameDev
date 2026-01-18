@@ -349,7 +349,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shipRoomsButton: {fileID: 1071596874}
-  cityButton: {fileID: 1353032903}
+  cityButtons:
+  - {fileID: 1353032903}
+  - {fileID: 373992228}
+  - {fileID: 1997446228}
   battleButton: {fileID: 502499224}
   shipRoomsSceneName: ShipRooms_new
   citySceneName: City
@@ -3391,3 +3394,4 @@ SceneRoots:
   - {fileID: 439878840}
   - {fileID: 874332556}
   - {fileID: 732240491}
+  - {fileID: 1933384426}

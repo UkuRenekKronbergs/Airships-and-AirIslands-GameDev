@@ -43,14 +43,14 @@ public class CombinedCompartment : MonoBehaviour
  
     }
     */
-
+    
 
 
 
     public void ApplyRoomSprite()
     {
         //Elevators later
-        if (Columns.Count == 1 || Columns.Count > 3)
+        if (Columns.Count == 1)
         {
             return;
         }
@@ -107,99 +107,6 @@ public class CombinedCompartment : MonoBehaviour
 
 
 
-
-    }
-    public void ApplyRoomSprite_v2()
-    {
-        //Elevators later
-        if (Columns.Count == 1 || Columns.Count > 3)
-        {
-            return;
-        }
-        List<Sprite> sprites = CompartmentPrefab.GetComponent<CompartmentType>().sprites;
-        SpriteRenderer a;
-        for (int i = 0; i < 3; i++)
-        {
-
-            if (i == 0)
-            {
-                a = Columns[i].GetComponent<Column>().Top.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
-                a.sprite = sprites[0];
-                a.enabled = true;
-                //a = Columns[i].GetComponent<Column>().Middle.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
-                //a.sprite = sprites[0];
-                //a.enabled = true;
-            }
-            //middle
-            if (i == 1)
-            {
-                a = Columns[i].GetComponent<Column>().Top.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
-                a.sprite = CompartmentPrefab.GetComponent<CompartmentType>().Icon;
-                a.enabled = true;
-
-                a = Columns[i].GetComponent<Column>().Middle.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
-                a.sprite = sprites[4];
-                a.enabled = true;
-
-                a = Columns[i].GetComponent<Column>().Bottom.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
-                a.sprite = sprites[7];
-                a.enabled = true;
-
-            }
-            if (i == 2)
-            {
-                a = Columns[i].GetComponent<Column>().Top.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
-                a.sprite = sprites[2];
-                a.enabled = true;
-                //a = Columns[i].GetComponent<Column>().Middle.transform.Find("SpriteTile").GetComponent<SpriteRenderer>();
-                //a.sprite = sprites[0];
-                //a.flipX = true;
-                //a.enabled = true;
-
-            }
-
-
-
-
-
-
-
-
-        }
-
-
-
-
-    }
-    public void OnlyIcon()
-    {
-
-        for (int i = 0; i < Columns.Count; i++)
-        {
-            if (Columns[i].GetComponent<Column>().Outline)
-            {
-                Columns[i].GetComponent<Column>().Outline = false;
-            }
-            var a= Columns[i].GetComponent<Column>().Middle.transform.Find("SpriteTile").GetChild(0).GetComponent<SpriteRenderer>();
-            a.enabled= false;
-            a = Columns[i].GetComponent<SpriteRenderer>();
-            a.enabled= true;
-            if (CompartmentType is BridgeCompartment)
-                a.color = Color.blue;
-            else if (CompartmentType is EngineCompartment)
-                a.color = Color.cyan;
-            else
-                a.color = Color.gray;
-        }
-        if (CompartmentPrefab.GetComponent<CompartmentType>().Icon != null)
-        {
-            var b = Columns[Columns.Count / 2];
-            var c = b.GetComponent<Column>().Middle.transform.Find("SpriteTile").GetChild(0).GetComponent<SpriteRenderer>();
-            c.sprite = CompartmentPrefab.GetComponent<CompartmentType>().Icon;
-            c.enabled = true;
-            c.transform.localScale = Vector3.one * 3f;
-            c.sortingOrder = 100;
-        }
 
     }
 }

@@ -59,6 +59,7 @@ namespace AirshipsAndAirIslands.Events
         public int GetGold() { 
             return gold;
         }
+        private NodePair selectedPath;
 
         public int GetResource(ResourceType type)
         {
@@ -123,6 +124,11 @@ namespace AirshipsAndAirIslands.Events
             }
         }
 
+        public void SetSelectedPath(NodePair path)
+        {
+            selectedPath = path;
+        }
+
         public bool TryAddQuest(QuestInfo quest)
         {
             if (quest == null)
@@ -159,10 +165,20 @@ namespace AirshipsAndAirIslands.Events
             return true;
         }
 
+        public bool IsMovementPossible()
+        {
+            if (selectedPath.a.name != playerLocation && selectedPath.b.name != playerLocation) return false;
+            if (selectedPath.distance > fuel) return false;
+
+            return true;
+        }
+
         public void MovePlayerLocation(string newLocation)
         {
-            Debug.Log("AAA"+newLocation);
+            if (!IsMovementPossible()) return;
+
             playerLocation = newLocation;
+            ModifyResource(ResourceType.Fuel, -selectedPath.distance);
         }
 
         public string GetPlayerLocation()
