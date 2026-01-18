@@ -11,15 +11,23 @@ namespace AirshipsAndAirIslands.Audio
     {
         public static AudioManager Instance { get; private set; }
 
-        [Header("Audio Source")]
+        [Header("Audio Sources")]
         [SerializeField] private AudioSource sfxSource;
+        [SerializeField] private AudioSource musicSource;
 
-        [Header("Clips")]
+        [Header("SFX Clips")]
         [SerializeField] private AudioClip clickClip;
         [SerializeField] private AudioClip enemyEncounterClip;
         [SerializeField] private AudioClip healClip;
         [SerializeField] private AudioClip purchaseClip;
         [SerializeField] private AudioClip buildClip;
+
+        [Header("Music Clips")]
+        [SerializeField] private AudioClip mainMenuMusic;
+        [SerializeField] private AudioClip battleMusic;
+        [SerializeField] private AudioClip cityMusic;
+        [SerializeField] private AudioClip buildMusic;
+        [SerializeField] private AudioClip mapMusic;
 
         [Header("Auto-assign")]
         [Tooltip("If enabled, the AudioManager will add a default click sound behaviour to Buttons that don't already have a custom sound marker.")]
@@ -45,6 +53,13 @@ namespace AirshipsAndAirIslands.Audio
                 sfxSource = gameObject.AddComponent<AudioSource>();
                 sfxSource.playOnAwake = false;
             }
+
+            if (musicSource == null)
+            {
+                musicSource = gameObject.AddComponent<AudioSource>();
+                musicSource.playOnAwake = false;
+                musicSource.loop = true;
+            }
         }
 
         private void OnDestroy()
@@ -58,8 +73,62 @@ namespace AirshipsAndAirIslands.Audio
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            // Play appropriate music for the scene
+            PlayMusicForScene(scene.name);
+            
             // Re-run assignment to pick up buttons in newly loaded scenes
             AssignClickToButtons();
+        }
+
+        private void PlayMusicForScene(string sceneName)
+        {
+            // Stop current music
+            if (musicSource.isPlaying)
+            {
+                musicSource.Stop();
+            }
+
+            // Play appropriate music based on scene name
+            if (sceneName.Contains("MainMenu"))
+            {
+                if (mainMenuMusic != null)
+                {
+                    musicSource.clip = mainMenuMusic;
+                    musicSource.Play();
+                }
+            }
+            else if (sceneName.Contains("Battle"))
+            {
+                if (battleMusic != null)
+                {
+                    musicSource.clip = battleMusic;
+                    musicSource.Play();
+                }
+            }
+            else if (sceneName.Contains("City"))
+            {
+                if (cityMusic != null)
+                {
+                    musicSource.clip = cityMusic;
+                    musicSource.Play();
+                }
+            }
+            else if (sceneName.Contains("ShipRooms") || sceneName.Contains("ShipRooms_new"))
+            {
+                if (buildMusic != null)
+                {
+                    musicSource.clip = buildMusic;
+                    musicSource.Play();
+                }
+            }
+            else if (sceneName.Contains("Map"))
+            {
+                if (mapMusic != null)
+                {
+                    musicSource.clip = mapMusic;
+                    musicSource.Play();
+                }
+            }
         }
 
         private void Start()
@@ -161,6 +230,44 @@ namespace AirshipsAndAirIslands.Audio
             }
 
             sfxSource.PlayOneShot(clip);
+        }
+
+        /// <summary>
+        /// Sets the volume for sound effects (0.0 to 1.0).
+        /// </summary>
+        public void SetSFXVolume(float volume)
+        {
+            if (sfxSource != null)
+            {
+                sfxSource.volume = Mathf.Clamp01(volume);
+            }
+        }
+
+        /// <summary>
+        /// Gets the current volume for sound effects (0.0 to 1.0).
+        /// </summary>
+        public float GetSFXVolume()
+        {
+            return sfxSource != null ? sfxSource.volume : 1f;
+        }
+
+        /// <summary>
+        /// Sets the volume for music (0.0 to 1.0).
+        /// </summary>
+        public void SetMusicVolume(float volume)
+        {
+            if (musicSource != null)
+            {
+                musicSource.volume = Mathf.Clamp01(volume);
+            }
+        }
+
+        /// <summary>
+        /// Gets the current volume for music (0.0 to 1.0).
+        /// </summary>
+        public float GetMusicVolume()
+        {
+            return musicSource != null ? musicSource.volume : 1f;
         }
     }
 }

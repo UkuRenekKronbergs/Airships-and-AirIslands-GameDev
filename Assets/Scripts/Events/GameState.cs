@@ -55,8 +55,12 @@ namespace AirshipsAndAirIslands.Events
         public IReadOnlyList<QuestInfo> ActiveQuests => _activeQuests;
         public int MaxHull => maxHull;
 
+        private NodePair selectedPath;
+        private string selectedLocation;
+
         public GameObject ShipObject;
-        public int GetGold() { 
+        public int GetGold()
+        {
             return gold;
         }
 
@@ -123,6 +127,16 @@ namespace AirshipsAndAirIslands.Events
             }
         }
 
+        public void SetSelectedPath(NodePair path)
+        {
+            selectedPath = path;
+        }
+
+        public void SetSelectedLocation(string location)
+        {
+            selectedLocation = location;
+        }
+
         public bool TryAddQuest(QuestInfo quest)
         {
             if (quest == null)
@@ -159,10 +173,64 @@ namespace AirshipsAndAirIslands.Events
             return true;
         }
 
+        public bool IsHoveredMovementPossible()
+        {
+            try
+            {
+                if (selectedPath == null) return false;
+                if (selectedPath.a.name != playerLocation && selectedPath.b.name != playerLocation) return false;
+                if (!checkMovementFuelRequirement()) return false;
+                if (!checkMovementFoodRequirement()) return false;
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+        }
+
+        public bool checkMovementFuelRequirement()
+        {
+            try
+            {
+                if (selectedPath == null) return false;
+                if (selectedPath.a.name != playerLocation && selectedPath.b.name != playerLocation) return false;
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool checkMovementFoodRequirement()
+        {
+            try
+            {
+                if (selectedPath == null) return false;
+                if (selectedPath.distance + (int)(crewFatigue * 0.1) > food) return false;
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public bool IsPlayerOnHoveredLocation()
+        {
+            return playerLocation == selectedLocation;
+        }
+
         public void MovePlayerLocation(string newLocation)
         {
-            Debug.Log("AAA"+newLocation);
+            if (!IsHoveredMovementPossible()) return;
+
             playerLocation = newLocation;
+            ModifyResource(ResourceType.Fuel, -selectedPath.distance);
+            ModifyResource(ResourceType.Food, -(selectedPath.distance + (int)(crewFatigue * 0.1)));
         }
 
         public string GetPlayerLocation()

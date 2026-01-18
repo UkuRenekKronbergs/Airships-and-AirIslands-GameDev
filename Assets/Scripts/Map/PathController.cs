@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [System.Serializable]
-public struct NodePair
+public class NodePair
 {
     public GameObject a;
     public GameObject b;

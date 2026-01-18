@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -9,7 +10,7 @@ public class MapHUD : MonoBehaviour
 {
     [Header("Navigation Buttons")]
     [SerializeField] private Button shipRoomsButton;
-    [SerializeField] private Button cityButton;
+    [SerializeField] private Button[] cityButtons;
     [SerializeField] private Button battleButton;
 
     [Header("Scene Names")]
@@ -40,8 +41,11 @@ public class MapHUD : MonoBehaviour
         }
 
         WireButton(shipRoomsButton, LoadShipRoomsScene);
-        WireButton(cityButton, LoadCityScene);
-    WireButton(battleButton, LoadBattleScene);
+        foreach (Button cityButton in cityButtons)
+        {
+            WireButton(cityButton, LoadCityScene);
+        }
+        WireButton(battleButton, LoadBattleScene);
         // Map should only have the Ship button play the click SFX. Ensure shipRoomsButton has it and remove from others.
         if (shipRoomsButton != null && shipRoomsButton.GetComponent<AirshipsAndAirIslands.Audio.UIButtonHasCustomSound>() == null)
         {
@@ -51,10 +55,13 @@ public class MapHUD : MonoBehaviour
             }
         }
 
-        if (cityButton != null)
+        if (cityButtons != null)
         {
-            var comp = cityButton.GetComponent<AirshipsAndAirIslands.Audio.UIButtonSound>();
-            if (comp != null) Destroy(comp);
+            foreach (Button cityButton in cityButtons)
+            {
+                var comp = cityButton.GetComponent<AirshipsAndAirIslands.Audio.UIButtonSound>();
+                if (comp != null) Destroy(comp);
+            }
         }
 
         if (battleButton != null)
@@ -82,11 +89,15 @@ public class MapHUD : MonoBehaviour
 
     private void LoadCityScene()
     {
+        if (!GameState.Instance.IsHoveredMovementPossible() && !GameState.Instance.IsPlayerOnHoveredLocation()) return;
+
         StartCoroutine(HandleEventThenLoad(citySceneName));
     }
 
     private void LoadBattleScene()
     {
+        if (!GameState.Instance.IsHoveredMovementPossible()) return;
+
         StartCoroutine(HandleEventThenLoad(battleSceneName));
     }
 
