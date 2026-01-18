@@ -2514,8 +2514,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 50
-  fuel: 30
-  food: 15
+  fuel: 50
+  food: 60
   ammo: 10
   maxHull: 100
   hull: 10
